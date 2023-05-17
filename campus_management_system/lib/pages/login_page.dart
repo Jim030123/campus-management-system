@@ -1,4 +1,4 @@
-import 'package:campus_management_system/components/textfield.dart';
+import 'package:campus_management_system/components/my_textfield.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
@@ -9,7 +9,7 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    
     return Scaffold(
       backgroundColor: Colors.grey[300],
       body: SafeArea(
@@ -36,7 +36,8 @@ class LoginPage extends StatelessWidget {
               hintText: 'Username',
               obsecureText: false,
             ),
-            SizedBox(
+            
+            const SizedBox(
               height: 25,
             ),
 
@@ -46,6 +47,27 @@ class LoginPage extends StatelessWidget {
               hintText: 'Password',
               obsecureText: true,
             ),
+
+            const SizedBox(
+              height: 10,
+            ),
+
+            // forgot password
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    'Forgot password?',
+                    style: TextStyle(color: Colors.grey[600]),
+                  ),
+
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 25.0,)
           ]),
         ),
       ),
