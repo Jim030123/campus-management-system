@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "925800864876",
+    "project_id": "campus-management-system-4962b",
+    "storage_bucket": "campus-management-system-4962b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:925800864876:android:694fef18678655bed8cc49",
+        "android_client_info": {
+          "package_name": "com.example.campus_management_system"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "925800864876-36637862hgiuae4qhk3lqkr20rttrf7m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkCunczOo4MJS4oN4dBan-7cY1bHhxkI4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "925800864876-36637862hgiuae4qhk3lqkr20rttrf7m.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "925800864876-9c71uqgt67g235688o5vcb5f4dhh2iaj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.campusManagementSystem"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
