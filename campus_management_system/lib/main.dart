@@ -15,7 +15,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MaterialApp.router(routerConfig: router));
+  runApp(const MainApp());
 }
 
 class MainApp extends StatelessWidget {
@@ -25,7 +25,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: AuthPage(),
       theme: ThemeData(
           textTheme:
               GoogleFonts.francoisOneTextTheme(Theme.of(context).textTheme)),

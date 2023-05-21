@@ -10,9 +10,9 @@ import 'package:campus_management_system/pages/visitor_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-GoRouter router = GoRouter(initialLocation: '/', routes: [
-  GoRoute(path: '/', builder: (context, state) => MyLoginPage()),
-  // GoRoute(path: '/login_page', builder: (context, state) => MyLoginPage()),
-  GoRoute(path: '/home_page', builder: (context, state) => HomePage()),
-  GoRoute(path: '/visitor', builder: (context, state) => VisitorPage())
-]);
+// GoRouter router = GoRouter(initialLocation: '/', routes: [
+//   GoRoute(path: '/', builder: (context, state) => MyLoginPage()),
+//   // GoRoute(path: '/login_page', builder: (context, state) => MyLoginPage()),
+//   GoRoute(path: '/home_page', builder: (context, state) => HomePage()),
+//   GoRoute(path: '/visitor', builder: (context, state) => VisitorPage())
+// ]);
