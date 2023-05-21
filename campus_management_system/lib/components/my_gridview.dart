@@ -4,8 +4,8 @@ import "package:campus_management_system/components/my_switchlisttile.dart";
 import "package:campus_management_system/components/my_tile.dart";
 import "package:flutter/material.dart";
 
-class MyTestPage extends StatelessWidget {
-  const MyTestPage({super.key});
+class MyGridView extends StatelessWidget {
+  const MyGridView({super.key});
 
   @override
   Widget build(BuildContext context) {

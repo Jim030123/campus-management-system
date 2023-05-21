@@ -57,19 +57,15 @@ class HostelStudentPage extends StatelessWidget {
                   // word
                   Container(
                       // color: Color.fromARGB(255, 56, 201, 97),
-                      width: 200,
+                      width: 250,
                       height: 100,
                       child: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Southern University College",
-                            style: TextStyle(fontSize: 25),
-                          ),
-                          Text(
                             "Campus Management System",
-                            textAlign: TextAlign.start,
-                            style: TextStyle(fontSize: 16),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 25),
                           ),
                         ],
                       )),
@@ -90,7 +86,8 @@ class HostelStudentPage extends StatelessWidget {
                   MyButton(onTap: onTap, text: 'About Us'),
                   Container(
                     child: Column(children: [
-                      MyButton2(buttonText: 'management'),
+                      MyButton2(
+                          buttonText: 'anagement', routename: '/management'),
                     ]),
                   )
                 ],

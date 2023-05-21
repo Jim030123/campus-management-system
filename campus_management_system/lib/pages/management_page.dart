@@ -1,5 +1,8 @@
 import 'package:campus_management_system/components/my_button.dart';
+import 'package:campus_management_system/components/my_button2.dart';
+import 'package:campus_management_system/pages/management_page.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sliding_switch/sliding_switch.dart';
 
 class ManagementPage extends StatelessWidget {
@@ -64,7 +67,7 @@ class ManagementPage extends StatelessWidget {
                             style: TextStyle(fontSize: 25),
                           ),
                           Text(
-                            "Campus Management Syetem",
+                            "Campus Management System",
                             textAlign: TextAlign.start,
                             style: TextStyle(fontSize: 16),
                           ),
@@ -85,30 +88,11 @@ class ManagementPage extends StatelessWidget {
                 children: [
                   MyButton(onTap: onTap, text: 'Log in Now'),
                   MyButton(onTap: onTap, text: 'About Us'),
-                  GestureDetector(
-                    child: SlidingSwitch(
-                      value: false,
-                      width: 250,
-                      onChanged: (bool value) {
-                        print(value);
-                      },
-                      height: 55,
-                      animationDuration: const Duration(milliseconds: 400),
-                      onTap: () {},
-                      onDoubleTap: () {},
-                      onSwipe: () {},
-                      textOff: "Hostel Student",
-                      textOn: "Management",
-                      // iconOff: Icons.abc,
-                      // iconOn: Icons.ac_unit,
-                      contentSize: 17,
-                      colorOn: const Color(0xffdc6c73),
-                      colorOff: Color.fromARGB(255, 12, 89, 255),
-                      background: Color.fromARGB(159, 44, 174, 203),
-                      buttonColor: const Color(0xfff7f5f7),
-                      inactiveColor: const Color(0xff636f7b),
-                    ),
-                  ),
+                  Container(
+                    child: Column(children: [
+                      MyButton2(buttonText: 'Hostel Student', routename: '/'),
+                    ]),
+                  )
                 ],
               ),
             )
