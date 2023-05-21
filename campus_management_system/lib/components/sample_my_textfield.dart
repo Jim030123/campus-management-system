@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class MyTextField extends StatelessWidget {
+class SampleTextField extends StatelessWidget {
   final controller;
   final String hintText;
   final bool obsecureText;
 
-  const MyTextField({
+  const SampleTextField({
     super.key,
     required this.controller,
     required this.hintText,

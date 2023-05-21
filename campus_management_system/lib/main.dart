@@ -1,6 +1,6 @@
 import 'package:campus_management_system/pages/auth_page.dart';
-import 'package:campus_management_system/pages/hostel_student.dart';
-import 'package:campus_management_system/pages/register_hostel_student.dart';
+import 'package:campus_management_system/pages/login_page.dart';
+import 'package:campus_management_system/pages/sample_login_page.dart';
 import 'package:campus_management_system/pages/test_page.dart';
 import 'package:campus_management_system/pages/visitor_page.dart';
 import 'package:campus_management_system/routes.dart';
@@ -25,7 +25,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: RegisterHostelStudentPage(),
+      home: LoginPage(),
       theme: ThemeData(
           textTheme:
               GoogleFonts.francoisOneTextTheme(Theme.of(context).textTheme)),

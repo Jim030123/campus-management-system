@@ -4,30 +4,16 @@ import "package:campus_management_system/components/my_switchlisttile.dart";
 import "package:campus_management_system/components/my_tile.dart";
 import "package:flutter/material.dart";
 
+import '../components/sample_my_textfield_copy.dart';
+import "../components/sample_my_textfield.dart";
+
 class MyTestPage extends StatelessWidget {
-  const MyTestPage({super.key});
+  MyTestPage({super.key});
+
+  final controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
-        primary: false,
-        padding: const EdgeInsets.all(20),
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-        crossAxisCount: 3,
-        children: <Widget>[
-          MyMenuTile(),
-          MyMenuTile(),
-          MyMenuTile(),
-          MyMenuTile(),
-          MyMenuTile(),
-          MyMenuTile(),
-          MyMenuTile(),
-          MyMenuTile(),
-          MyMenuTile(),
-          MyMenuTile(),
-          MyMenuTile(),
-          MyMenuTile(),
-        ]);
+    return Scaffold(body: SampleTextField2());
   }
 }
