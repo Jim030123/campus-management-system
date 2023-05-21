@@ -36,9 +36,13 @@ class _MyLoginPageState extends State<MyLoginPage> {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text, password: passwordController.text);
       Navigator.pop(context);
+<<<<<<< Updated upstream
       
 
 
+=======
+      GoRouter.of(context).go("/home_page");
+>>>>>>> Stashed changes
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
 
