@@ -20,101 +20,104 @@ class LoginPage extends StatelessWidget {
       backgroundColor: Colors.grey[300],
       body: SafeArea(
         child: Center(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            const SizedBox(
-              height: 30,
-            ),
-            const Icon(
-              Icons.lock,
-              size: 100,
-            ),
-            const SizedBox(
-              height: 50,
-            ),
-            Text(
-              'Welcome back you\'ve been missed',
-              style: TextStyle(color: Colors.grey[700], fontSize: 16),
-            ),
+          child: SingleChildScrollView(
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              const SizedBox(
+                height: 30,
+              ),
+              const Icon(
+                Icons.lock,
+                size: 100,
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              Text(
+                'Welcome back you\'ve been missed',
+                style: TextStyle(color: Colors.grey[700], fontSize: 16),
+              ),
 
-            // username
-            MyTextField(
-              controller: emailController,
-              hintText: 'Email',
-              obsecureText: false,
-            ),
+              // username
+              MyTextField(
+                controller: emailController,
+                hintText: 'Email',
+                obsecureText: false,
+              ),
 
-            const SizedBox(
-              height: 25,
-            ),
+              const SizedBox(
+                height: 25,
+              ),
 
-            // password
-            MyTextField(
-              controller: passwordController,
-              hintText: 'Password',
-              obsecureText: true,
-            ),
+              // password
+              MyTextField(
+                controller: passwordController,
+                hintText: 'Password',
+                obsecureText: true,
+              ),
 
-            const SizedBox(
-              height: 10,
-            ),
+              const SizedBox(
+                height: 10,
+              ),
 
-            // forgot password
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+              // forgot password
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      'Forgot password?',
+                      style: TextStyle(color: Colors.grey[600]),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(
+                height: 25.0,
+              ),
+
+              MyButton(onTap: signUserIn),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: Row(children: [
+                  Expanded(
+                    child: Divider(
+                      thickness: 0.5,
+                      color: Colors.grey[400],
+                    ),
+                  ),
+                  const Text('Or continue with'),
+                  Expanded(
+                    child: Divider(
+                      thickness: 0.5,
+                      color: Colors.grey[400],
+                    ),
+                  ),
+                ]),
+              ),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Forgot password?',
-                    style: TextStyle(color: Colors.grey[600]),
+                    'Not A Member?',
+                    style: TextStyle(color: Colors.grey[700]),
                   ),
+                  const SizedBox(
+                    width: 4,
+                  ),
+                  const Text(
+                    'Register Now',
+                    style: TextStyle(
+                        color: Colors.blue, fontWeight: FontWeight.bold),
+                  )
                 ],
-              ),
-            ),
-
-            const SizedBox(
-              height: 25.0,
-            ),
-
-            MyButton(onTap: signUserIn),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: Row(children: [
-                Expanded(
-                  child: Divider(
-                    thickness: 0.5,
-                    color: Colors.grey[400],
-                  ),
-                ),
-                const Text('Or continue with'),
-                Expanded(
-                  child: Divider(
-                    thickness: 0.5,
-                    color: Colors.grey[400],
-                  ),
-                ),
-              ]),
-            ),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Not A Member?',
-                  style: TextStyle(color: Colors.grey[700]),
-                ),
-                const SizedBox(
-                  width: 4,
-                ),
-                const Text(
-                  'Register Now',
-                  style: TextStyle(
-                      color: Colors.blue, fontWeight: FontWeight.bold),
-                )
-              ],
-            )
-          ]),
+              )
+            ]),
+          ),
         ),
       ),
     );
