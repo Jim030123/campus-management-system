@@ -9,13 +9,18 @@ class MyListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(Icons.car_rental),
-      title: Text(carplatenumber),
-      subtitle: Text(carmodel),
-      trailing: Image.asset(
-        'lib/images/logo.png',
+    return GestureDetector(
+      child: ListTile(
+        leading: Icon(Icons.car_rental),
+        title: Text(carplatenumber),
+        subtitle: Text(carmodel),
+        trailing: Image.asset(
+          'lib/images/logo.png',
+        ),
       ),
+      onTap: () {
+        Navigator.pushNamed(context, '/sample_home');
+      },
     );
   }
 }

@@ -23,6 +23,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   String? _selectedRole = "";
 
   FirebaseAuth _auth = FirebaseAuth.instance;
+  final user = FirebaseAuth.instance.currentUser!;
 
   @override
   Widget build(BuildContext context) {
@@ -95,6 +96,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 },
                 child: Text('Register'),
               ),
+              Text(user.uid)
             ],
           ),
         ),

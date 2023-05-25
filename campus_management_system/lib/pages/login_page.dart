@@ -36,9 +36,6 @@ class _MyLoginPageState extends State<MyLoginPage> {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text, password: passwordController.text);
       Navigator.pop(context);
-      
-
-
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
 
@@ -54,63 +51,65 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Card(
-        color: Colors.grey[300],
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          // column child
-
-          children: [
-            SizedBox(
-              height: 70.0,
-            ),
-
-            Align(
-              alignment: Alignment.centerRight,
-              child: ElevatedButton(
-                child: Text('Switch to Visitor'),
-                onPressed: () {
-                  print('Hello');
-                },
-              ),
-            ),
-
-            SizedBox(
-              height: 50.0,
-            ),
-            // Allign center
-            MyLogo(),
-
-            SizedBox(
-              height: 25.0,
-            ),
-
-            Container(
-              // color: Colors.red,
-              width: 300,
-              height: 300,
+    return Scaffold(
+        backgroundColor: Colors.grey[300],
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Container(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.center,
+                // column child
                 children: [
-                  SampleTextField(
-                    controller: emailController,
-                    hintText: 'Email',
-                    obsecureText: false,
+                  SizedBox(
+                    height: 70.0,
                   ),
-                  SampleTextField(
-                    controller: passwordController,
-                    hintText: 'Password',
-                    obsecureText: true,
+
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: ElevatedButton(
+                      child: Text('Switch to Visitor'),
+                      onPressed: () {
+                        print('Hello');
+                      },
+                    ),
                   ),
-                  MyButton(onTap: signUserIn, text: 'Log In'),
+
+                  SizedBox(
+                    height: 50.0,
+                  ),
+                  // Allign center
+                  MyLogo(),
+
+                  SizedBox(
+                    height: 25.0,
+                  ),
+
+                  Container(
+                    // color: Colors.red,
+                    width: 300,
+                    height: 300,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SampleTextField(
+                          controller: emailController,
+                          hintText: 'Email',
+                          obsecureText: false,
+                        ),
+                        SampleTextField(
+                          controller: passwordController,
+                          hintText: 'Password',
+                          obsecureText: true,
+                        ),
+                        MyButton(onTap: signUserIn, text: 'Log In'),
+                      ],
+                    ),
+                  )
                 ],
               ),
-            )
-          ],
-        ),
-      ),
-    );
+            ),
+          ),
+        ));
   }
 
   void wrongEmailMessage() {

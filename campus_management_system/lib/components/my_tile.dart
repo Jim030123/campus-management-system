@@ -8,8 +8,8 @@ class MyMenuTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
-        width: 200,
-        height: 200,
+        width: 250,
+        height: 250,
         decoration: BoxDecoration(
           color: Colors.blue,
           borderRadius: BorderRadius.circular(10),
@@ -26,7 +26,7 @@ class MyMenuTile extends StatelessWidget {
         ]),
       ),
       onTap: () {
-        GoRouter.of(context).go("/hostel_student");
+        Navigator.pushNamed(context, '/sample_home');
       },
     );
   }

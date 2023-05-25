@@ -18,9 +18,8 @@ class MyDrawerListtile extends StatelessWidget {
     return ListTile(
       leading: Icon(IconData(icon, fontFamily: 'MaterialIcons')),
       title: Text(pagename),
-      
       onTap: () {
-        GoRouter.of(context).go(routename);
+        Navigator.pushNamed(context, routename);
       },
     );
   }

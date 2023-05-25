@@ -1,3 +1,4 @@
+import 'package:campus_management_system/pages/introduction_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -12,12 +13,7 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         actions: [IconButton(onPressed: signUserOut, icon: Icon(Icons.logout))],
       ),
-      body: Center(
-        child: Text(
-          'Logged In as ' + user.email!,
-          style: TextStyle(fontSize: 20),
-        ),
-      ),
+      body: IntroductionPage(),
     );
   }
 
