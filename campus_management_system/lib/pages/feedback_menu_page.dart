@@ -8,8 +8,8 @@ import 'package:flutter/widgets.dart';
 import '../components/my_appbar.dart';
 import '../components/my_long_button.dart';
 
-class MyTestPage extends StatelessWidget {
-  const MyTestPage({super.key});
+class FeedbackPage extends StatelessWidget {
+  const FeedbackPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,26 +20,19 @@ class MyTestPage extends StatelessWidget {
         color: Colors.white,
         child: Column(children: [
           MyLogo(),
-          MyIconTile(iconnumber: 0xf01c8, text: 'Facility'),
+          MyIconTile(iconnumber: 0xf73b, text: 'Feedback'),
           SizedBox(
             height: 25,
           ),
           MyLongButton(
-            text: 'Facility Information',
+            text: 'Fill Feedback',
             routename: '',
           ),
           SizedBox(
             height: 25,
           ),
           MyLongButton(
-            text: 'Booking',
-            routename: '',
-          ),
-            SizedBox(
-            height: 25,
-          ),
-          MyLongButton(
-            text: 'Booking Record',
+            text: 'Feedback Submitted',
             routename: '',
           ),
         ]),

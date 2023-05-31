@@ -1,32 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class MyMenuTile extends StatelessWidget {
-  const MyMenuTile({super.key});
+  MyMenuTile(
+      {super.key,
+      required this.text,
+      required this.iconnumber,
+      required this.routename});
+
+  String text;
+  String routename;
+  int iconnumber;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
-        width: 250,
-        height: 250,
+        width: 175,
+        padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.blue,
+          color: Colors.blueAccent,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(children: [
-          Icon(Icons.safety_check, size: 40),
+          Icon(IconData(iconnumber, fontFamily: 'MaterialIcons'), size: 80),
           SizedBox(
             height: 20,
           ),
           Text(
-            "TEXT",
-            style: TextStyle(fontSize: 20),
+            text,
+            style: TextStyle(fontSize: 18),
           ),
         ]),
       ),
       onTap: () {
-        Navigator.pushNamed(context, '/sample_home');
+        Navigator.pushNamed(context, routename);
       },
     );
   }

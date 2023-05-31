@@ -8,8 +8,8 @@ import 'package:flutter/widgets.dart';
 import '../components/my_appbar.dart';
 import '../components/my_long_button.dart';
 
-class MyTestPage extends StatelessWidget {
-  const MyTestPage({super.key});
+class SecurityMenuPage extends StatelessWidget {
+  const SecurityMenuPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,26 +20,26 @@ class MyTestPage extends StatelessWidget {
         color: Colors.white,
         child: Column(children: [
           MyLogo(),
-          MyIconTile(iconnumber: 0xf01c8, text: 'Facility'),
+          MyIconTile(iconnumber: 0xf013e, text: 'Security'),
           SizedBox(
             height: 25,
           ),
           MyLongButton(
-            text: 'Facility Information',
+            text: 'Register Vehicle',
             routename: '',
           ),
           SizedBox(
             height: 25,
           ),
           MyLongButton(
-            text: 'Booking',
-            routename: '',
+            text: 'Show Vechicle Registered',
+            routename: '/show_registered_car',
           ),
-            SizedBox(
+          SizedBox(
             height: 25,
           ),
           MyLongButton(
-            text: 'Booking Record',
+            text: 'Entry Record (Comming Soon)',
             routename: '',
           ),
         ]),

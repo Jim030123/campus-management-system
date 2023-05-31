@@ -51,7 +51,8 @@ class MyDrawer extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 MyLongButton(
-                  
+                  text: 'Log out',
+                  routename: '',
                 ),
 
                 SizedBox(

@@ -2,26 +2,31 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class MyLongButton extends StatelessWidget {
-  MyLongButton({
-    super.key,
-  });
+  MyLongButton({super.key, required this.text, required this.routename});
 
+  String text;
+  String routename;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
         child: Align(
-            child: Text('Log out'), alignment: AlignmentDirectional.center),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                text,
+                style: TextStyle(fontSize: 25),
+              ),
+            ),
+            alignment: AlignmentDirectional.center),
         width: 300,
-        height: 50,
         decoration: BoxDecoration(
           color: Colors.blue,
           borderRadius: BorderRadius.circular(10),
         ),
       ),
       onTap: () {
-        FirebaseAuth.instance.signOut();
-        Navigator.popAndPushNamed(context, '/');
+        Navigator.pushNamed(context, routename);
       },
     );
   }

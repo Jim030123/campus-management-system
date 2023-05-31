@@ -1,98 +1,126 @@
 import "package:campus_management_system/components/my_drawer.dart";
 import "package:campus_management_system/components/my_listtile.dart";
+import "package:campus_management_system/components/my_logo.dart";
 import "package:campus_management_system/components/my_switchlisttile.dart";
 import "package:campus_management_system/components/my_tile.dart";
 import "package:flutter/material.dart";
 import 'package:firebase_auth/firebase_auth.dart';
+import "package:qr_flutter/qr_flutter.dart";
 
-class MainPage extends StatefulWidget {
-  MainPage({super.key});
+class StudentMainPage extends StatefulWidget {
+  StudentMainPage({super.key});
 
   @override
-  State<MainPage> createState() => _MainPageState();
+  State<StudentMainPage> createState() => _StudentMainPageState();
 }
 
 FirebaseAuth _auth = FirebaseAuth.instance;
 final user = FirebaseAuth.instance.currentUser!;
 
-class _MainPageState extends State<MainPage> {
+class _StudentMainPageState extends State<StudentMainPage> {
   bool _visible = true;
   @override
   Widget build(BuildContext context) {
     String batch = 'db get';
     String studentID = 'db get';
     String name = 'db get';
-    String role = 'db get';
     return Scaffold(
       body: SingleChildScrollView(
         child: Center(
           child: Container(
-            margin: EdgeInsets.only(top: 20),
-            width: 1000,
-            height: 1000,
+            // width: 1000,
+            height: 800,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+                MyLogo(),
                 Container(
-                  width: 2000,
+                  padding: EdgeInsets.all(8),
+                  // width: 2000,
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      color: Colors.black,
-                    ),
+                    color: Colors.black12,
+                    // border: Border.all(
+                    //   color: Colors.black,
+                    // ),
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(children: [
-                      Text(
-                        role + " Information",
-                        style: TextStyle(fontSize: 45),
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 25),
-                          child: Column(
-                            children: [
-                              Text(
-                                "Name:" +
-                                    name +
-                                    "\nBatch:" +
-                                    batch +
-                                    "\nStudent ID:" +
-                                    studentID,
-                                style: TextStyle(fontSize: 25),
-                              ),
-                            ],
-                          ),
+                  child: Column(mainAxisSize: MainAxisSize.min, children: [
+                    Text(
+                      "Student Information",
+                      style: TextStyle(fontSize: 30),
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 25),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Column(
+                              children: [
+                                Text(
+                                  "Name:" +
+                                      name +
+                                      "\nBatch:" +
+                                      batch +
+                                      "\nStudent ID:" +
+                                      studentID,
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                QrImageView(
+                                  data: user.uid,
+                                  version: QrVersions.auto,
+                                  size: 75.0,
+                                ),
+                                Text(
+                                  "user ID: \n" + user.uid,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 9),
+                                )
+                              ],
+                            ),
+                          ],
                         ),
-                      )
-                    ]),
-                  ),
+                      ),
+                    )
+                  ]),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    MyMenuTile(),
-                    MyMenuTile(),
-                    MyMenuTile(),
+                    MyMenuTile(
+                        text: 'Student Resident',
+                        iconnumber: 0xf07dd,
+                        routename: '/resident_menu'),
+                    MyMenuTile(
+                        text: 'Security',
+                        iconnumber: 0xf013e,
+                        routename: '/security_menu'),
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    MyMenuTile(),
-                    MyMenuTile(),
-                    MyMenuTile(),
+                    MyMenuTile(
+                        text: 'Facility',
+                        iconnumber: 0xf01c8,
+                        routename: '/test'),
+                    MyMenuTile(
+                        text: 'Feedback',
+                        iconnumber: 0xf73b,
+                        routename: '/feedback_menu'),
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    MyMenuTile(),
-                    MyMenuTile(),
-                    MyMenuTile(),
+                    // MyMenuTile(),
+                    // MyMenuTile(),
+                    // MyMenuTile(),
                   ],
                 ),
               ],
@@ -102,6 +130,13 @@ class _MainPageState extends State<MainPage> {
       ),
       bottomNavigationBar: Container(
         // color: Colors.green,
+        height: 50,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(200), topRight: Radius.circular(200)),
+          color: Colors.black54,
+        ),
+        // color: Colors.green,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 70),
           child: Row(
@@ -110,14 +145,16 @@ class _MainPageState extends State<MainPage> {
               IconButton(
                   icon: const Icon(
                     Icons.account_circle_rounded,
-                    size: 45,
+                    size: 30,
                   ),
                   tooltip: 'User Profile',
-                  onPressed: () {}),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/profile');
+                  }),
               IconButton(
                   icon: const Icon(
                     Icons.logout,
-                    size: 45,
+                    size: 30,
                   ),
                   tooltip: 'Log Out',
                   onPressed: () {
@@ -170,70 +207,13 @@ class _MainPageState extends State<MainPage> {
                               ],
                             ),
                           );
-
-                          // Container(
-                          //   margin: EdgeInsets.only(bottom: 10, right: 10),
-                          //   width: 200.0,
-                          //   height: 250.0,
-                          //   child: ListView(children: [
-                          //     MyListTile(
-                          //         carmodel: 'sad', carplatenumber: 'fdf'),
-                          //     MyListTile(
-                          //         carmodel: 'sad', carplatenumber: 'fdf'),
-                          //     MyListTile(
-                          //         carmodel: 'sad', carplatenumber: 'fdf'),
-                          //     MyListTile(
-                          //         carmodel: 'sad', carplatenumber: 'fdf')
-                          //   ]),
-                          //   decoration: BoxDecoration(
-                          //       borderRadius: BorderRadius.circular(25),
-                          //       color: Colors.grey),
-                          // );
                         }
                       });
-                      // showDialog(
-                      //   context: context,
-                      //   builder: (ctx) => AlertDialog(
-                      //     title: const Text("Alert Dialog Box"),
-                      //     content:
-                      //         const Text("You have raised a Alert Dialog Box"),
-                      //     actions: <Widget>[
-                      //       TextButton(
-                      //         onPressed: () {
-                      //           Navigator.of(ctx).pop();
-                      //         },
-                      //         child: Container(
-                      //           color: Colors.green,
-                      //           padding: const EdgeInsets.all(14),
-                      //           child: const Text("okay"),
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // );
-                      // Stack(children: <Widget>[
-                      //   Container(
-                      //     width: 300,
-                      //     height: 300,
-                      //     color: Colors.red,
-                      //     padding: EdgeInsets.all(15.0),
-                      //     alignment: Alignment.topRight,
-                      //     child: Text(
-                      //       'One',
-                      //       style: TextStyle(color: Colors.white),
-                      //     ), //Text
-                      //   ),
-                      // ]);
                     });
                   })
             ],
           ),
         ),
-        height: 75,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(200), topRight: Radius.circular(200)),
-            color: Color.fromARGB(255, 97, 209, 101)),
       ),
     );
   }
