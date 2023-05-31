@@ -1,4 +1,3 @@
-import 'package:campus_management_system/components/my_appbar.dart';
 import 'package:campus_management_system/components/my_drawer.dart';
 import 'package:campus_management_system/components/my_icon_tile.dart';
 import 'package:campus_management_system/components/my_logo.dart';
@@ -6,10 +5,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import '../components/my_appbar.dart';
 import '../components/my_long_button.dart';
 
-class StudentResidentMenuPage extends StatelessWidget {
-  const StudentResidentMenuPage({super.key});
+class ResidentStudentPage extends StatelessWidget {
+  const ResidentStudentPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,23 +20,19 @@ class StudentResidentMenuPage extends StatelessWidget {
         color: Colors.white,
         child: Column(children: [
           MyLogo(),
-          MyIconTile(iconnumber: 0xf07dd, text: 'Student Resident'),
-          SizedBox(
-            height: 25,
-          ),
-          MyLongButton(text: 'Register Student', routename: '/registeration'),
+          MyIconTile(iconnumber: 0xf01c8, text: 'Resident Student'),
           SizedBox(
             height: 25,
           ),
           MyLongButton(
-            text: 'Hostel Information',
-            routename: '',
+            text: 'Add account',
+            routename: '/',
           ),
           SizedBox(
             height: 25,
           ),
           MyLongButton(
-            text: 'Map',
+            text: 'View All account',
             routename: '',
           ),
         ]),

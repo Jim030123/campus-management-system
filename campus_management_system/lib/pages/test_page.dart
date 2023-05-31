@@ -20,26 +20,19 @@ class MyTestPage extends StatelessWidget {
         color: Colors.white,
         child: Column(children: [
           MyLogo(),
-          MyIconTile(iconnumber: 0xf01c8, text: 'Facility'),
+          MyIconTile(iconnumber: 0xf01c8, text: 'Resident Student'),
           SizedBox(
             height: 25,
           ),
           MyLongButton(
-            text: 'Facility Information',
+            text: 'Add account',
             routename: '',
           ),
           SizedBox(
             height: 25,
           ),
           MyLongButton(
-            text: 'Booking',
-            routename: '',
-          ),
-            SizedBox(
-            height: 25,
-          ),
-          MyLongButton(
-            text: 'Booking Record',
+            text: 'View All account',
             routename: '',
           ),
         ]),

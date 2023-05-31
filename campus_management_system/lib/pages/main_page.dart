@@ -29,7 +29,7 @@ class _StudentMainPageState extends State<StudentMainPage> {
         child: Center(
           child: Container(
             // width: 1000,
-            height: 800,
+            height: 1200,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -108,17 +108,30 @@ class _StudentMainPageState extends State<StudentMainPage> {
                     MyMenuTile(
                         text: 'Facility',
                         iconnumber: 0xf01c8,
-                        routename: '/test'),
+                        routename: '/facility_menu'),
                     MyMenuTile(
                         text: 'Feedback',
                         iconnumber: 0xf73b,
                         routename: '/feedback_menu'),
                   ],
                 ),
+                SizedBox(
+                  width: 25,
+                ),
+                Divider(
+                  height: 2.0,
+                  color: Colors.black,
+                ),
+                SizedBox(
+                  width: 25,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    // MyMenuTile(),
+                    MyMenuTile(
+                        text: 'Add Student',
+                        iconnumber: 0xf7c5,
+                        routename: '/student_resident_menu'),
                     // MyMenuTile(),
                     // MyMenuTile(),
                   ],

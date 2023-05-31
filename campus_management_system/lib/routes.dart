@@ -4,7 +4,6 @@ import 'package:campus_management_system/pages/login_page.dart';
 import 'package:campus_management_system/pages/management_page.dart';
 
 import 'package:campus_management_system/pages/management_register_page.dart';
-import 'package:campus_management_system/pages/sample_login_page.dart';
 import 'package:campus_management_system/pages/test_page.dart';
 import 'package:campus_management_system/pages/visitor_page.dart';
 import 'package:flutter/material.dart';

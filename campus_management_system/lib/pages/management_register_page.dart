@@ -93,6 +93,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         emailController.text),
                   );
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  signUserUp;
                 },
                 child: Text('Register'),
               ),
@@ -111,5 +112,24 @@ class _RegistrationPageState extends State<RegistrationPage> {
     ref.doc(user!.uid).set({'email': emailController.text, 'role': _roles});
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => RegistrationPage()));
+  }
+
+  void signUserUp() async {
+    // show loading circle
+    showDialog(
+        context: context,
+        builder: (context) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        });
+
+    try {
+      // check if password is confirmed
+
+      Navigator.pop(context);
+    } on FirebaseAuthException catch (e) {}
+
+    // pop the loading circle
   }
 }
