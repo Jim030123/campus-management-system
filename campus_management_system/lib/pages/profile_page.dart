@@ -1,22 +1,28 @@
 import 'package:campus_management_system/components/my_appbar.dart';
 import 'package:campus_management_system/components/my_drawer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-import 'Main_page.dart';
+class ProfilePage extends StatefulWidget {
+  ProfilePage({super.key});
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  final user = FirebaseAuth.instance.currentUser!;
 
   @override
   Widget build(BuildContext context) {
-    String fullname = 'db get';
+    String name = 'db get';
     String role = 'db get';
     String dob = 'db get';
     String gender = 'db get';
     String nationality = 'db get';
     String program = 'db get';
-    String department = 'db get';
+
     String roomNo = 'db get';
     String id = 'db get';
     return Scaffold(
@@ -38,7 +44,7 @@ class ProfilePage extends StatelessWidget {
               height: 25,
             ),
             Container(
-              // margin: EdgeInsets.symmetric(horizontal: 100),
+              margin: EdgeInsets.symmetric(horizontal: 100),
               alignment: Alignment.topLeft,
               child: Container(
                 padding: EdgeInsets.all(20),
@@ -113,7 +119,7 @@ class ProfilePage extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  fullname,
+                                  name,
                                   style: TextStyle(fontSize: 20),
                                 ),
                                 Text(
@@ -134,10 +140,6 @@ class ProfilePage extends StatelessWidget {
                                 ),
                                 Text(
                                   program,
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                                Text(
-                                  department,
                                   style: TextStyle(fontSize: 20),
                                 ),
                                 Text(

@@ -1,8 +1,11 @@
+import 'package:campus_management_system/pages/account_management_page.dart';
 import 'package:campus_management_system/pages/auth_page.dart';
-import 'package:campus_management_system/pages/blank_page.dart';
+import 'package:campus_management_system/pages/facility_information.dart';
+import 'package:campus_management_system/pages/redirect_login_page.dart';
 import 'package:campus_management_system/pages/booking_menu_page.dart';
 import 'package:campus_management_system/pages/booking_page.dart';
 import 'package:campus_management_system/pages/feedback_menu_page.dart';
+
 import 'package:campus_management_system/pages/resident_menu_page.dart';
 import 'package:campus_management_system/pages/main_page.dart';
 
@@ -13,7 +16,9 @@ import 'package:campus_management_system/pages/management_register_page.dart';
 import 'package:campus_management_system/pages/profile_page.dart';
 import 'package:campus_management_system/pages/security_menu.dart';
 import 'package:campus_management_system/pages/show_car_registered.dart';
-import 'package:campus_management_system/pages/test_page.dart';
+import 'package:campus_management_system/components/my_alert_dialog.dart';
+import 'package:campus_management_system/pages/test.dart';
+import 'package:campus_management_system/pages/view_all_account.dart';
 import 'package:campus_management_system/pages/visitor_page.dart';
 import 'package:campus_management_system/routes.dart';
 import 'package:flutter/material.dart';
@@ -29,44 +34,45 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MainApp());
+  runApp(MainApp());
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  MainApp({super.key});
+
+  get refreshedUser => null;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // navigatorObservers: [routeObserver],
       routes: {
-        '': (context) => BlankPage(),
+        '': (context) => RedirectLoginPage(),
         '/': (context) => IntroductionPage(),
-        '/main': (context) => StudentMainPage(),
+        '/student_main': (context) => StudentMainPage(),
         '/auth': (context) => AuthPage(),
         '/login': (context) => MyLoginPage(),
         '/test': (context) => MyTestPage(),
         '/profile': (context) => ProfilePage(),
         '/logout': (context) => MyLoginPage(),
-        
 
         // Menu
         '/resident_menu': (context) => StudentResidentMenuPage(),
         '/feedback_menu': (context) => FeedbackPage(),
-        
+
         // Security
         '/security_menu': (context) => SecurityMenuPage(),
         '/show_registered_car': (context) => ShowRegisterdCarPage(),
 
         // Facility
         '/facility_menu': (context) => BookingMenuPage(),
+        '/facility_information': (context) => FacilityInformationPage(),
         '/booking_page': (context) => BookingPage(),
 
-
-
         // Management
-        '/student_resident_menu': (context) => StudentResidentMenuPage(),
+        '/account_management_menu': (context) => AccountManagementMenuPage(),
         '/registeration': (context) => RegistrationPage(),
-
+        '/view_all_account': (context) => ViewAllAccountPage(),
       },
       initialRoute: '/',
       debugShowCheckedModeBanner: true,

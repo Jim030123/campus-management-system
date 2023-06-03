@@ -24,12 +24,12 @@ class StudentResidentMenuPage extends StatelessWidget {
           SizedBox(
             height: 25,
           ),
-          MyLongButton(text: 'Register Student', routename: '/registeration'),
+          MyLongButton(text: 'Resident Application', routename: ''),
           SizedBox(
             height: 25,
           ),
           MyLongButton(
-            text: 'Hostel Information',
+            text: 'Resident Information',
             routename: '',
           ),
           SizedBox(

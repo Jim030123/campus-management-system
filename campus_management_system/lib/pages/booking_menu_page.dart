@@ -26,7 +26,7 @@ class BookingMenuPage extends StatelessWidget {
           ),
           MyLongButton(
             text: 'Facility Information',
-            routename: '',
+            routename: '/facility_information',
           ),
           SizedBox(
             height: 25,

@@ -1,0 +1,11 @@
+import 'package:flutter/material.dart';
+
+class TermAndCondition extends StatelessWidget {
+  const TermAndCondition({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+        'Term and Conditions\n1.	All student residents shall observe and complete with rule rules and regulations of the student residence as embodied in the Student Manual, Agreement and Rules and Regulations for Student Residence or any other rules and regulation the management may see fit to implement from time to time\n2.	All student of Southern University College can apply the student residence. They must fill in the student residence application from. Students are living in other states will have priority in reviewing the student residence application. The review of the application of students living in Johor will be based on the reasonable allocation and arrangement of vacant\n3.	All applicants will be notified as to the success or otherwise of their application within 3 working days upon the receipt of form by Student Resident Unit (SRU). Upon confirmation of the availability of rooms, applicant is required to pay the rental fees in advance (by semester) prior to check-in.\n4.	Resident who fails to pay rental within the stipulated time will be evicted from Student Residence.\n5.	Allocation of room is solely at the discretion of SRU. Any special requests must be reviewed by SRU. Decisions will be made by taking the reason of application and applicant’s condition into conversations. Priority will only given to applicants with disabilities and health issues etc.\n6.	Maximum tenancy is 12 months. Student residents are required to move out from the student residence at the end of the 12 month of tenancy or upon graduation to facilitate cleaning and clearance job by the Student Resident Unit (hereafter as “the unit”) and AGO. Those who wish to extend their tenancy will have their qualification evaluated by the Unit according to the remaining space, personal traits and disciplinary records. Such application shall be made within stipulated timeframe, and payment shall be made on time. Anyone who has not made such application before the deadline will be deemed as voluntary disqualification. The Unit reserves the right to refuse any application that does nit comply with this regulation without providing any reason.');
+  }
+}

@@ -1,3 +1,4 @@
+import 'package:campus_management_system/pages/redirect_login_page.dart';
 import 'package:campus_management_system/pages/main_page.dart';
 import 'package:campus_management_system/pages/home_page.dart';
 import 'package:campus_management_system/pages/login_page.dart';
@@ -7,7 +8,7 @@ import 'login_or_register_page.dart';
 import 'main_page.dart';
 
 class AuthPage extends StatelessWidget {
-  const AuthPage({super.key});
+  AuthPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,9 @@ class AuthPage extends StatelessWidget {
         builder: (context, snapshot) {
           // user is logged in
           if (snapshot.hasData) {
-            return StudentMainPage();
+            // uid not refresh
+
+            return RedirectLoginPage();
           }
 
           // user is not logged in

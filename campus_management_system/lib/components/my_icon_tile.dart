@@ -12,7 +12,7 @@ class MyIconTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: 125,
+        width: 130,
         padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),

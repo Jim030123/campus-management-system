@@ -1,7 +1,4 @@
-import "package:campus_management_system/components/my_drawer.dart";
-import "package:campus_management_system/components/my_listtile.dart";
 import "package:campus_management_system/components/my_logo.dart";
-import "package:campus_management_system/components/my_switchlisttile.dart";
 import "package:campus_management_system/components/my_tile.dart";
 import "package:flutter/material.dart";
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,11 +11,11 @@ class StudentMainPage extends StatefulWidget {
   State<StudentMainPage> createState() => _StudentMainPageState();
 }
 
-FirebaseAuth _auth = FirebaseAuth.instance;
-final user = FirebaseAuth.instance.currentUser!;
+final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class _StudentMainPageState extends State<StudentMainPage> {
   bool _visible = true;
+  final user = FirebaseAuth.instance.currentUser!;
   @override
   Widget build(BuildContext context) {
     String batch = 'db get';
@@ -36,7 +33,6 @@ class _StudentMainPageState extends State<StudentMainPage> {
                 MyLogo(),
                 Container(
                   padding: EdgeInsets.all(8),
-                  // width: 2000,
                   decoration: BoxDecoration(
                     color: Colors.black12,
                     // border: Border.all(
@@ -44,7 +40,7 @@ class _StudentMainPageState extends State<StudentMainPage> {
                     // ),
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
-                  child: Column(mainAxisSize: MainAxisSize.min, children: [
+                  child: Column(children: [
                     Text(
                       "Student Information",
                       style: TextStyle(fontSize: 30),
@@ -59,11 +55,11 @@ class _StudentMainPageState extends State<StudentMainPage> {
                             Column(
                               children: [
                                 Text(
-                                  "Name:" +
+                                  "Name: " +
                                       name +
-                                      "\nBatch:" +
+                                      "\nBatch: " +
                                       batch +
-                                      "\nStudent ID:" +
+                                      "\nStudent ID: " +
                                       studentID,
                                   style: TextStyle(fontSize: 15),
                                 ),
@@ -74,7 +70,7 @@ class _StudentMainPageState extends State<StudentMainPage> {
                                 QrImageView(
                                   data: user.uid,
                                   version: QrVersions.auto,
-                                  size: 75.0,
+                                  size: 100.0,
                                 ),
                                 Text(
                                   "user ID: \n" + user.uid,
@@ -129,9 +125,9 @@ class _StudentMainPageState extends State<StudentMainPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     MyMenuTile(
-                        text: 'Add Student',
+                        text: 'Account Management',
                         iconnumber: 0xf7c5,
-                        routename: '/student_resident_menu'),
+                        routename: '/account_management_menu'),
                     // MyMenuTile(),
                     // MyMenuTile(),
                   ],
