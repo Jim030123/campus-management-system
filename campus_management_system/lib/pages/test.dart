@@ -3,6 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../user/user.dart';
+
 class MyTestPage extends StatelessWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -39,7 +41,7 @@ class MyTestPage extends StatelessWidget {
           child: ElevatedButton(
             child: Text('Create User Document'),
             onPressed: () {
-              createUserDocument();
+              fetchUsers();
             },
           ),
         ),

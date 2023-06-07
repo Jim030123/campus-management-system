@@ -1,17 +1,19 @@
 import 'package:campus_management_system/pages/account_management_page.dart';
 import 'package:campus_management_system/pages/auth_page.dart';
 import 'package:campus_management_system/pages/facility_information.dart';
+import 'package:campus_management_system/pages/management/management_main_page.dart';
 import 'package:campus_management_system/pages/redirect_login_page.dart';
 import 'package:campus_management_system/pages/booking_menu_page.dart';
 import 'package:campus_management_system/pages/booking_page.dart';
 import 'package:campus_management_system/pages/feedback_menu_page.dart';
+import 'package:campus_management_system/pages/register_vehicle_page.dart';
 
 import 'package:campus_management_system/pages/resident_menu_page.dart';
-import 'package:campus_management_system/pages/main_page.dart';
+import 'package:campus_management_system/pages/student/student_main_page.dart';
 
 import 'package:campus_management_system/pages/home_page.dart';
 import 'package:campus_management_system/pages/introduction_page.dart';
-import 'package:campus_management_system/pages/login_page.dart';
+import 'package:campus_management_system/pages/general/login_page.dart';
 import 'package:campus_management_system/pages/management_register_page.dart';
 import 'package:campus_management_system/pages/profile_page.dart';
 import 'package:campus_management_system/pages/security_menu.dart';
@@ -19,6 +21,9 @@ import 'package:campus_management_system/pages/show_car_registered.dart';
 import 'package:campus_management_system/components/my_alert_dialog.dart';
 import 'package:campus_management_system/pages/test.dart';
 import 'package:campus_management_system/pages/view_all_account.dart';
+import 'package:campus_management_system/pages/visitor/register_visitor_pass.dart';
+import 'package:campus_management_system/pages/visitor/visitor_auth_page.dart';
+import 'package:campus_management_system/pages/visitor/visitor_login_page.dart';
 import 'package:campus_management_system/pages/visitor_page.dart';
 import 'package:campus_management_system/routes.dart';
 import 'package:flutter/material.dart';
@@ -45,16 +50,21 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // navigatorObservers: [routeObserver],
       routes: {
         '': (context) => RedirectLoginPage(),
         '/': (context) => IntroductionPage(),
         '/student_main': (context) => StudentMainPage(),
+        '/management_main': (context) => MagnagementMainPage(),
         '/auth': (context) => AuthPage(),
         '/login': (context) => MyLoginPage(),
         '/test': (context) => MyTestPage(),
         '/profile': (context) => ProfilePage(),
         '/logout': (context) => MyLoginPage(),
+
+        // Visitor
+        '/visitor_login': (context) => VisitorLoginPage(),
+        '/register_visitor_pass': (context) => RegisterVisitorPass(),
+        '/visitor_auth': (context) => VisitorAuthPage(),
 
         // Menu
         '/resident_menu': (context) => StudentResidentMenuPage(),
@@ -63,11 +73,12 @@ class MainApp extends StatelessWidget {
         // Security
         '/security_menu': (context) => SecurityMenuPage(),
         '/show_registered_car': (context) => ShowRegisterdCarPage(),
+        '/register_vehicle': (context) => RegistrationVehiclePage(),
 
         // Facility
         '/facility_menu': (context) => BookingMenuPage(),
         '/facility_information': (context) => FacilityInformationPage(),
-        '/booking_page': (context) => BookingPage(),
+        '/booking_page': (context) => BookingCalendarDemoApp(),
 
         // Management
         '/account_management_menu': (context) => AccountManagementMenuPage(),

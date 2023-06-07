@@ -1,7 +1,6 @@
 import 'package:campus_management_system/components/my_drawer.dart';
 import 'package:campus_management_system/pages/home_page.dart';
-import 'package:campus_management_system/pages/login_page.dart';
-import 'package:campus_management_system/pages/management_page.dart';
+import 'package:campus_management_system/pages/general/login_page.dart';
 
 import 'package:campus_management_system/pages/management_register_page.dart';
 import 'package:campus_management_system/components/my_alert_dialog.dart';

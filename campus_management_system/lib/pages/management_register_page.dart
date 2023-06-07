@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:campus_management_system/role.dart';
 import 'package:intl/intl.dart';
+import 'package:campus_management_system/pages/general/login_page.dart';
 
 class RegistrationPage extends StatefulWidget {
   @override
@@ -19,8 +20,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
     _selectedProgram = _program[0];
   }
   // bool emailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
@@ -82,7 +81,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(),
-      drawer: MyDrawer(),
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(16.0),
@@ -173,8 +171,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         decoration: InputDecoration(labelText: 'Password'),
                         obscureText: true,
                         validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please enter a password';
+                          if (value!.length < 6) {
+                            return 'Please enter a password at least 6 letter or number!';
                           }
                           return null;
                         },
@@ -233,33 +231,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         child: ElevatedButton(
                           onPressed: () {
                             _checkTextLength();
-                            signUserUp();
-
-                            // Map<String, dynamic> data = {
-                            //   "name": nameController.text,
-                            //   "dob": formattedDob,
-                            //   "contact_no": contactnoController.text,
-                            //   "email": emailController.text,
-                            //   "roles": _selectedRole as String,
-                            //   "program": _selectedProgram as String,
-                            //   "id": idController.text,
-                            // };
 
                             if (_formKey.currentState!.validate()) {
-                              createUserDocument();
+                              signUpWithEmail(context);
+                              _confirmDialog();
 
-                              // FirebaseFirestore.instance
-                              //     .collection("user")
-                              //     .add(data);
-
-                              final snackBar = SnackBar(
-                                content: Text('You have created a ' +
-                                    _selectedRole! +
-                                    ' for this account: ' +
-                                    emailController.text),
-                              );
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(snackBar);
+                              // createUserDocument();
                             }
                           },
                           child: Text('Register'),
@@ -276,25 +253,56 @@ class _RegistrationPageState extends State<RegistrationPage> {
     );
   }
 
-  void signUserUp() async {
-    // show loading circle
-    showDialog(
-        context: context,
-        builder: (context) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        });
+  Future<void> signUpWithEmail(BuildContext context) async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
-      Navigator.pop(context);
-    } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
-    }
+
+      String uid = userCredential.user!.uid;
+      String formattedDob = DateFormat('yyyy/MM/dd').format(dob);
+
+      await FirebaseFirestore.instance.collection('users').doc(uid).set({
+        "name": nameController.text,
+        "dob": formattedDob,
+        "contact_no": contactnoController.text,
+        "email": emailController.text,
+        "roles": _selectedRole as String,
+        "program": _selectedProgram as String,
+        "id": idController.text,
+      });
+
+      await FirebaseAuth.instance
+          .sendPasswordResetEmail(email: emailController.text);
+    } on FirebaseAuthException catch (e) {}
     ;
+    // pop the loading circle
+  }
+
+  void _confirmDialog() async {
+    // show loading circle
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Create account'),
+          content: Text(
+              'This also will create a profile for' + emailController.text),
+          actions: [
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+
     // pop the loading circle
   }
 
@@ -317,32 +325,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
           );
         },
       );
-    }
-  }
-
-  Future<void> createUserDocument() async {
-    User? user = _auth.currentUser;
-
-    if (user != null) {
-      try {
-        DocumentReference userDocRef =
-            _firestore.collection('users').doc(user.uid);
-
-        String formattedDob = DateFormat('yyyy/MM/dd').format(dob);
-        await userDocRef.set({
-          "name": nameController.text,
-          "dob": formattedDob,
-          "contact_no": contactnoController.text,
-          "email": emailController.text,
-          "roles": _selectedRole as String,
-          "program": _selectedProgram as String,
-          "id": idController.text,
-        });
-
-        print('User document created successfully!');
-      } catch (e) {
-        print('Error creating user document: $e');
-      }
     }
   }
 }

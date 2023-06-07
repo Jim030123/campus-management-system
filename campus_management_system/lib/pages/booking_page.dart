@@ -1,19 +1,16 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
-
 import 'package:booking_calendar/booking_calendar.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 
-
-class BookingPage extends StatefulWidget {
-  const BookingPage({Key? key}) : super(key: key);
+class BookingCalendarDemoApp extends StatefulWidget {
+  const BookingCalendarDemoApp({Key? key}) : super(key: key);
 
   @override
-  State<BookingPage> createState() => _BookingPageState();
+  State<BookingCalendarDemoApp> createState() => _BookingCalendarDemoAppState();
 }
 
-class _BookingPageState extends State<BookingPage> {
+class _BookingCalendarDemoAppState extends State<BookingCalendarDemoApp> {
   final now = DateTime.now();
   late BookingService mockBookingService;
 

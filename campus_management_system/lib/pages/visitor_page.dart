@@ -24,9 +24,7 @@ class VisitorPage extends StatelessWidget {
               alignment: Alignment.centerRight,
               child: ElevatedButton(
                 child: Text('Switch to Hostel Student / Management'),
-                onPressed: () {
-                  print('Hello');
-                },
+                onPressed: () {},
               ),
             ),
 

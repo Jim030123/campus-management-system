@@ -50,11 +50,6 @@ class MyDrawer extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                MyLongButton(
-                  text: 'Log out',
-                  routename: '',
-                ),
-
                 SizedBox(
                   height: 25,
                 ),
