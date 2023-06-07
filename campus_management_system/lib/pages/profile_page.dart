@@ -26,7 +26,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    getdatafromDB();
+    // getdatafromDB();
   }
 
   getdatafromDB() async {

@@ -23,6 +23,7 @@ dependencies:
   curved_navigation_bar: ^1.0.3
   qr_flutter: ^4.1.0
   booking_calendar: ^1.1.9
+  camera: ^0.10.5+2
   # marquee: ^2.2.3
 
   

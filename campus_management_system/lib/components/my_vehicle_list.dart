@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 
-class TestWidget extends StatefulWidget {
-  const TestWidget({super.key});
+class MyVehicleList extends StatefulWidget {
+  const MyVehicleList({super.key});
 
   @override
-  State<TestWidget> createState() => _TestWidgetState();
+  State<MyVehicleList> createState() => _MyVehicleListState();
 }
 
-class _TestWidgetState extends State<TestWidget> {
+class _MyVehicleListState extends State<MyVehicleList> {
   @override
   Widget build(BuildContext context) {
-    
     String model = "ds";
     String regdate = "dsa";
     return Padding(
