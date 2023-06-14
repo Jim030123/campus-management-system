@@ -1,7 +1,3 @@
-import 'dart:io';
-import 'dart:ui';
-
-import 'package:camera/camera.dart';
 import 'package:campus_management_system/components/my_alert_dialog.dart';
 import 'package:campus_management_system/components/my_appbar.dart';
 import 'package:campus_management_system/components/my_drawer.dart';
@@ -12,32 +8,40 @@ import 'package:campus_management_system/role.dart';
 import 'package:intl/intl.dart';
 import 'package:campus_management_system/pages/general/login_page.dart';
 
-import '../components/my_camera.dart';
-
-class RegistrationVehiclePage extends StatefulWidget {
-  RegistrationVehiclePage({super.key});
+class ResidentApplicationPage extends StatefulWidget {
+  ResidentApplicationPage({super.key});
 
   @override
-  _RegistrationVehiclePageState createState() =>
-      _RegistrationVehiclePageState();
+  _ResidentApplicationPageState createState() =>
+      _ResidentApplicationPageState();
 }
 
-class _RegistrationVehiclePageState extends State<RegistrationVehiclePage> {
-  @override
-  _RegistrationVehiclePageState() {}
+class _ResidentApplicationPageState extends State<ResidentApplicationPage> {
+  _ResidentApplicationPageState() {
+    _selectedRoomType = _roomtype[0];
+  }
 
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController vehiclenumberController = TextEditingController();
-  final TextEditingController modelnameController = TextEditingController();
-  TextEditingController nameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController idController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController idController = TextEditingController();
+  final TextEditingController parentNameController = TextEditingController();
+  final TextEditingController parentContactNoController =
+      TextEditingController();
+  final TextEditingController relationController = TextEditingController();
   final String status = "Wait the Management Review";
 
-  bool checkboxValue = false;
+  final _roomtype = [
+    'Twin Sharing (Air Conditioned) (Block A & C) RM 660 (Short Semester) RM 990 (Long Semester)',
+    'Twin Sharing (Non Air Conditioned) (Block B & D) RM 840 (Short Semester) RM 1 260 (Long Semester)',
+    'Twin Sharing (Air Conditioned) (Block E) RM 1 500 (Short Semester)  RM 2 250 (Long Semester)',
+    'Trio Sharing (Air Conditioned) (Block E) RM 1 050 (Short Semester)  RM 1 575 (Long Semester)'
+  ];
 
-  bool value = false;
+  String? _selectedRoomType = "";
+
+  bool checkboxValue = false;
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +51,6 @@ class _RegistrationVehiclePageState extends State<RegistrationVehiclePage> {
           .collection('users') // Replace with your collection name
           .doc(user) // Use the provided document ID
           .get();
-
-      // Access the "role" field and convert it to a string
 
       String name = await snapshot.get('name');
       String email = await snapshot.get('email');
@@ -64,16 +66,13 @@ class _RegistrationVehiclePageState extends State<RegistrationVehiclePage> {
           builder: (context, snapshot) {
             List<String> dataList = snapshot.data as List<String>;
             String name = dataList[0];
-
             String email = dataList[1];
-
             String id = dataList[2];
 
             nameController.text = name;
             emailController.text = email;
             idController.text = id;
 
-            final XFile? picture;
             return Container(
               padding: EdgeInsets.all(16.0),
               child: Column(
@@ -81,7 +80,7 @@ class _RegistrationVehiclePageState extends State<RegistrationVehiclePage> {
                   Align(
                     alignment: Alignment.topLeft,
                     child: Text(
-                      'Register New Car',
+                      'Student Resident Application',
                       style: TextStyle(fontSize: 30),
                     ),
                   ),
@@ -99,9 +98,7 @@ class _RegistrationVehiclePageState extends State<RegistrationVehiclePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // name
                           TextFormField(
-                            // readOnly: true,
                             controller: nameController,
                             decoration: InputDecoration(labelText: 'Name'),
                             validator: (value) {
@@ -111,9 +108,7 @@ class _RegistrationVehiclePageState extends State<RegistrationVehiclePage> {
                               return null;
                             },
                           ),
-
                           TextFormField(
-                            // readOnly: true,
                             controller: emailController,
                             decoration: InputDecoration(labelText: 'Email'),
                             validator: (value) {
@@ -124,7 +119,6 @@ class _RegistrationVehiclePageState extends State<RegistrationVehiclePage> {
                             },
                           ),
                           TextFormField(
-                            // readOnly: true,
                             controller: idController,
                             decoration: InputDecoration(labelText: 'ID'),
                             validator: (value) {
@@ -134,43 +128,49 @@ class _RegistrationVehiclePageState extends State<RegistrationVehiclePage> {
                               return null;
                             },
                           ),
-                          TextFormField(
-                            controller: vehiclenumberController,
+                          DropdownButtonFormField(
                             decoration: InputDecoration(
-                                labelText: 'Vehicle Plate Number'),
+                              labelText: "Role",
+                              prefixIcon: Icon(Icons.verified_user),
+                              border: UnderlineInputBorder(),
+                            ),
+                            value: _selectedRoomType,
+                            items: _roomtype
+                                .map((e) => DropdownMenuItem(
+                                      child: Text(e),
+                                      value: e,
+                                    ))
+                                .toList(),
+                            onChanged: (val) {
+                              setState(() {
+                                _selectedRoomType = val as String;
+                              });
+                            },
+                          ),
+                          TextFormField(
+                            controller: parentNameController,
+                            decoration:
+                                InputDecoration(labelText: 'Parent Name'),
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return 'Please enter your Vechicle Plate Number';
+                                return 'Please enter your Parent Name';
                               }
                               return null;
                             },
                           ),
-                          TextFormField(
-                            controller: modelnameController,
-                            decoration: InputDecoration(
-                                labelText: 'Vehicle Model Name'),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter your Vechicle Model Name';
-                              }
-                              return null;
-                            },
-                          ),
-
                           SizedBox(height: 16.0),
-
-                          ElevatedButton(
-                            child: Text('Take Photo'),
-                            onPressed: () async {
-                              await availableCameras().then((value) =>
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (_) =>
-                                              CameraPage(cameras: value))));
+                          TextFormField(
+                            controller: parentContactNoController,
+                            decoration: InputDecoration(
+                              labelText: 'Parent Contact Number',
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter your Parent Contact Number';
+                              }
+                              return null;
                             },
                           ),
-
                           Row(
                             children: [
                               Checkbox(
@@ -182,21 +182,23 @@ class _RegistrationVehiclePageState extends State<RegistrationVehiclePage> {
                                 },
                               ),
                               Text(
-                                  "I have read and agree to Terms of Service and Privacy Policy")
+                                "I have read and agree to Terms of Service and Privacy Policy",
+                                style: TextStyle(
+                                  color: const Color.fromARGB(255, 33, 40, 243),
+                                ),
+                              ),
                             ],
                           ),
-
                           SizedBox(
                             height: 25,
                           ),
-
                           Align(
                             alignment: Alignment.bottomRight,
                             child: ElevatedButton(
                               onPressed: checkboxValue
                                   ? () {
                                       if (_formKey.currentState!.validate()) {
-                                        registerVehicle(context);
+                                        studentResidentApplication(context);
                                         _confirmDialog();
                                       }
                                     }
@@ -217,39 +219,37 @@ class _RegistrationVehiclePageState extends State<RegistrationVehiclePage> {
     );
   }
 
-  registerVehicle(BuildContext context) async {
+  studentResidentApplication(BuildContext context) async {
     try {
       String auth = FirebaseAuth.instance.currentUser!.uid;
 
       await FirebaseFirestore.instance
-          .collection('users')
+          .collection('resident_application')
           .doc(auth)
-          .collection('vehicle')
-          .doc(vehiclenumberController.text)
           .set({
         "name": nameController.text,
         "email": emailController.text,
         "id": idController.text,
-        "vehicle_number": vehiclenumberController.text,
-        "model": modelnameController.text,
-        "status": status
+        "room_type": _selectedRoomType,
+        "parent_name": parentNameController.text,
+        "parent_contact_no": parentContactNoController.text,
+        "status": status,
       });
       print(auth);
-    } on FirebaseAuthException catch (e) {}
-    ;
-    // pop the loading circle
+    } on FirebaseAuthException catch (e) {
+      // Handle the exception if needed
+    }
   }
 
   void _confirmDialog() async {
-    // show loading circle
-
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Create account'),
           content: Text(
-              'This also will create a profile for' + emailController.text),
+            'This will also create a profile for ' + emailController.text,
+          ),
           actions: [
             TextButton(
               child: Text('OK'),
@@ -261,7 +261,5 @@ class _RegistrationVehiclePageState extends State<RegistrationVehiclePage> {
         );
       },
     );
-
-    // pop the loading circle
   }
 }

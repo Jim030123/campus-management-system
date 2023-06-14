@@ -1,5 +1,6 @@
 import "package:campus_management_system/components/my_logo.dart";
 import "package:campus_management_system/components/my_tile.dart";
+import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:qr_flutter/qr_flutter.dart";
@@ -18,125 +19,135 @@ class _MagnagementMainPageState extends State<MagnagementMainPage> {
   final user = FirebaseAuth.instance.currentUser!;
   @override
   Widget build(BuildContext context) {
-    String batch = 'db get';
-    String studentID = 'db get';
-    String name = 'db get';
+    getdatafromDB() async {
+      final user = FirebaseAuth.instance.currentUser!.uid;
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('users') // Replace with your collection name
+          .doc(user) // Use the provided document ID
+          .get();
+
+      String name = await snapshot.get('name');
+      String email = await snapshot.get('email');
+      String id = await snapshot.get('id');
+      return [name, email, id];
+    }
+
+    // String batch = 'db get';
+    // String studentID = 'db get';
+    // String name = 'db get';
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Center(
-          child: Container(
-            // width: 1000,
-            height: 1200,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                MyLogo(),
-                Container(
-                  padding: EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.black12,
-                    // border: Border.all(
-                    //   color: Colors.black,
-                    // ),
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: Column(children: [
-                    Text(
-                      "Management Staff Information",
-                      style: TextStyle(fontSize: 30),
-                    ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 25),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Column(
-                              children: [
-                                Text(
-                                  "Name: " +
-                                      name +
-                                      "\nBatch: " +
-                                      batch +
-                                      "\nStudent ID: " +
-                                      studentID,
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                QrImageView(
-                                  data: user.uid,
-                                  version: QrVersions.auto,
-                                  size: 100.0,
-                                ),
-                                Text(
-                                  "user ID: \n" + user.uid,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(fontSize: 9),
-                                )
-                              ],
-                            ),
-                          ],
+      body: FutureBuilder(
+          future: getdatafromDB(),
+          builder: (context, snapshot) {
+            List<String> dataList = snapshot.data as List<String>;
+            String name = dataList[0];
+            String email = dataList[1];
+            String id = dataList[2];
+
+            return SingleChildScrollView(
+              child: Center(
+                child: Container(
+                  // width: 1000,
+                  height: 1200,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      MyLogo(),
+                      Container(
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.black12,
+                          // border: Border.all(
+                          //   color: Colors.black,
+                          // ),
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
                         ),
+                        child: Column(children: [
+                          Text(
+                            "Management Staff Information",
+                            style: TextStyle(fontSize: 30),
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 25),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Column(
+                                    children: [
+                                      Text(
+                                        "Name: " +
+                                            name +
+                                            "\nBatch: " +
+                                            email +
+                                            "\nStudent ID: " +
+                                            id,
+                                        style: TextStyle(fontSize: 15),
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      QrImageView(
+                                        data: user.uid,
+                                        version: QrVersions.auto,
+                                        size: 100.0,
+                                      ),
+                                      Text(
+                                        "user ID: \n" + user.uid,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(fontSize: 9),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        ]),
                       ),
-                    )
-                  ]),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          MyMenuTile(
+                              text: 'Account Management',
+                              iconnumber: 0xf7c5,
+                              routename: '/account_management_menu'),
+                          MyMenuTile(
+                              text: 'Student Application Approve',
+                              iconnumber: 0xe08e,
+                              routename: '/student_resident_application'),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [],
+                      ),
+                      SizedBox(
+                        width: 25,
+                      ),
+                      Divider(
+                        height: 2.0,
+                        color: Colors.black,
+                      ),
+                      SizedBox(
+                        width: 25,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          // MyMenuTile(),
+                          // MyMenuTile(),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    MyMenuTile(
-                        text: 'Student Resident',
-                        iconnumber: 0xf07dd,
-                        routename: '/resident_menu'),
-                    MyMenuTile(
-                        text: 'Security',
-                        iconnumber: 0xf013e,
-                        routename: '/security_menu'),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    MyMenuTile(
-                        text: 'Facility',
-                        iconnumber: 0xf01c8,
-                        routename: '/facility_menu'),
-                    MyMenuTile(
-                        text: 'Feedback',
-                        iconnumber: 0xf73b,
-                        routename: '/feedback_menu'),
-                  ],
-                ),
-                SizedBox(
-                  width: 25,
-                ),
-                Divider(
-                  height: 2.0,
-                  color: Colors.black,
-                ),
-                SizedBox(
-                  width: 25,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    MyMenuTile(
-                        text: 'Account Management',
-                        iconnumber: 0xf7c5,
-                        routename: '/account_management_menu'),
-                    // MyMenuTile(),
-                    // MyMenuTile(),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+              ),
+            );
+          }),
       bottomNavigationBar: Container(
         // color: Colors.green,
         height: 50,

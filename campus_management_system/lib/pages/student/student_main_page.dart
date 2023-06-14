@@ -111,6 +111,15 @@ class _StudentMainPageState extends State<StudentMainPage> {
                         routename: '/feedback_menu'),
                   ],
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    MyMenuTile(
+                        text: 'Billing',
+                        iconnumber: 0xf01c8,
+                        routename: '/facility_menu'),
+                  ],
+                ),
                 SizedBox(
                   width: 25,
                 ),
@@ -123,14 +132,7 @@ class _StudentMainPageState extends State<StudentMainPage> {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    MyMenuTile(
-                        text: 'Account Management',
-                        iconnumber: 0xf7c5,
-                        routename: '/account_management_menu'),
-                    // MyMenuTile(),
-                    // MyMenuTile(),
-                  ],
+                  children: [],
                 ),
               ],
             ),

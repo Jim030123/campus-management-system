@@ -67,9 +67,13 @@ class ShowRegisterdCarPage extends StatelessWidget {
             itemBuilder: (context, index) {
               Map<String, dynamic> documentData = allData[index];
               String vehicle_number = documentData['vehicle_number'];
+              String modelname = documentData['model'];
+              String id = documentData['id'];
 
               return ListTile(
                 title: Text(vehicle_number),
+                leading: Text(id),
+                subtitle: Text(modelname),
               );
             },
           );

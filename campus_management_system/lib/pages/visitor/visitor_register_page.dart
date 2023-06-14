@@ -1,19 +1,55 @@
 import 'package:campus_management_system/components/my_logo.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../components/my_button.dart';
 import '../../components/sample_my_textfield.dart';
 
-class VisitorRegisterPage extends StatelessWidget {
-  const VisitorRegisterPage({super.key});
+final _emailController = TextEditingController();
+final _nameController = TextEditingController();
+final _contactnumberController = TextEditingController();
+final _passwordController = TextEditingController();
+final _confirmpasswordController = TextEditingController();
+final String role = "Visitor";
+
+class VisitorRegisterPage extends StatefulWidget {
+  VisitorRegisterPage({super.key});
+
+  @override
+  State<VisitorRegisterPage> createState() => _VisitorRegisterPageState();
+}
+
+class _VisitorRegisterPageState extends State<VisitorRegisterPage> {
+  void signUserUp() async {
+    // show loading circle
+    showDialog(
+        context: context,
+        builder: (context) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        });
+
+    try {
+      // check if password is confirmed
+      if (_passwordController.text == _confirmpasswordController.text) {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: _emailController.text, password: _passwordController.text);
+      } else {
+        showErrorMessage();
+      }
+
+      Navigator.pop(context);
+    } on FirebaseAuthException catch (e) {
+      Navigator.pop(context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final _emailController = TextEditingController();
-    final _nameController = TextEditingController();
-    final _phoneController = TextEditingController();
-    final _passwordController = TextEditingController();
-    final _confirmpasswordController = TextEditingController();
+    final String role = "Visitor";
+
     return Scaffold(
       backgroundColor: Colors.grey[300],
       body: SafeArea(
@@ -45,7 +81,7 @@ class VisitorRegisterPage extends StatelessWidget {
                       ),
 
                       SampleTextField(
-                        controller: _phoneController,
+                        controller: _contactnumberController,
                         hintText: 'Phone',
                         obsecureText: false,
                       ),
@@ -83,7 +119,9 @@ class VisitorRegisterPage extends StatelessWidget {
                         height: 25,
                       ),
                       MyButton(
-                        onTap: () {},
+                        onTap: () {
+                          signUpWithEmail(context);
+                        },
                         text: 'Sign Up',
                       ),
                     ]))
@@ -92,4 +130,49 @@ class VisitorRegisterPage extends StatelessWidget {
       ),
     );
   }
+
+  void wrongPasswordMessage() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return const AlertDialog(
+            title: Text('Incorrect Password'),
+          );
+        });
+  }
+
+  void showErrorMessage() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return const AlertDialog(
+            title: Text('Password don\'t match!'),
+          );
+        });
+  }
+  // pop the loading circle
+}
+
+Future<void> signUpWithEmail(BuildContext context) async {
+  try {
+    UserCredential userCredential =
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: _emailController.text,
+      password: _passwordController.text,
+    );
+
+    String uid = userCredential.user!.uid;
+
+    await FirebaseFirestore.instance.collection('users').doc(uid).set({
+      "name": _nameController.text,
+      "contact_no": _contactnumberController.text,
+      "email": _emailController.text,
+      "roles": role
+    });
+
+    await FirebaseAuth.instance
+        .sendPasswordResetEmail(email: _emailController.text);
+  } on FirebaseAuthException catch (e) {}
+  ;
+  // pop the loading circle
 }

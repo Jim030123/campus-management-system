@@ -3,6 +3,7 @@ import 'package:campus_management_system/pages/student/student_main_page.dart';
 import 'package:campus_management_system/pages/home_page.dart';
 import 'package:campus_management_system/pages/general/login_page.dart';
 import 'package:campus_management_system/pages/visitor/register_visitor_pass.dart';
+import 'package:campus_management_system/pages/visitor/visitor_login.dart';
 import 'package:campus_management_system/pages/visitor/visitor_register_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,7 +25,7 @@ class VisitorAuthPage extends StatelessWidget {
 
           // user is not logged in
           else {
-            return VisitorRegisterPage();
+            return VisitorLoginPage();
           }
         },
       ),

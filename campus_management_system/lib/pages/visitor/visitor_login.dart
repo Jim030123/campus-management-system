@@ -7,7 +7,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../components/my_long_button.dart';
 import '../../components/sample_my_textfield.dart';
 
 class VisitorLoginPage extends StatefulWidget {
@@ -33,6 +32,20 @@ class _VisitorLoginPageState extends State<VisitorLoginPage> {
             child: CircularProgressIndicator(),
           );
         });
+
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _emailController.text, password: _passwordController.text);
+      Navigator.pop(context);
+    } on FirebaseAuthException catch (e) {
+      Navigator.pop(context);
+
+      if (e.code == 'user-not-found') {
+        wrongEmailMessage();
+      } else if (e.code == 'wrong-password') {
+        wrongPasswordMessage();
+      }
+    }
 
     // pop the loading circle
   }
@@ -69,6 +82,11 @@ class _VisitorLoginPageState extends State<VisitorLoginPage> {
                   // Allign center
                   MyLogo(),
 
+                  Text(
+                    "Visitor Portal",
+                    style: TextStyle(fontSize: 30),
+                  ),
+
                   SizedBox(
                     height: 25.0,
                   ),
@@ -76,19 +94,21 @@ class _VisitorLoginPageState extends State<VisitorLoginPage> {
                   Container(
                     // color: Colors.red,
                     width: 300,
-                    height: 400,
+                    height: 300,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        MyLongButton(
-                          text: 'Register Visitor Pass',
-                          routename: '/visitor_auth',
+                        SampleTextField(
+                          controller: _emailController,
+                          hintText: 'Email',
+                          obsecureText: false,
                         ),
-                        MyLongButton(
-                          text: 'View Visitor Pass',
-                          routename: '',
+                        SampleTextField(
+                          controller: _passwordController,
+                          hintText: 'Password',
+                          obsecureText: true,
                         ),
-                       
+                        MyButton(onTap: signUserIn, text: 'Log In'),
                       ],
                     ),
                   )
@@ -97,5 +117,25 @@ class _VisitorLoginPageState extends State<VisitorLoginPage> {
             ),
           ),
         ));
+  }
+
+  void wrongEmailMessage() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return const AlertDialog(
+            title: Text('Incorrect Email'),
+          );
+        });
+  }
+
+  void wrongPasswordMessage() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return const AlertDialog(
+            title: Text('Incorrect Password'),
+          );
+        });
   }
 }
