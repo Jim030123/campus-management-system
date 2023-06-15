@@ -272,6 +272,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         "roles": _selectedRole as String,
         "program": _selectedProgram as String,
         "id": idController.text,
+        "room_type": null
       });
 
       await FirebaseAuth.instance

@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:campus_management_system/pages/management/student_application.dart';
 
-
 class Room extends StatefulWidget {
   DocumentSnapshot user;
 
@@ -35,44 +34,127 @@ class _RoomState extends State<Room> {
       _allRoom = snapshot.docs;
       _isLoading = false;
     });
-
-    
   }
 
+  late String selectedValue;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: MyAppBar(),
         body: Container(
-          child: _isLoading
-              ? Center(child: CircularProgressIndicator())
-              : ListView.builder(
-                  itemCount: _allRoom.length,
-                  itemBuilder: (context, index) {
-                    DocumentSnapshot user = _allRoom[index];
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ListTile(
-                        tileColor: Colors.grey,
-                        title: Text(user.id + user['capacity']),
-                        subtitle: Text(user['capacity']),
-                        trailing: ElevatedButton(
-                            onPressed: () {}, child: Text('Select')),
-                      ),
-                    );
-                  },
-                ),
-        ));
+            padding: EdgeInsets.all(1),
+            child: _isLoading
+                ? Center(child: CircularProgressIndicator())
+                : ListView.builder(
+                    itemCount: _allRoom.length,
+                    itemBuilder: (context, index) {
+                      DocumentSnapshot user = _allRoom[index];
+                      return Container(
+                        padding: EdgeInsets.all(8),
+                        child: ListTile(
+                            tileColor: Colors.grey,
+                            title: Text(user['room_no']),
+                            subtitle: Text("Remaining Beds: " +
+                                user['current_person'].toString() +
+                                " / " +
+                                user['max_capacity'].toString()),
+                            trailing: button(user)),
+                      );
+                    })));
   }
 
-  studentResidentApplication(BuildContext context) async {
+  assignRoom() async {
     try {
       await FirebaseFirestore.instance
           .collection('resident_application')
-          .doc(user.id)
-          .set({"room_no": 'sa'});
+          .doc(widget.user.id)
+          .update({
+        "room_no": selectedValue,
+      });
     } on FirebaseAuthException catch (e) {
       // Handle the exception if needed
+    }
+
+    try {
+      await FirebaseFirestore.instance
+          .collection('room_available')
+          .doc(selectedValue)
+          .update({"current_person": FieldValue.increment(1)});
+    } on FirebaseAuthException catch (e) {
+      // Handle the exception if needed
+    }
+  }
+
+  confirmDialog() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text("You will assign this student to a student residence"),
+        content: Text("Student Name: " +
+            widget.user['name'] +
+            "\nRoom No: " +
+            selectedValue),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+            child: Row(
+              children: [
+                GestureDetector(
+                  child: Container(
+                    color: Colors.green,
+                    padding: const EdgeInsets.all(14),
+                    child: const Text(
+                      "Yes",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  onTap: () {
+                    assignRoom();
+                    Navigator.popUntil(context,
+                        ModalRoute.withName('/student_resident_application'));
+                  },
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Container(
+                  color: Colors.green,
+                  padding: const EdgeInsets.all(14),
+                  child: const Text(
+                    "Cancel",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  button(DocumentSnapshot user) {
+    if (user['current_person'] < user['max_capacity']) {
+      return ElevatedButton(
+          onPressed: () {
+            setState(() {
+              selectedValue = user['room_no'];
+
+              confirmDialog();
+            });
+          },
+          child: Text('Select'));
+    } else if (user['current_person'] >= user['max_capacity']) {
+      return ElevatedButton(
+        onPressed: null,
+        child: Text('Full'),
+      );
+      // return Container(
+      //   color: Colors.blue,
+      //   child: Text("full"),
+      // );
     }
   }
 }

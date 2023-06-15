@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class MyButton2 extends StatefulWidget {
-  const MyButton2({
-    super.key,
-    required this.buttonText,
-    required this.routename
-  });
+  const MyButton2(
+      {super.key, required this.buttonText, required this.routename});
 
   final String buttonText;
   final String routename;

@@ -29,6 +29,7 @@ class MyMenuTile extends StatelessWidget {
           Text(
             text,
             style: TextStyle(fontSize: 18),
+            textAlign: TextAlign.center,
           ),
         ]),
       ),

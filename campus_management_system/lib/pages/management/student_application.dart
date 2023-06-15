@@ -35,7 +35,7 @@ class _StudentResidentApplicationPageState
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => NewPage(user: user),
+        builder: (context) => ApplicationDetail(user: user),
       ),
     );
   }
@@ -44,7 +44,7 @@ class _StudentResidentApplicationPageState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Firebase Data'),
+        title: Text('Application List'),
       ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
@@ -52,10 +52,14 @@ class _StudentResidentApplicationPageState
               itemCount: _allApplication.length,
               itemBuilder: (context, index) {
                 DocumentSnapshot user = _allApplication[index];
-                return ListTile(
-                  title: Text(user['email'] ?? 'No Email'),
-                  subtitle: Text(user.id),
-                  onTap: () => _openNewPage(user),
+                return Padding(
+                  padding: EdgeInsets.all(16),
+                  child: ListTile(
+                    tileColor: Colors.grey,
+                    title: Text(user['email'] ?? 'No Email'),
+                    subtitle: Text(user.id),
+                    onTap: () => _openNewPage(user),
+                  ),
                 );
               },
             ),
@@ -63,16 +67,16 @@ class _StudentResidentApplicationPageState
   }
 }
 
-class NewPage extends StatefulWidget {
+class ApplicationDetail extends StatefulWidget {
   final DocumentSnapshot user;
 
-  const NewPage({required this.user, Key? key}) : super(key: key);
+  const ApplicationDetail({required this.user, Key? key}) : super(key: key);
 
   @override
-  State<NewPage> createState() => _NewPageState();
+  State<ApplicationDetail> createState() => _ApplicationDetailState();
 }
 
-class _NewPageState extends State<NewPage> {
+class _ApplicationDetailState extends State<ApplicationDetail> {
   Future<void> fetchUsers() async {
     QuerySnapshot snapshot = await studentResidentApplicationCollection.get();
     setState(() {
@@ -80,12 +84,6 @@ class _NewPageState extends State<NewPage> {
       _isLoading = false;
     });
   }
-
-  bool _isLoading = true;
-  late List<DocumentSnapshot> _allApplication;
-
-  final CollectionReference studentResidentApplicationCollection =
-      FirebaseFirestore.instance.collection('room_available');
 
   void _openNewPage(DocumentSnapshot user) {
     Navigator.push(
@@ -95,6 +93,12 @@ class _NewPageState extends State<NewPage> {
       ),
     );
   }
+
+  bool _isLoading = true;
+  late List<DocumentSnapshot> _allApplication;
+
+  final CollectionReference studentResidentApplicationCollection =
+      FirebaseFirestore.instance.collection('room_available');
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +130,11 @@ class _NewPageState extends State<NewPage> {
                       Text("Room Type: " + widget.user['room_type']),
                       s(),
                       Text(widget.user.id),
-                      ElevatedButton(onPressed: () {}, child: Text('Choose'))
+                      ElevatedButton(
+                          onPressed: () {
+                            _openNewPage(widget.user);
+                          },
+                          child: Text('Choose'))
                     ],
                   ),
                 ),
@@ -146,7 +154,9 @@ class _NewPageState extends State<NewPage> {
   }
 
   s() {
-    if (widget.user['room_type'] ==
+    if (widget.user['room_type'] == null) {
+      return Text('a');
+    } else if (widget.user['room_type'] ==
         "Twin Sharing (Air Conditioned) (Block A & C) RM 660 (Short Semester) RM 990 (Long Semester)") {
       return Text('sa');
 

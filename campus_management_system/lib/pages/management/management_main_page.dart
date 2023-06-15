@@ -116,14 +116,24 @@ class _MagnagementMainPageState extends State<MagnagementMainPage> {
                               iconnumber: 0xf7c5,
                               routename: '/account_management_menu'),
                           MyMenuTile(
-                              text: 'Student Application Approve',
-                              iconnumber: 0xe08e,
+                              text: 'Student Resident Application',
+                              iconnumber: 0xf021b,
                               routename: '/student_resident_application'),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [],
+                        children: [
+                          MyMenuTile(
+                              text: 'Room availability',
+                              iconnumber: 0xe08e,
+                              routename: '/room_available'),
+                          MyMenuTile(
+                              text:
+                                  'Feedback Recieved (same concept with resident form)',
+                              iconnumber: 0xe260,
+                              routename: '/room_available'),
+                        ],
                       ),
                       SizedBox(
                         width: 25,

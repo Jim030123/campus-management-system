@@ -4,6 +4,7 @@ import 'package:campus_management_system/pages/facility_information.dart';
 import 'package:campus_management_system/pages/management/management_main_page.dart';
 import 'package:campus_management_system/pages/management/room.dart';
 import 'package:campus_management_system/pages/management/room_page.dart';
+import 'package:campus_management_system/pages/management/room_availble_page.dart';
 import 'package:campus_management_system/pages/management/student_application.dart';
 import 'package:campus_management_system/pages/redirect_login_page.dart';
 import 'package:campus_management_system/pages/booking_menu_page.dart';
@@ -103,6 +104,8 @@ class MainApp extends StatelessWidget {
         '/view_all_account': (context) => ViewAllAccountPage(),
         '/student_resident_application': (context) =>
             StudentResidentApplicationPage(),
+          '/room_available': (context) =>
+            RoomAvailable(),
     
       },
       initialRoute: '/',
