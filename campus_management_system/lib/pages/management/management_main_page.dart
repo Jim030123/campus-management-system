@@ -141,7 +141,7 @@ class _MagnagementMainPageState extends State<MagnagementMainPage> {
                           MyMenuTile(
                               text: 'Auto fill Form',
                               iconnumber: 0xf60d,
-                              routename: '/auto_fill_form'),
+                              routename: '/auto_fill_form_menu'),
                           // MyMenuTile(
                           //     text:
                           //         'Feedback Recieved (same concept with resident form)',

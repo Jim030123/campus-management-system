@@ -15,7 +15,9 @@ import 'package:campus_management_system/pages/general/login_page.dart';
 import '../components/my_camera.dart';
 
 class RegistrationVehiclePage extends StatefulWidget {
-  RegistrationVehiclePage({super.key});
+  final String id;
+
+  RegistrationVehiclePage({super.key, required this.id});
 
   @override
   _RegistrationVehiclePageState createState() =>
@@ -42,7 +44,7 @@ class _RegistrationVehiclePageState extends State<RegistrationVehiclePage> {
   @override
   Widget build(BuildContext context) {
     getdatafromDB() async {
-      final user = FirebaseAuth.instance.currentUser!.uid;
+      final user = widget.id;
       DocumentSnapshot snapshot = await FirebaseFirestore.instance
           .collection('users') // Replace with your collection name
           .doc(user) // Use the provided document ID

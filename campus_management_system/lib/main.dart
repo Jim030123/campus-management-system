@@ -1,7 +1,8 @@
 import 'package:campus_management_system/pages/account_management_page.dart';
 import 'package:campus_management_system/pages/auth_page.dart';
 import 'package:campus_management_system/pages/facility_information.dart';
-import 'package:campus_management_system/pages/management/auto_fill_cam_page.dart';
+import 'package:campus_management_system/pages/management/qr_auto_fill_.dart';
+import 'package:campus_management_system/pages/management/auto_fill_form_menu.dart';
 import 'package:campus_management_system/pages/management/management_main_page.dart';
 import 'package:campus_management_system/pages/management/room.dart';
 import 'package:campus_management_system/pages/management/room_page.dart';
@@ -59,6 +60,7 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String id = FirebaseAuth.instance.currentUser!.uid;
     return MaterialApp(
       routes: {
         '': (context) => RedirectLoginPage(),
@@ -72,7 +74,8 @@ class MainApp extends StatelessWidget {
         '/logout': (context) => MyLoginPage(),
 
 // Student Resident
-        '/resident_application': (context) => ResidentApplicationPage(),
+
+        '/resident_application': (context) => ResidentApplicationPage(id: id),
         '/resident_information': (context) => ResidentInformationPage(),
 
         '/room_information_A_C': (context) => TwinSharingRoomBlock_A_C(),
@@ -92,7 +95,9 @@ class MainApp extends StatelessWidget {
         // Security
         '/security_menu': (context) => SecurityMenuPage(),
         '/show_registered_car': (context) => ShowRegisterdCarPage(),
-        '/register_vehicle': (context) => RegistrationVehiclePage(),
+        '/register_vehicle': (context) => RegistrationVehiclePage(
+              id: id,
+            ),
 
         // Facility
         '/facility_menu': (context) => BookingMenuPage(),
@@ -106,9 +111,8 @@ class MainApp extends StatelessWidget {
         '/student_resident_application': (context) =>
             StudentResidentApplicationPage(),
         '/room_available': (context) => RoomAvailable(),
-'/auto_fill_form': (context) => AutoFillFormPage(),
+        '/auto_fill_form_menu': (context) => AutoFillFormMenu(),
       },
-
 
       initialRoute: '/',
       debugShowCheckedModeBanner: true,
