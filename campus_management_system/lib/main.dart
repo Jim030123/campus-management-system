@@ -1,6 +1,7 @@
 import 'package:campus_management_system/pages/account_management_page.dart';
 import 'package:campus_management_system/pages/auth_page.dart';
 import 'package:campus_management_system/pages/facility_information.dart';
+import 'package:campus_management_system/pages/management/auto_fill_cam_page.dart';
 import 'package:campus_management_system/pages/management/management_main_page.dart';
 import 'package:campus_management_system/pages/management/room.dart';
 import 'package:campus_management_system/pages/management/room_page.dart';
@@ -104,10 +105,11 @@ class MainApp extends StatelessWidget {
         '/view_all_account': (context) => ViewAllAccountPage(),
         '/student_resident_application': (context) =>
             StudentResidentApplicationPage(),
-          '/room_available': (context) =>
-            RoomAvailable(),
-    
+        '/room_available': (context) => RoomAvailable(),
+'/auto_fill_form': (context) => AutoFillFormPage(),
       },
+
+
       initialRoute: '/',
       debugShowCheckedModeBanner: true,
       // home: AuthPage(),

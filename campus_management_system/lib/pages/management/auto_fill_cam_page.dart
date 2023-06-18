@@ -1,12 +1,13 @@
+import 'package:campus_management_system/pages/management/auto_fill_form_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-class MyTestPage extends StatefulWidget {
+class AutoFillFormPage extends StatefulWidget {
   @override
-  _MyTestPageState createState() => _MyTestPageState();
+  _AutoFillFormPageState createState() => _AutoFillFormPageState();
 }
 
-class _MyTestPageState extends State<MyTestPage> {
+class _AutoFillFormPageState extends State<AutoFillFormPage> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController? controller;
   bool scanning = false;
@@ -53,10 +54,27 @@ class _MyTestPageState extends State<MyTestPage> {
   Widget buildScannedDataText(BuildContext context) {
     return Positioned(
       bottom: 16.0,
-      child: Text(
-        scannedData,
-        style: TextStyle(
-            fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.white),
+      child: InkWell(
+        onTap: () {
+          controller?.pauseCamera();
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AutoFillFormMenu(scannedData: scannedData),
+            ),
+          ).then((_) {
+            // Resume camera when returning from ScannedDataPage
+            controller?.resumeCamera();
+          });
+        },
+        child: Text(
+          scannedData,
+          style: TextStyle(
+            fontSize: 18.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
       ),
     );
   }
@@ -68,7 +86,6 @@ class _MyTestPageState extends State<MyTestPage> {
         scanning = false;
         scannedData = scanData.code ?? '';
       });
-
     });
   }
 }

@@ -135,6 +135,20 @@ class _MagnagementMainPageState extends State<MagnagementMainPage> {
                               routename: '/room_available'),
                         ],
                       ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          MyMenuTile(
+                              text: 'Auto fill Form',
+                              iconnumber: 0xf60d,
+                              routename: '/auto_fill_form'),
+                          // MyMenuTile(
+                          //     text:
+                          //         'Feedback Recieved (same concept with resident form)',
+                          //     iconnumber: 0xe260,
+                          //     routename: '/room_available'),
+                        ],
+                      ),
                       SizedBox(
                         width: 25,
                       ),
