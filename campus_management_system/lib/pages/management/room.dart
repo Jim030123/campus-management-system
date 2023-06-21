@@ -2,7 +2,7 @@ import 'package:campus_management_system/components/my_appbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:campus_management_system/pages/management/student_application.dart';
+import 'package:campus_management_system/pages/management/student_resident_application.dart';
 
 class Room extends StatefulWidget {
   DocumentSnapshot user;

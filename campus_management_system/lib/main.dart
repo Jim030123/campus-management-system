@@ -7,15 +7,18 @@ import 'package:campus_management_system/pages/management/management_main_page.d
 import 'package:campus_management_system/pages/management/room.dart';
 import 'package:campus_management_system/pages/management/room_page.dart';
 import 'package:campus_management_system/pages/management/room_availble_page.dart';
-import 'package:campus_management_system/pages/management/student_application.dart';
-import 'package:campus_management_system/pages/redirect_login_page.dart';
+import 'package:campus_management_system/pages/management/student_resident_application.dart';
+import 'package:campus_management_system/pages/general/redirect_login_page.dart';
 import 'package:campus_management_system/pages/booking_menu_page.dart';
 import 'package:campus_management_system/pages/booking_page.dart';
-import 'package:campus_management_system/pages/feedback_menu_page.dart';
+import 'package:campus_management_system/pages/student/feedback_menu_page.dart';
+import 'package:campus_management_system/pages/management/visitor_pass_application.dart';
 import 'package:campus_management_system/pages/register_vehicle_page.dart';
 import 'package:campus_management_system/pages/resident_form.dart';
 
 import 'package:campus_management_system/pages/resident_menu_page.dart';
+import 'package:campus_management_system/pages/student/feedback_form.dart';
+import 'package:campus_management_system/pages/student/feedback_submitted.dart';
 import 'package:campus_management_system/pages/student/student_main_page.dart';
 
 import 'package:campus_management_system/pages/home_page.dart';
@@ -27,7 +30,7 @@ import 'package:campus_management_system/pages/security_menu.dart';
 import 'package:campus_management_system/pages/show_car_registered.dart';
 import 'package:campus_management_system/components/my_alert_dialog.dart';
 import 'package:campus_management_system/pages/resident_information.dart';
-import 'package:campus_management_system/pages/test.dart';
+import 'package:campus_management_system/pages/student/student_resident_exist.dart';
 import 'package:campus_management_system/pages/view_all_account.dart';
 import 'package:campus_management_system/pages/visitor/register_visitor_pass.dart';
 import 'package:campus_management_system/pages/visitor/visitor_auth_page.dart';
@@ -35,7 +38,7 @@ import 'package:campus_management_system/pages/visitor/visitor_login.dart';
 import 'package:campus_management_system/pages/visitor/visitor_menu_page.dart';
 import 'package:campus_management_system/pages/visitor/visitor_register_page.dart';
 import 'package:campus_management_system/pages/visitor_page.dart';
-import 'package:campus_management_system/routes.dart';
+import 'package:campus_management_system/pages/visitor_pass_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:introduction_screen/introduction_screen.dart';
@@ -56,11 +59,12 @@ void main() async {
 class MainApp extends StatelessWidget {
   MainApp({super.key});
 
-  get refreshedUser => null;
+  // get refreshedUser => null;
 
   @override
   Widget build(BuildContext context) {
-    String id = FirebaseAuth.instance.currentUser!.uid;
+    String id = FirebaseAuth.instance.currentUser?.uid ?? 'defaultId';
+
     return MaterialApp(
       routes: {
         '': (context) => RedirectLoginPage(),
@@ -69,7 +73,6 @@ class MainApp extends StatelessWidget {
         '/management_main': (context) => MagnagementMainPage(),
         '/auth': (context) => AuthPage(),
         '/login': (context) => MyLoginPage(),
-        '/test': (context) => MyTestPage(),
         '/profile': (context) => ProfilePage(),
         '/logout': (context) => MyLoginPage(),
 
@@ -83,14 +86,20 @@ class MainApp extends StatelessWidget {
         '/room_information_E': (context) => TwinSharingRoomIEB(),
         '/room_information_trio_E': (context) => TrioSharingRoomIEB(),
         // Visitor
+        '/visitor_main': (context) => VisitorPage(),
         '/visitor_login': (context) => VisitorLoginPage(),
         '/register_visitor_pass': (context) => RegisterVisitorPass(),
         '/visitor_auth': (context) => VisitorAuthPage(),
         '/visitor_register': (context) => VisitorRegisterPage(),
-
+        '/visitor_pass_progress': (context) => VisitorPassProgress(),
         // Menu
         '/resident_menu': (context) => StudentResidentMenuPage(),
+        '/resident_student': (context) => StudentResidentExist(),
+
+        // feedback
         '/feedback_menu': (context) => FeedbackPage(),
+        '/feedback_form': (context) => FeedbackForm(id: id),
+        '/feedback_submitted': (context) => FeedbackSubmitted(),
 
         // Security
         '/security_menu': (context) => SecurityMenuPage(),
@@ -112,6 +121,7 @@ class MainApp extends StatelessWidget {
             StudentResidentApplicationPage(),
         '/room_available': (context) => RoomAvailable(),
         '/auto_fill_form_menu': (context) => AutoFillFormMenu(),
+        '/visitor_pass_application': (context) => VisitorPassApplicationPage(),
       },
 
       initialRoute: '/',

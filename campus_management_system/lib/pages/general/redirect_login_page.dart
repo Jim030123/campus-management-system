@@ -27,6 +27,10 @@ class _RedirectLoginPageState extends State<RedirectLoginPage> {
       Future.delayed(Duration(seconds: 3), () {
         Navigator.pushReplacementNamed(context, '/management_main');
       });
+    } else if (role == 'Visitor') {
+      Future.delayed(Duration(seconds: 3), () {
+        Navigator.pushReplacementNamed(context, '/visitor_main');
+      });
     }
     return role;
   }

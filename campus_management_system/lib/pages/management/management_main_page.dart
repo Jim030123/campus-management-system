@@ -142,11 +142,10 @@ class _MagnagementMainPageState extends State<MagnagementMainPage> {
                               text: 'Auto fill Form',
                               iconnumber: 0xf60d,
                               routename: '/auto_fill_form_menu'),
-                          // MyMenuTile(
-                          //     text:
-                          //         'Feedback Recieved (same concept with resident form)',
-                          //     iconnumber: 0xe260,
-                          //     routename: '/room_available'),
+                          MyMenuTile(
+                              text: 'Visitor Pass Application',
+                              iconnumber: 0xf021b,
+                              routename: '/visitor_pass_application'),
                         ],
                       ),
                       SizedBox(

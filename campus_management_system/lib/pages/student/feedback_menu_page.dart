@@ -5,8 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import '../components/my_appbar.dart';
-import '../components/my_long_button.dart';
+import '../../components/my_appbar.dart';
+import '../../components/my_long_button.dart';
 
 class FeedbackPage extends StatelessWidget {
   const FeedbackPage({super.key});
@@ -26,14 +26,14 @@ class FeedbackPage extends StatelessWidget {
           ),
           MyLongButton(
             text: 'Fill Feedback',
-            routename: '',
+            routename: '/feedback_form',
           ),
           SizedBox(
             height: 25,
           ),
           MyLongButton(
             text: 'Feedback Submitted',
-            routename: '',
+            routename: '/feedback_submitted',
           ),
         ]),
       ),

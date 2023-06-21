@@ -1,4 +1,4 @@
-import 'package:campus_management_system/pages/redirect_login_page.dart';
+import 'package:campus_management_system/pages/general/redirect_login_page.dart';
 import 'package:campus_management_system/pages/student/student_main_page.dart';
 import 'package:campus_management_system/pages/home_page.dart';
 import 'package:campus_management_system/pages/general/login_page.dart';

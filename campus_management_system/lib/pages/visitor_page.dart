@@ -20,13 +20,13 @@ class VisitorPage extends StatelessWidget {
               height: 70.0,
             ),
 
-            Align(
-              alignment: Alignment.centerRight,
-              child: ElevatedButton(
-                child: Text('Switch to Hostel Student / Management'),
-                onPressed: () {},
-              ),
-            ),
+            // Align(
+            //   alignment: Alignment.centerRight,
+            //   child: ElevatedButton(
+            //     child: Text('Switch to Hostel Student / Management'),
+            //     onPressed: () {},
+            //   ),
+            // ),
 
             SizedBox(
               height: 50.0,
@@ -80,7 +80,12 @@ class VisitorPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  MyButton(onTap: onTap, text: 'Register Visitor Pass'),
+                  MyButton(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/register_visitor_pass');
+                    },
+                    text: 'Register Visitor Pass',
+                  ),
                   MyButton(onTap: onTap, text: 'View Progress'),
                   MyButton(onTap: onTap, text: 'View Visitor Pass'),
                 ],

@@ -1,5 +1,6 @@
 import "package:campus_management_system/components/my_logo.dart";
 import "package:campus_management_system/components/my_tile.dart";
+import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:qr_flutter/qr_flutter.dart";
@@ -88,10 +89,22 @@ class _StudentMainPageState extends State<StudentMainPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    MyMenuTile(
-                        text: 'Student Resident',
-                        iconnumber: 0xf07dd,
-                        routename: '/resident_menu'),
+                    FutureBuilder<MyMenuTile?>(
+                      future: fetchUserData(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          // While waiting for the data, you can display a loading indicator
+                          return CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          // If an error occurs during data retrieval, you can display an error message
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          // If the data retrieval is successful, you can display the MyMenuTile widget
+                          return snapshot.data ?? Container();
+                        }
+                      },
+                    ),
                     MyMenuTile(
                         text: 'Security',
                         iconnumber: 0xf013e,
@@ -233,5 +246,27 @@ class _StudentMainPageState extends State<StudentMainPage> {
     await FirebaseAuth.instance.signOut();
     // Redirect the user to the login page
     Navigator.pushNamedAndRemoveUntil(context, '/auth', (route) => false);
+  }
+
+  Future<MyMenuTile?> fetchUserData() async {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection('resident_application')
+        .doc(uid)
+        .get();
+
+    if (snapshot.exists) {
+      return MyMenuTile(
+        text: 'Student Resident (Exist)',
+        iconnumber: 0xf07dd,
+        routename: '/resident_student',
+      );
+    } else {
+      return MyMenuTile(
+        text: 'Student Resident ',
+        iconnumber: 0xf07dd,
+        routename: '/resident_menu',
+      ); // Return null if the document doesn't exist
+    }
   }
 }
