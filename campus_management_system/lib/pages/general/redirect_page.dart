@@ -17,9 +17,8 @@ class _RedirectLoginPageState extends State<RedirectLoginPage> {
 
     // Access the "role" field and convert it to a string
     String role = snapshot.get('roles').toString();
-    print(role);
 
-    if (role == 'Resident_Student') {
+    if (role == 'Student') {
       Future.delayed(Duration(seconds: 3), () {
         Navigator.pushReplacementNamed(context, '/student_main');
       });
@@ -32,6 +31,7 @@ class _RedirectLoginPageState extends State<RedirectLoginPage> {
         Navigator.pushReplacementNamed(context, '/visitor_main');
       });
     }
+
     return role;
   }
 
@@ -51,7 +51,7 @@ class _RedirectLoginPageState extends State<RedirectLoginPage> {
         child: Container(
             padding: EdgeInsets.all(16),
             decoration: BoxDecoration(
-                color: Colors.yellow,
+                color: Colors.grey,
                 borderRadius: BorderRadius.all(Radius.circular(25))),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -77,6 +77,49 @@ class _RedirectLoginPageState extends State<RedirectLoginPage> {
                       getRoleFieldValue(user).toString();
                     },
                     child: Text('Main page'))
+              ],
+            )),
+      ),
+    );
+  }
+}
+
+class RedirectProfileForm extends StatelessWidget {
+  const RedirectProfileForm({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Container(
+            padding: EdgeInsets.all(16),
+            decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.all(Radius.circular(25))),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                    textAlign: TextAlign.center,
+                    'Detect your personal detail is incomplete ' +
+                        'please wait' +
+                        ' \nRedirecting to the Personal Form...',
+                    style: TextStyle(fontSize: 30)),
+                SizedBox(
+                  height: 25,
+                ),
+                Text(
+                  'You should be redirected automatically in 3 second if not please press Go Button',
+                  style: TextStyle(fontSize: 15),
+                ),
+                SizedBox(
+                  height: 25,
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.popAndPushNamed(context, '/personal_form');
+                    },
+                    child: Text('Go'))
               ],
             )),
       ),

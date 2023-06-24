@@ -1,5 +1,6 @@
 import 'package:campus_management_system/pages/management/room.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class StudentResidentApplicationPage extends StatefulWidget {
@@ -44,7 +45,7 @@ class _StudentResidentApplicationPageState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Application List'),
+        title: Text('Student Resident Application List'),
       ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
@@ -52,12 +53,18 @@ class _StudentResidentApplicationPageState
               itemCount: _allApplication.length,
               itemBuilder: (context, index) {
                 DocumentSnapshot user = _allApplication[index];
+
+                if (user['status'] != 'Wait the Managemnet Review') {
+                  // If the status is not 'wait', return an empty container
+                  return null;
+                }
+
                 return Padding(
                   padding: EdgeInsets.all(16),
                   child: ListTile(
                     tileColor: Colors.grey,
                     title: Text(user['email'] ?? 'No Email'),
-                    subtitle: Text(user.id),
+                    subtitle: Text(user['status']),
                     onTap: () => _openNewPage(user),
                   ),
                 );
@@ -139,7 +146,6 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
                   ),
                 ),
               ),
-              
             ],
           ),
         ),

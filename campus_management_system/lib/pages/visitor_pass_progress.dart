@@ -11,28 +11,24 @@ class VisitorPassProgress extends StatefulWidget {
 }
 
 class _VisitorPassProgressState extends State<VisitorPassProgress> {
-  late List<String> progress = ['start', 'approve'];
+  late List<String> progress = ['start', 'approve', 'decline'];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(),
-      body: Container(
-        child: ListView.builder(
-          itemCount: progress.length,
-          itemBuilder: (context, index) {
-            final item = progress.elementAt(progress.length - 1 - index);
+      body: ListView.builder(
+        itemCount: progress.length,
+        itemBuilder: (context, index) {
+          final item = progress.elementAt(progress.length - 1 - index);
 
-            if (item == 'start') {
-              return VP_Progress_start();
-            } else if (item == 'approve') {
-              return VP_Progress_Approve();
-            }
-
-            // else if (item == 'decline') {
-            //   return VP_Progress_Decline();
-            // }
-          },
-        ),
+          if (item == 'start') {
+            return VP_Progress_start();
+          } else if (item == 'approve') {
+            return VP_Progress_Approve();
+          } else if (item == 'decline') {
+            return VP_Progress_Decline();
+          }
+        },
       ),
     );
   }

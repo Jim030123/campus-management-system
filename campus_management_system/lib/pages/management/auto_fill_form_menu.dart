@@ -47,7 +47,15 @@ class AutoFillFormMenu extends StatelessWidget {
           child: Text('Add Vehicle Car', style: TextStyle(fontSize: 20)),
         ),
         ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            selectedbutton = 3;
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      QRAutoFillFormPage(selectedbutton: selectedbutton)),
+            );
+          },
           child: Text('Add Visitor Pass', style: TextStyle(fontSize: 20)),
         ),
       ]),

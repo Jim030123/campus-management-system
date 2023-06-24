@@ -15,7 +15,7 @@ class StudentResidentMenuPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(),
-      drawer: MyDrawer(),
+      drawer: MyStudentDrawer(),
       body: Container(
         color: Colors.white,
         child: Column(children: [
@@ -35,10 +35,6 @@ class StudentResidentMenuPage extends StatelessWidget {
           ),
           SizedBox(
             height: 25,
-          ),
-          MyLongButton(
-            text: 'Map',
-            routename: '',
           ),
         ]),
       ),

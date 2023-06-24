@@ -86,7 +86,11 @@ class VisitorPage extends StatelessWidget {
                     },
                     text: 'Register Visitor Pass',
                   ),
-                  MyButton(onTap: onTap, text: 'View Progress'),
+                  MyButton(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/visitor_pass_progress');
+                      },
+                      text: 'View Progress'),
                   MyButton(onTap: onTap, text: 'View Visitor Pass'),
                 ],
               ),

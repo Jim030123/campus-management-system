@@ -1,6 +1,7 @@
 import 'package:campus_management_system/components/my_alert_dialog.dart';
 import 'package:campus_management_system/components/my_appbar.dart';
 import 'package:campus_management_system/components/my_drawer.dart';
+import 'package:campus_management_system/pages/visitor/visitor_register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,16 +9,19 @@ import 'package:campus_management_system/role.dart';
 import 'package:intl/intl.dart';
 import 'package:campus_management_system/pages/general/login_page.dart';
 
-class RegistrationPage extends StatefulWidget {
+class RegistrationAccount extends StatefulWidget {
   @override
-  _RegistrationPageState createState() => _RegistrationPageState();
+  _RegistrationAccountState createState() => _RegistrationAccountState();
 }
 
-class _RegistrationPageState extends State<RegistrationPage> {
+class _RegistrationAccountState extends State<RegistrationAccount> {
   @override
-  _RegistrationPageState() {
+  _RegistrationAccountState() {
     _selectedRole = _roles[0];
     _selectedProgram = _program[0];
+    _selectedPosition = _position[0];
+    _selectedVisitorType = _visitortype[0];
+    _selectedGender = _gender[0];
   }
   // bool emailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch();
 
@@ -27,10 +31,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final TextEditingController roleController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController icorpassportController = TextEditingController();
-  final TextEditingController contactnoController = TextEditingController();
+  final TextEditingController NRICController = TextEditingController();
   final TextEditingController idController = TextEditingController();
 
-  final _roles = ['Resident_Student', 'Management', 'Visitor'];
+  final _roles = ['Student', 'Management', 'Visitor'];
+  final _gender = ['Male', 'Female'];
+  final _position = ['Admin', 'Security'];
+  final _visitortype = ["Short term visitor", "Long term visitor"];
   final List<String> _program = [
     'FAD-Diploma in Advertising Design',
     'FAD-Diploma in Industrial Design',
@@ -76,6 +83,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   String? _selectedRole = "";
   String? _selectedProgram = "";
+  String? _selectedPosition = "";
+  String? _selectedVisitorType = "";
+  String? _selectedGender = "";
+  String fullDetail = "0";
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +118,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // name
                       TextFormField(
                         controller: nameController,
                         decoration: InputDecoration(labelText: 'Name'),
@@ -118,14 +128,30 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           return null;
                         },
                       ),
-                      // IC / Passport No.
-
+                      DropdownButtonFormField(
+                        decoration: InputDecoration(
+                            labelText: "Gender",
+                            prefixIcon: Icon(Icons.supervisor_account_rounded),
+                            border: UnderlineInputBorder()),
+                        value: _selectedGender,
+                        items: _gender
+                            .map((e) => DropdownMenuItem(
+                                  child: Text(e),
+                                  value: e,
+                                ))
+                            .toList(),
+                        onChanged: (val) {
+                          setState(() {
+                            _selectedGender = val as String;
+                          });
+                        },
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             'Date of Birth :${dob.year}/${dob.month}/${dob.day}',
-                            style: TextStyle(fontSize: 20),
+                            style: TextStyle(fontSize: 18),
                           ),
                           SizedBox(
                             height: 16,
@@ -141,21 +167,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                 if (newDate == null) return;
                                 setState(() => dob = newDate);
                               },
-                              child: Text('select date of birth')),
+                              child: Text('Select dob')),
                         ],
                       ),
-
-                      TextFormField(
-                        controller: contactnoController,
-                        decoration: InputDecoration(labelText: 'Contact No'),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please enter the Contact Number';
-                          }
-                          return null;
-                        },
-                      ),
-
                       TextFormField(
                         controller: emailController,
                         decoration: InputDecoration(labelText: 'Email'),
@@ -178,14 +192,16 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         },
                       ),
                       TextFormField(
-                        controller: idController,
-                        decoration: InputDecoration(
-                            labelText:
-                                'Student ID / Management ID (Ignore this field if you doesn\'t have any ID  )'),
+                        controller: NRICController,
+                        decoration: InputDecoration(labelText: 'NRIC'),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter NRIC';
+                          }
+                          return null;
+                        },
                       ),
-
                       SizedBox(height: 16.0),
-
                       DropdownButtonFormField(
                         decoration: InputDecoration(
                             labelText: "Role",
@@ -204,25 +220,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           });
                         },
                       ),
-
-                      DropdownButtonFormField(
-                        decoration: InputDecoration(
-                            labelText: "Program",
-                            prefixIcon: Icon(Icons.book),
-                            border: UnderlineInputBorder()),
-                        value: _selectedProgram,
-                        items: _program
-                            .map((f) => DropdownMenuItem(
-                                  child: Text(f),
-                                  value: f,
-                                ))
-                            .toList(),
-                        onChanged: (val) {
-                          setState(() {
-                            _selectedProgram = val as String;
-                          });
-                        },
-                      ),
+                      idfield(),
+                      roleropdownlist(),
                       SizedBox(
                         height: 25,
                       ),
@@ -267,13 +266,31 @@ class _RegistrationPageState extends State<RegistrationPage> {
       await FirebaseFirestore.instance.collection('users').doc(uid).set({
         "name": nameController.text,
         "dob": formattedDob,
-        "contact_no": contactnoController.text,
+        "gender": _selectedGender as String,
+        "nric": NRICController.text,
         "email": emailController.text,
-        "roles": _selectedRole as String,
-        "program": _selectedProgram as String,
         "id": idController.text,
-        "room_type": null
+        "full_detail": fullDetail,
+        // "address": null
       });
+
+      if (_selectedRole == _roles[0]) {
+        await FirebaseFirestore.instance.collection('users').doc(uid).update({
+          "roles": _selectedRole as String,
+          "program": _selectedProgram as String,
+          // "address": null,
+        });
+      } else if (_selectedRole == _roles[1]) {
+        await FirebaseFirestore.instance.collection('users').doc(uid).update({
+          "roles": _selectedRole as String,
+          "position": _selectedPosition as String,
+        });
+      } else if (_selectedRole == _roles[2]) {
+        await FirebaseFirestore.instance.collection('users').doc(uid).update({
+          "roles": _selectedRole as String,
+          "vistitor_type": _selectedVisitorType as String
+        });
+      }
 
       await FirebaseAuth.instance
           .sendPasswordResetEmail(email: emailController.text);
@@ -290,8 +307,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Create account'),
-          content: Text(
-              'This also will create a profile for' + emailController.text),
+          content: Text("This also will create a profile for:" +
+              "\nEmail: " +
+              emailController.text +
+              "\nRole: " +
+              role),
           actions: [
             TextButton(
               child: Text('OK'),
@@ -325,6 +345,81 @@ class _RegistrationPageState extends State<RegistrationPage> {
             ],
           );
         },
+      );
+    }
+  }
+
+  idfield() {
+    if (_selectedRole == _roles[0] || _selectedRole == _roles[1]) {
+      return TextFormField(
+        controller: idController,
+        decoration: InputDecoration(labelText: 'Student ID / Management ID '),
+      );
+    } else {
+      return Container();
+    }
+  }
+
+  roleropdownlist() {
+    if (_selectedRole == _roles[0]) {
+      return DropdownButtonFormField(
+        decoration: InputDecoration(
+            labelText: "Program",
+            prefixIcon: Icon(Icons.book),
+            border: UnderlineInputBorder()),
+        value: _selectedProgram,
+        items: _program
+            .map((f) => DropdownMenuItem(
+                  child: Text(f),
+                  value: f,
+                ))
+            .toList(),
+        onChanged: (val) {
+          setState(() {
+            _selectedProgram = val as String;
+          });
+        },
+        isExpanded: true,
+      );
+    } else if (_selectedRole == _roles[1]) {
+      return DropdownButtonFormField(
+        decoration: InputDecoration(
+            labelText: "Position",
+            prefixIcon: Icon(Icons.group_rounded),
+            border: UnderlineInputBorder()),
+        value: _selectedPosition,
+        items: _position
+            .map((f) => DropdownMenuItem(
+                  child: Text(f),
+                  value: f,
+                ))
+            .toList(),
+        onChanged: (val) {
+          setState(() {
+            _selectedPosition = val as String;
+          });
+        },
+        isExpanded: true,
+      );
+    } else if (_selectedRole == _roles[2]) {
+      return DropdownButtonFormField(
+        decoration: InputDecoration(
+            labelText: "Visitor Type",
+            prefixIcon: Icon(Icons.manage_accounts_rounded),
+            border: UnderlineInputBorder()),
+        value: _selectedVisitorType,
+        items: _visitortype
+            .map((f) => DropdownMenuItem(
+                  child: Text(f),
+                  value: f,
+                ))
+            .toList(),
+        onChanged: (val) {
+          setState(() {
+            _selectedVisitorType = val as String;
+          });
+        },
+        isExpanded: true,
       );
     }
   }

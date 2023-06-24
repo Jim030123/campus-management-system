@@ -11,23 +11,24 @@ import 'my_long_button.dart';
 import '../documentation/term_and_condition.dart';
 
 class MyAlertDialog extends StatelessWidget {
-  MyAlertDialog({super.key, required this.text});
+  MyAlertDialog({Key? key, required this.text}) : super(key: key);
+
   final String? text;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: AlertDialog(
-      title: Text(text!),
-      actions: [
-        TextButton(
-          child: Text('OK'),
-          onPressed: () {
-            // Perform an action
-            Navigator.of(context).pop();
-          },
-        ),
-      ],
-    ));
+    e(context);
+    return Scaffold(); // Return your desired widget here
   }
+}
+
+void e(context) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return const AlertDialog(
+        title: Text('Incorrect Email'),
+      );
+    },
+  );
 }

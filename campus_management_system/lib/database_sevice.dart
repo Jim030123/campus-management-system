@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:campus_management_system/pages/management_register_page.dart';
+import 'package:campus_management_system/pages/management/registration_account.dart';
 import 'package:flutter/material.dart';
 
 class DatabaseService {

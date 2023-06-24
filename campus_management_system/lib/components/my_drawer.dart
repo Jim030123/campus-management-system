@@ -4,8 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class MyDrawer extends StatelessWidget {
-  MyDrawer({super.key});
+class MyStudentDrawer extends StatelessWidget {
+  MyStudentDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,17 +34,25 @@ class MyDrawer extends StatelessWidget {
               color: Colors.black,
             ),
             MyDrawerListtile(
-                pagename: 'Main Page', routename: '/main', icon: 0xe038),
+                pagename: 'Main Page', routename: '/main', icon: 0xe328),
             MyDrawerListtile(
-                pagename: 'pagename', routename: '/', icon: 0xe038),
+                pagename: 'Profile', routename: '/profile', icon: 0xf522),
             MyDrawerListtile(
-                pagename: 'pagename', routename: '/', icon: 0xe038),
+                pagename: 'Security',
+                routename: '/security_menu',
+                icon: 0xf013e),
             MyDrawerListtile(
-                pagename: 'pagename', routename: '/', icon: 0xe038),
+                pagename: 'Feedback',
+                routename: '/feedback_menu',
+                icon: 0xf73b),
             MyDrawerListtile(
-                pagename: 'pagename', routename: '/', icon: 0xe038),
+                pagename: 'Billing (havent done)',
+                routename: '/facility_menu',
+                icon: 0xe481),
             MyDrawerListtile(
-                pagename: 'pagename', routename: '/', icon: 0xe038),
+                pagename: 'Facility (Done)',
+                routename: '/facility_menu',
+                icon: 0xf01c8),
             SizedBox(height: 50),
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,

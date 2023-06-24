@@ -1,6 +1,8 @@
 import 'package:campus_management_system/pages/account_management_page.dart';
 import 'package:campus_management_system/pages/auth_page.dart';
 import 'package:campus_management_system/pages/facility_information.dart';
+import 'package:campus_management_system/pages/general/fill_personal_information.dart';
+import 'package:campus_management_system/pages/management/feedback_received.dart';
 import 'package:campus_management_system/pages/management/qr_auto_fill_.dart';
 import 'package:campus_management_system/pages/management/auto_fill_form_menu.dart';
 import 'package:campus_management_system/pages/management/management_main_page.dart';
@@ -8,7 +10,7 @@ import 'package:campus_management_system/pages/management/room.dart';
 import 'package:campus_management_system/pages/management/room_page.dart';
 import 'package:campus_management_system/pages/management/room_availble_page.dart';
 import 'package:campus_management_system/pages/management/student_resident_application.dart';
-import 'package:campus_management_system/pages/general/redirect_login_page.dart';
+import 'package:campus_management_system/pages/general/redirect_page.dart';
 import 'package:campus_management_system/pages/booking_menu_page.dart';
 import 'package:campus_management_system/pages/booking_page.dart';
 import 'package:campus_management_system/pages/student/feedback_menu_page.dart';
@@ -24,7 +26,7 @@ import 'package:campus_management_system/pages/student/student_main_page.dart';
 import 'package:campus_management_system/pages/home_page.dart';
 import 'package:campus_management_system/pages/introduction_page.dart';
 import 'package:campus_management_system/pages/general/login_page.dart';
-import 'package:campus_management_system/pages/management_register_page.dart';
+import 'package:campus_management_system/pages/management/registration_account.dart';
 import 'package:campus_management_system/pages/profile_page.dart';
 import 'package:campus_management_system/pages/security_menu.dart';
 import 'package:campus_management_system/pages/show_car_registered.dart';
@@ -33,7 +35,6 @@ import 'package:campus_management_system/pages/resident_information.dart';
 import 'package:campus_management_system/pages/student/student_resident_exist.dart';
 import 'package:campus_management_system/pages/view_all_account.dart';
 import 'package:campus_management_system/pages/visitor/register_visitor_pass.dart';
-import 'package:campus_management_system/pages/visitor/visitor_auth_page.dart';
 import 'package:campus_management_system/pages/visitor/visitor_login.dart';
 import 'package:campus_management_system/pages/visitor/visitor_menu_page.dart';
 import 'package:campus_management_system/pages/visitor/visitor_register_page.dart';
@@ -67,7 +68,6 @@ class MainApp extends StatelessWidget {
 
     return MaterialApp(
       routes: {
-        '': (context) => RedirectLoginPage(),
         '/': (context) => IntroductionPage(),
         '/student_main': (context) => StudentMainPage(),
         '/management_main': (context) => MagnagementMainPage(),
@@ -76,6 +76,12 @@ class MainApp extends StatelessWidget {
         '/profile': (context) => ProfilePage(),
         '/logout': (context) => MyLoginPage(),
 
+        '/full_personal_form':(context) => PersonalForm(),
+
+// Redirect Page
+'': (context) => RedirectLoginPage(),
+'/redirect_personal_form':(context) =>RedirectProfileForm(), 
+      
 // Student Resident
 
         '/resident_application': (context) => ResidentApplicationPage(id: id),
@@ -88,8 +94,9 @@ class MainApp extends StatelessWidget {
         // Visitor
         '/visitor_main': (context) => VisitorPage(),
         '/visitor_login': (context) => VisitorLoginPage(),
-        '/register_visitor_pass': (context) => RegisterVisitorPass(),
-        '/visitor_auth': (context) => VisitorAuthPage(),
+        '/register_visitor_pass': (context) => RegisterVisitorPass(
+              id: id,
+            ),
         '/visitor_register': (context) => VisitorRegisterPage(),
         '/visitor_pass_progress': (context) => VisitorPassProgress(),
         // Menu
@@ -100,6 +107,7 @@ class MainApp extends StatelessWidget {
         '/feedback_menu': (context) => FeedbackPage(),
         '/feedback_form': (context) => FeedbackForm(id: id),
         '/feedback_submitted': (context) => FeedbackSubmitted(),
+        '/feedback_received': (context) => FeedbackRecieved(),
 
         // Security
         '/security_menu': (context) => SecurityMenuPage(),
@@ -115,7 +123,7 @@ class MainApp extends StatelessWidget {
 
         // Management
         '/account_management_menu': (context) => AccountManagementMenuPage(),
-        '/registeration': (context) => RegistrationPage(),
+        '/registeration': (context) => RegistrationAccount(),
         '/view_all_account': (context) => ViewAllAccountPage(),
         '/student_resident_application': (context) =>
             StudentResidentApplicationPage(),

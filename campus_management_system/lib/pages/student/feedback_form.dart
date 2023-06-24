@@ -184,10 +184,14 @@ class _FeedbackFormState extends State<FeedbackForm> {
                                   });
                                 },
                               ),
-                              Text(
-                                'By submitting this form, you acknowledge that the information provided is accurate to the best of your knowledge and that you authorize the relevant authorities to investigate and address your complaint.',
-                                style: TextStyle(
-                                  color: const Color.fromARGB(255, 33, 40, 243),
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.7,
+                                child: Text(
+                                  'By submitting this form, you acknowledge that the information provided is accurate to the best of your knowledge',
+                                  style: TextStyle(
+                                    color:
+                                        const Color.fromARGB(255, 33, 40, 243),
+                                  ),
                                 ),
                               ),
                             ],

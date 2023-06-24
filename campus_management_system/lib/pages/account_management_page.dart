@@ -16,7 +16,7 @@ class AccountManagementMenuPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(),
-      drawer: MyDrawer(),
+      drawer: MyStudentDrawer(),
       body: Container(
         color: Colors.white,
         child: Column(children: [

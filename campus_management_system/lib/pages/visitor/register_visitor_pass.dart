@@ -11,7 +11,8 @@ import 'package:campus_management_system/pages/general/login_page.dart';
 import '../../documentation/term_and_condition.dart';
 
 class RegisterVisitorPass extends StatefulWidget {
-  RegisterVisitorPass({super.key});
+  final String id;
+  RegisterVisitorPass({super.key, required this.id});
 
   @override
   _RegisterVisitorPassState createState() => _RegisterVisitorPassState();

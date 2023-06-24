@@ -1,9 +1,11 @@
 import 'package:campus_management_system/pages/management/auto_fill_form_menu.dart';
+import 'package:campus_management_system/pages/management/visitor_pass_application.dart';
 import 'package:campus_management_system/pages/resident_form.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../register_vehicle_page.dart';
+import '../visitor/register_visitor_pass.dart';
 
 class QRAutoFillFormPage extends StatefulWidget {
   int selectedbutton;
@@ -83,6 +85,18 @@ class _QRAutoFillFormPageState extends State<QRAutoFillFormPage> {
               context,
               MaterialPageRoute(
                 builder: (context) => RegistrationVehiclePage(id: scannedData),
+              ),
+            ).then((_) {
+              // Resume camera when returning from ScannedDataPage
+              controller?.resumeCamera();
+            });
+          } else if (widget.selectedbutton == 3) {
+            controller?.pauseCamera();
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    RegisterVisitorPass(id: scannedData),
               ),
             ).then((_) {
               // Resume camera when returning from ScannedDataPage

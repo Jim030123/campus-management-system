@@ -8,6 +8,8 @@ import 'package:campus_management_system/role.dart';
 import 'package:intl/intl.dart';
 import 'package:campus_management_system/pages/general/login_page.dart';
 
+import '../documentation/term_and_condition.dart';
+
 class ResidentApplicationPage extends StatefulWidget {
   final String id;
 
@@ -256,6 +258,26 @@ class _ResidentApplicationPageState extends State<ResidentApplicationPage> {
           actions: [
             TextButton(
               child: Text('OK'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+   void _showAlertDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Terms of Service and Privacy Policy'),
+          content: StudentResidentTnC(),
+          actions: [
+            TextButton(
+              child: Text('Close'),
               onPressed: () {
                 Navigator.pop(context);
               },

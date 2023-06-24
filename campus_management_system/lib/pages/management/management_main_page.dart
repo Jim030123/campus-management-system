@@ -132,7 +132,7 @@ class _MagnagementMainPageState extends State<MagnagementMainPage> {
                               text:
                                   'Feedback Recieved (same concept with resident form)',
                               iconnumber: 0xe260,
-                              routename: '/room_available'),
+                              routename: '/feedback_received'),
                         ],
                       ),
                       Row(

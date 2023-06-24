@@ -15,7 +15,7 @@ class SecurityMenuPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(),
-      drawer: MyDrawer(),
+      drawer: MyStudentDrawer(),
       body: Container(
         color: Colors.white,
         child: Column(children: [
@@ -31,7 +31,6 @@ class SecurityMenuPage extends StatelessWidget {
           SizedBox(
             height: 25,
           ),
-          
           MyLongButton(
             text: 'Show Vechicle Registered',
             routename: '/show_registered_car',

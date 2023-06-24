@@ -1,9 +1,10 @@
 import 'package:campus_management_system/pages/management/room.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class VisitorPassApplicationPage extends StatefulWidget {
-  const VisitorPassApplicationPage({Key? key}) : super(key: key);
+  VisitorPassApplicationPage({super.key});
 
   @override
   _VisitorPassApplicationPageState createState() =>
@@ -118,11 +119,31 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
                   child: Center(
                     child: Column(
                       children: [
-                        Text("Name: " + widget.user['name']),
-                        Text("NRIC: " + widget.user['NRIC']),
+                        Text(
+                          "Name: " +
+                              widget.user['name'] +
+                              "\nNRIC: " +
+                              widget.user['NRIC'] +
+                              "\nStatus: " +
+                              widget.user['status'] +
+                              "\nDate Visit: " +
+                              widget.user['date_visit'] +
+                              "\nVehicle Type: " +
+                              widget.user['vehicle_type'] +
+                              "\nVehicle Plate Number: " +
+                              widget.user['vehicle_plate_number'],
+                          style: TextStyle(fontSize: 20),
+                        ),
                         ElevatedButton(
-                            onPressed: () {}, child: Text('Approve')),
-                        ElevatedButton(onPressed: () {}, child: Text('Approve'))
+                            onPressed: () {
+                              ApproveVisitorPass(context);
+                            },
+                            child: Text('Approve')),
+                        ElevatedButton(
+                            onPressed: () {
+                              DeclineVisitorPass(context);
+                            },
+                            child: Text('Decline'))
                       ],
                     ),
                   ),
@@ -139,5 +160,35 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
   void initState() {
     super.initState();
     fetchUsers();
+  }
+
+  ApproveVisitorPass(BuildContext context) async {
+    try {
+      String status = "Approve";
+
+      await FirebaseFirestore.instance
+          .collection('visitor_pass_application')
+          .doc(widget.user.id)
+          .update({"status": status});
+    } on FirebaseAuthException catch (e) {}
+    ;
+
+    Navigator.popUntil(context, ModalRoute.withName('/management_main'));
+    // pop the loading circle
+  }
+
+  DeclineVisitorPass(BuildContext context) async {
+    try {
+      String status = "Decline";
+
+      await FirebaseFirestore.instance
+          .collection('visitor_pass_application')
+          .doc(widget.user.id)
+          .update({"status": status});
+
+      Navigator.popUntil(context, ModalRoute.withName('/management_main'));
+    } on FirebaseAuthException catch (e) {}
+    ;
+    // pop the loading circle
   }
 }
