@@ -1,72 +1,86 @@
 import 'package:campus_management_system/components/my_appbar.dart';
-import 'package:campus_management_system/components/my_facility_tile.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class FacilityInformationPage extends StatelessWidget {
-  const FacilityInformationPage({super.key});
+class FacilityInformationPage extends StatefulWidget {
+  FacilityInformationPage({super.key});
 
+  @override
+  State<FacilityInformationPage> createState() =>
+      _FacilityInformationPageState();
+}
+
+class _FacilityInformationPageState extends State<FacilityInformationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.grey[300],
         appBar: MyAppBar(),
-        body: Center(
+        body: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.all(16),
-            child: Container(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              padding: EdgeInsets.all(25),
+              child: Column(children: [
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Block A - D",
+                    style: TextStyle(fontSize: 30),
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+                Divider(
+                  color: Colors.black,
+                ),
+                Container(
+                  child: Wrap(
+                    runSpacing: 25,
+                    spacing: 25,
                     children: [
-                      Column(
-                        children: [
-                          Image.asset(
-                            'lib/images/TripleSharing_old.png',
-                            width: 300,
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(15),
-                            width: 300,
-                            height: 200,
-                            color: Colors.white,
-                            child: Column(
-                              children: [
-                                Text(
-                                  'Twin Sharing Room \n(Non Air Conditioned)',
-                                  style: TextStyle(fontSize: 25),
-                                  textAlign: TextAlign.center,
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  '-	Block A & C \n-	RM 990 (Long Trimester)\n- RM 660 (Short Trimester)',
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Align(
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.pushNamed(
-                                          context, '/room_information_A_C');
-                                    },
-                                    child:
-                                        Text("Click here to get more detailed",
-                                            style: TextStyle(
-                                              color: Colors.blue,
-                                            )),
-                                  ),
-                                  alignment: Alignment.bottomRight,
-                                )
-                              ],
+                      Image.asset(
+                        'lib/images/TripleSharing_old.png',
+                        width: 300,
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(15),
+                        width: 300,
+                        height: 200,
+                        color: Colors.white,
+                        child: Column(
+                          children: [
+                            Text(
+                              'Twin Sharing Room \n(Non Air Conditioned)',
+                              style: TextStyle(fontSize: 25),
+                              textAlign: TextAlign.center,
                             ),
-                          ),
-                        ],
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              '-	Block A & C \n-	RM 990 (Long Trimester)\n- RM 660 (Short Trimester)',
+                              style: TextStyle(fontSize: 15),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Align(
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                      context, '/room_information_A_C');
+                                },
+                                child: Text("Click here to get more detailed",
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                    )),
+                              ),
+                              alignment: Alignment.bottomRight,
+                            )
+                          ],
+                        ),
                       ),
 
+                      SizedBox(
+                        height: 25,
+                      ),
                       // 2
                       Container(
                           child: Column(
@@ -118,66 +132,78 @@ class FacilityInformationPage extends StatelessWidget {
                       )),
                     ],
                   ),
-                  SizedBox(
-                    height: 16,
+                ),
+                SizedBox(
+                  height: 25,
+                ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Block E (IEB)",
+                    style: TextStyle(fontSize: 30),
+                    textAlign: TextAlign.left,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                ),
+                Divider(
+                  color: Colors.black,
+                ),
+                Container(
+                  child: Wrap(
+                    spacing: 25,
+                    runSpacing: 25,
                     children: [
-                      Column(
-                        children: [
-                          Image.asset(
-                            'lib/images/TripleSharing_old.png',
-                            width: 300,
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(15),
-                            width: 300,
-                            height: 200,
-                            color: Colors.white,
-                            child: Column(
-                              children: [
-                                Text(
-                                  'Twin Sharing Room \n(Non Air Conditioned)',
-                                  style: TextStyle(fontSize: 25),
-                                  textAlign: TextAlign.center,
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  '-	Block A & C \n-	RM 990 (Long Trimester)\n- RM 660 (Short Trimester)',
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Align(
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.pushNamed(
-                                          context, '/room_information_A_C');
-                                    },
-                                    child:
-                                        Text("Click here to get more detailed",
-                                            style: TextStyle(
-                                              color: Colors.blue,
-                                            )),
-                                  ),
-                                  alignment: Alignment.bottomRight,
-                                )
-                              ],
+                      Image.asset(
+                        'lib/images/TwinSharing.jpg',
+                        width: 300,
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(15),
+                        width: 300,
+                        height: 200,
+                        color: Colors.white,
+                        child: Column(
+                          children: [
+                            Text(
+                              'Twin Sharing Room \n(Air Conditioned)',
+                              style: TextStyle(fontSize: 25),
+                              textAlign: TextAlign.center,
                             ),
-                          ),
-                        ],
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              '-  Location: Block E \n- RM 2 250 (Long Trimester)\n- RM 1 500 (Short Trimester) ',
+                              style: TextStyle(fontSize: 15),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Align(
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                      context, '/room_information_twin_E');
+                                },
+                                child: Text("Click here to get more detailed",
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                    )),
+                              ),
+                              alignment: Alignment.bottomRight,
+                            )
+                          ],
+                        ),
                       ),
 
+                      SizedBox(
+                        height: 25,
+                      ),
                       // 2
                       Container(
                           child: Column(
                         children: [
                           Image.asset(
-                            'lib/images/Twin_Sharing_old.png',
+                            'lib/images/TrioSharing.jpg',
                             width: 300,
                           ),
                           Container(
@@ -188,7 +214,7 @@ class FacilityInformationPage extends StatelessWidget {
                             child: Column(
                               children: [
                                 Text(
-                                  'Twin Sharing Room \n(Air Conditioned)',
+                                  'Trio Sharing Room \n(Air Conditioned)',
                                   style: TextStyle(fontSize: 25),
                                   textAlign: TextAlign.center,
                                 ),
@@ -196,7 +222,7 @@ class FacilityInformationPage extends StatelessWidget {
                                   height: 5,
                                 ),
                                 Text(
-                                  '-	Block B & D \n-	RM 1 260 (Long Trimester)\n- RM 840 (Short Trimester)',
+                                  '-  Block B & D \n- RM 1 260 (Long Tri-mester)\n- RM 840 (Short Trimester)',
                                   style: TextStyle(fontSize: 15),
                                 ),
                                 SizedBox(
@@ -206,7 +232,7 @@ class FacilityInformationPage extends StatelessWidget {
                                   child: GestureDetector(
                                     onTap: () {
                                       Navigator.pushNamed(
-                                          context, '/room_information_B_D');
+                                          context, '/room_information_trio_E');
                                     },
                                     child:
                                         Text("Click here to get more detailed",
@@ -223,10 +249,8 @@ class FacilityInformationPage extends StatelessWidget {
                       )),
                     ],
                   ),
-                ],
-              ),
-            ),
-          ),
+                ),
+              ])),
         ));
   }
 }

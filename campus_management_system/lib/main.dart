@@ -76,12 +76,12 @@ class MainApp extends StatelessWidget {
         '/profile': (context) => ProfilePage(),
         '/logout': (context) => MyLoginPage(),
 
-        '/full_personal_form':(context) => PersonalForm(),
+        '/personal_form': (context) => PersonalForm(),
 
 // Redirect Page
-'': (context) => RedirectLoginPage(),
-'/redirect_personal_form':(context) =>RedirectProfileForm(), 
-      
+        '': (context) => RedirectLoginPage(),
+        '/redirect_personal_form': (context) => RedirectProfileForm(),
+
 // Student Resident
 
         '/resident_application': (context) => ResidentApplicationPage(id: id),
@@ -89,7 +89,7 @@ class MainApp extends StatelessWidget {
 
         '/room_information_A_C': (context) => TwinSharingRoomBlock_A_C(),
         '/room_information_B_D': (context) => TwinSharingRoomBlock_B_D(),
-        '/room_information_E': (context) => TwinSharingRoomIEB(),
+        '/room_information_twin_E': (context) => TwinSharingRoomIEB(),
         '/room_information_trio_E': (context) => TrioSharingRoomIEB(),
         // Visitor
         '/visitor_main': (context) => VisitorPage(),

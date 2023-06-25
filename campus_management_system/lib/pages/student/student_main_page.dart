@@ -48,7 +48,7 @@ class _StudentMainPageState extends State<StudentMainPage> {
 
         if (full_detail == "0") {
           Future.delayed(Duration(seconds: 3), () {
-            Navigator.pushReplacementNamed(context, '/full_personal_form');
+            Navigator.pushReplacementNamed(context, '/redirect_personal_form');
           });
         }
 

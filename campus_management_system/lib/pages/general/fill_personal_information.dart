@@ -1,3 +1,5 @@
+import 'package:campus_management_system/components/my_divider.dart';
+import 'package:campus_management_system/components/my_textstyle.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +19,7 @@ class _PersonalFormState extends State<PersonalForm> {
   _PersonalFormState() {
     _selectedNationality = _nationaltype[0];
     _selectedState = _state[0];
+    _selectedRelationship = _relationship[0];
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -30,8 +33,19 @@ class _PersonalFormState extends State<PersonalForm> {
   final TextEditingController idController = TextEditingController();
   final TextEditingController roleController = TextEditingController();
   final TextEditingController homeaddressController = TextEditingController();
+  final TextEditingController postcodeController = TextEditingController();
+  final TextEditingController contactnoController = TextEditingController();
+  final TextEditingController foreignCountryController =
+      TextEditingController();
 
-  final fulldetail = '1';
+  final TextEditingController parennameController = TextEditingController();
+
+  final TextEditingController parentcontactnoController =
+      TextEditingController();
+
+  final TextEditingController parentemailController = TextEditingController();
+
+  String? fulldetail = '1';
 
   final _nationaltype = ['National Resident', 'Foreign Resident'];
   final _state = [
@@ -49,6 +63,9 @@ class _PersonalFormState extends State<PersonalForm> {
     'Selangor',
     'Terrengganu'
   ];
+
+  final _relationship = ['Mother', 'Father', 'Sibling', 'Grandparent'];
+  String? _selectedRelationship = "";
 
   String? _selectedNationality = "";
   String? _selectedState = "";
@@ -84,7 +101,6 @@ class _PersonalFormState extends State<PersonalForm> {
             String dob = basicProfileDetail[2];
             String nric = basicProfileDetail[3];
             String email = basicProfileDetail[4];
-
             String role = basicProfileDetail[5];
             String id = basicProfileDetail[6];
 
@@ -180,6 +196,17 @@ class _PersonalFormState extends State<PersonalForm> {
                               return null;
                             },
                           ),
+                          TextFormField(
+                            controller: contactnoController,
+                            decoration:
+                                InputDecoration(labelText: 'Contact No'),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter your Contact No';
+                              }
+                              return null;
+                            },
+                          ),
                           DropdownButtonFormField(
                             decoration: InputDecoration(
                               labelText: "Nationality",
@@ -200,13 +227,62 @@ class _PersonalFormState extends State<PersonalForm> {
                             },
                           ),
                           nationalitydropdownlist(),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: MyMiddleText(text: "Parent information"),
+                          ),
+                          MyDivider(),
                           TextFormField(
-                            controller: homeaddressController,
+                            controller: parennameController,
                             decoration:
-                                InputDecoration(labelText: 'Home Address'),
+                                InputDecoration(labelText: 'Parent Name'),
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return 'Please enter your home address';
+                                return 'Please enter your parent name';
+                              }
+                              return null;
+                            },
+                          ),
+                          DropdownButtonFormField(
+                            decoration: InputDecoration(
+                              labelText: "Relationship",
+                              prefixIcon: Icon(Icons.people_rounded),
+                              border: UnderlineInputBorder(),
+                            ),
+                            value: _selectedRelationship,
+                            items: _relationship
+                                .map((e) => DropdownMenuItem(
+                                      child: Text(e),
+                                      value: e,
+                                    ))
+                                .toList(),
+                            onChanged: (val) {
+                              setState(() {
+                                _selectedRelationship = val as String;
+                              });
+                            },
+                          ),
+                          TextFormField(
+                            controller: parentcontactnoController,
+                            decoration: InputDecoration(
+                                labelText: 'Parent Contact Number'),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter your parent contact number';
+                              }
+                              return null;
+                            },
+                          ),
+                          TextFormField(
+                            controller: parentemailController,
+                            decoration:
+                                InputDecoration(labelText: 'Parent Email'),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter your Parent Email';
                               }
                               return null;
                             },
@@ -290,7 +366,51 @@ class _PersonalFormState extends State<PersonalForm> {
               });
             },
           ),
-          
+          TextFormField(
+            controller: postcodeController,
+            decoration: InputDecoration(labelText: 'Postcode'),
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please enter your postcode';
+              }
+              return null;
+            },
+          ),
+          TextFormField(
+            controller: homeaddressController,
+            decoration: InputDecoration(labelText: 'Home Address'),
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please enter your home address';
+              }
+              return null;
+            },
+          ),
+        ],
+      );
+    } else if (_selectedNationality == _nationaltype[1]) {
+      return Column(
+        children: [
+          TextFormField(
+            controller: foreignCountryController,
+            decoration: InputDecoration(labelText: 'Country'),
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please enter your country';
+              }
+              return null;
+            },
+          ),
+          TextFormField(
+            controller: postcodeController,
+            decoration: InputDecoration(labelText: 'Postcode'),
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please enter your postcode';
+              }
+              return null;
+            },
+          ),
           TextFormField(
             controller: homeaddressController,
             decoration: InputDecoration(labelText: 'Home Address'),
@@ -308,13 +428,31 @@ class _PersonalFormState extends State<PersonalForm> {
     }
   }
 
+// havent done
   updatePersonalInfo(BuildContext context) async {
     try {
       String uid = FirebaseAuth.instance.currentUser!.uid;
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .update({"address": homeaddressController.text});
+
+      await FirebaseFirestore.instance.collection('users').doc(uid).update({
+        "home_address": homeaddressController.text,
+        "nationality": _selectedNationality as String,
+        "postcode": postcodeController.text,
+        "parent_name": parennameController.text,
+        "relationship": _selectedRelationship as String,
+        "parent_contact_no": parentcontactnoController.text,
+        "parent_email": parentemailController.text,
+        "full_detail": fulldetail
+      });
+
+      if (_selectedNationality == _nationaltype[0]) {
+        await FirebaseFirestore.instance.collection('users').doc(uid).update({
+          "state": _selectedState as String,
+        });
+      } else if (_selectedNationality == _nationaltype[1]) {
+        await FirebaseFirestore.instance.collection('users').doc(uid).update({
+          "country": foreignCountryController.text,
+        });
+      }
     } on FirebaseAuthException catch (e) {
       // Handle the exception if needed
     } // Handle the exception if needed
