@@ -8,7 +8,7 @@ import 'package:campus_management_system/role.dart';
 import 'package:intl/intl.dart';
 import 'package:campus_management_system/pages/general/login_page.dart';
 
-import '../documentation/term_and_condition.dart';
+import '../../documentation/term_and_condition.dart';
 
 class ResidentApplicationPage extends StatefulWidget {
   final String id;
@@ -37,7 +37,7 @@ class _ResidentApplicationPageState extends State<ResidentApplicationPage> {
   final TextEditingController relationshipController = TextEditingController();
   final TextEditingController parentemailController = TextEditingController();
   final String status = "Wait the Management Review";
-
+  final String roomno = "";
   final _roomtype = [
     'Twin Sharing (Air Conditioned) (Block A & C) RM 660 (Short Semester) RM 990 (Long Semester)',
     'Twin Sharing (Non Air Conditioned) (Block B & D) RM 840 (Short Semester) RM 1 260 (Long Semester)',
@@ -311,6 +311,7 @@ class _ResidentApplicationPageState extends State<ResidentApplicationPage> {
         "parent_email": parentemailController.text,
         "room_type": _selectedRoomType as String,
         "status": status,
+        "room_no": roomno,
       });
       print(auth);
     } on FirebaseAuthException catch (e) {
@@ -323,9 +324,9 @@ class _ResidentApplicationPageState extends State<ResidentApplicationPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Create account'),
+          title: Text('Submit your student resident form'),
           content: Text(
-            'This will also create a profile for ' + emailController.text,
+            'This will also sent the student resident form to management',
           ),
           actions: [
             TextButton(

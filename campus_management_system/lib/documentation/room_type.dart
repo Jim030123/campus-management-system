@@ -1,4 +1,5 @@
 import 'package:campus_management_system/components/my_appbar.dart';
+import 'package:campus_management_system/components/my_divider.dart';
 import 'package:flutter/material.dart';
 
 class TwinSharingRoomBlock_A_C extends StatelessWidget {
@@ -15,8 +16,9 @@ class TwinSharingRoomBlock_A_C extends StatelessWidget {
             children: [
               Align(
                   alignment: Alignment.centerLeft,
-                  child: Text("Twin Sharing Room (Non Air Contioned)",
+                  child: Text("Twin Sharing Room \n(Non Air Contioned)",
                       style: TextStyle(fontSize: 30))),
+              MyDivider(),
               Center(
                   child: Column(
                 children: [
@@ -36,15 +38,13 @@ class TwinSharingRoomBlock_A_C extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: Colors.green,
                         borderRadius: BorderRadius.circular(25)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    child: Wrap(
+                      // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      spacing: 25,
+                      runSpacing: 25,
                       children: [
 //1
                         Column(children: [
-                          Text(
-                            'Room Facility',
-                            style: TextStyle(fontSize: 30),
-                          ),
                           Text(
                             '- Single Bed & Bunk Bed\n- Wardrobe\n- Curtain\n- Individual study table & chair\n- Fan\n - Basin ',
                             style: TextStyle(fontSize: 20),
@@ -57,6 +57,7 @@ class TwinSharingRoomBlock_A_C extends StatelessWidget {
                             'Sharing Facilities',
                             style: TextStyle(fontSize: 30),
                           ),
+                          MyDivider(),
                           Text(
                               '- Water Heater\n- Refrigerator\n- Water Dispender\n - Coin-operated Washing Wachine and Dryer\n- WIFI \n- Study Room',
                               style: TextStyle(fontSize: 20))
@@ -108,8 +109,9 @@ class TwinSharingRoomBlock_B_D extends StatelessWidget {
             children: [
               Align(
                   alignment: Alignment.centerLeft,
-                  child: Text("Twin Sharing Room (Air Contioned)",
+                  child: Text("Twin Sharing Room \n(Air Contioned)",
                       style: TextStyle(fontSize: 30))),
+              MyDivider(),
               Center(
                   child: Column(
                 children: [
@@ -129,15 +131,12 @@ class TwinSharingRoomBlock_B_D extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: Colors.green,
                         borderRadius: BorderRadius.circular(25)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    child: Wrap(
+                      runSpacing: 25,
+                      spacing: 25,
                       children: [
 //1
                         Column(children: [
-                          Text(
-                            'Room Facility',
-                            style: TextStyle(fontSize: 30),
-                          ),
                           Text(
                             '- Single Bed & Bunk Bed\n- Wardrobe\n- Curtain\n- Individual study table & chair\n- Fan\n - Basin ',
                             style: TextStyle(fontSize: 20),
@@ -150,6 +149,7 @@ class TwinSharingRoomBlock_B_D extends StatelessWidget {
                             'Sharing Facilities',
                             style: TextStyle(fontSize: 30),
                           ),
+                          MyDivider(),
                           Text(
                               '- Water Heater\n- Refrigerator\n- Water Dispender\n - Coin-operated Washing Wachine and Dryer\n- WIFI \n- Study Room',
                               style: TextStyle(fontSize: 20))
@@ -201,14 +201,17 @@ class TwinSharingRoomIEB extends StatelessWidget {
             children: [
               Align(
                   alignment: Alignment.centerLeft,
-                  child: Text("Twin Sharing Room (Air Contioned)",
+                  child: Text("Twin Sharing Room \n(Air Contioned)",
                       style: TextStyle(fontSize: 30))),
+              MyDivider(),
               Center(
                   child: Column(
                 children: [
                   Align(
                     alignment: Alignment.center,
-                    child: Row(
+                    child: Wrap(
+                      spacing: 25,
+                      runSpacing: 25,
                       children: [
                         Image.asset('lib/images/twinieb_area.png'),
                         Image.asset('lib/images/twinieb.png'),
@@ -230,8 +233,9 @@ class TwinSharingRoomIEB extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: Colors.green,
                         borderRadius: BorderRadius.circular(25)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    child: Wrap(
+                      runSpacing: 25,
+                      spacing: 25,
                       children: [
 //1
                         Column(children: [
@@ -251,6 +255,7 @@ class TwinSharingRoomIEB extends StatelessWidget {
                             'Sharing Facilities',
                             style: TextStyle(fontSize: 30),
                           ),
+                          MyDivider(),
                           Text(
                               '- Water Heater\n- Refrigerator\n- Water Dispender\n - Coin-operated Washing Wachine and Dryer\n- WIFI \n- Study Room',
                               style: TextStyle(fontSize: 20))
@@ -302,14 +307,16 @@ class TrioSharingRoomIEB extends StatelessWidget {
             children: [
               Align(
                   alignment: Alignment.centerLeft,
-                  child: Text("Trio Sharing Room (Air Contioned)",
+                  child: Text("Trio Sharing Room \n(Air Contioned)",
                       style: TextStyle(fontSize: 30))),
               Center(
                   child: Column(
                 children: [
                   Align(
                     alignment: Alignment.center,
-                    child: Row(
+                    child: Wrap(
+                      runSpacing: 25,
+                      spacing: 25,
                       children: [
                         Image.asset('lib/images/trioieb_area.png'),
                         Image.asset('lib/images/trioieb.png'),
@@ -331,15 +338,12 @@ class TrioSharingRoomIEB extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: Colors.green,
                         borderRadius: BorderRadius.circular(25)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    child: Wrap(
+                      spacing: 25,
+                      runSpacing: 25,
                       children: [
 //1
                         Column(children: [
-                          Text(
-                            'Room Facility',
-                            style: TextStyle(fontSize: 30),
-                          ),
                           Text(
                             '- Single Bed & Bunk Bed\n- Wardrobe\n- Curtain\n- Individual study table & chair\n- Fan\n - Basin ',
                             style: TextStyle(fontSize: 20),
@@ -352,6 +356,7 @@ class TrioSharingRoomIEB extends StatelessWidget {
                             'Sharing Facilities',
                             style: TextStyle(fontSize: 30),
                           ),
+                          MyDivider(),
                           Text(
                               '- Water Heater\n- Refrigerator\n- Water Dispender\n - Coin-operated Washing Wachine and Dryer\n- WIFI \n- Study Room',
                               style: TextStyle(fontSize: 20))

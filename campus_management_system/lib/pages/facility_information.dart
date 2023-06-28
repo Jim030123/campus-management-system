@@ -22,7 +22,7 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                 Align(
                   alignment: Alignment.topLeft,
                   child: Text(
-                    "Block A - D",
+                    "Outdoor Facility",
                     style: TextStyle(fontSize: 30),
                     textAlign: TextAlign.left,
                   ),
@@ -36,18 +36,17 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                     spacing: 25,
                     children: [
                       Image.asset(
-                        'lib/images/TripleSharing_old.png',
+                        'lib/images/basketball.jpg',
                         width: 300,
                       ),
                       Container(
                         padding: EdgeInsets.all(15),
                         width: 300,
-                        height: 200,
                         color: Colors.white,
                         child: Column(
                           children: [
                             Text(
-                              'Twin Sharing Room \n(Non Air Conditioned)',
+                              'Basketball Court',
                               style: TextStyle(fontSize: 25),
                               textAlign: TextAlign.center,
                             ),
@@ -55,7 +54,7 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                               height: 5,
                             ),
                             Text(
-                              '-	Block A & C \n-	RM 990 (Long Trimester)\n- RM 660 (Short Trimester)',
+                              'Location: Sport field \n Opening Hour : 8AM - 6PM\n Number of Court : 2',
                               style: TextStyle(fontSize: 15),
                             ),
                             SizedBox(
@@ -65,9 +64,9 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                               child: GestureDetector(
                                 onTap: () {
                                   Navigator.pushNamed(
-                                      context, '/room_information_A_C');
+                                      context, '/check_facility_available');
                                 },
-                                child: Text("Click here to get more detailed",
+                                child: Text("Booking Now",
                                     style: TextStyle(
                                       color: Colors.blue,
                                     )),
@@ -86,7 +85,7 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                           child: Column(
                         children: [
                           Image.asset(
-                            'lib/images/Twin_Sharing_old.png',
+                            'lib/images/tennis.jpg',
                             width: 300,
                           ),
                           Container(
@@ -97,7 +96,7 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                             child: Column(
                               children: [
                                 Text(
-                                  'Twin Sharing Room \n(Air Conditioned)',
+                                  'Tennis Court',
                                   style: TextStyle(fontSize: 25),
                                   textAlign: TextAlign.center,
                                 ),
@@ -105,26 +104,12 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                                   height: 5,
                                 ),
                                 Text(
-                                  '-	Block B & D \n-	RM 1 260 (Long Trimester)\n- RM 840 (Short Trimester)',
+                                  'Location: Sport Field \n Opening Hour : 8AM - 6PM\n Number of Court : 3',
                                   style: TextStyle(fontSize: 15),
                                 ),
                                 SizedBox(
                                   height: 10,
                                 ),
-                                Align(
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.pushNamed(
-                                          context, '/room_information_B_D');
-                                    },
-                                    child:
-                                        Text("Click here to get more detailed",
-                                            style: TextStyle(
-                                              color: Colors.blue,
-                                            )),
-                                  ),
-                                  alignment: Alignment.bottomRight,
-                                )
                               ],
                             ),
                           ),
@@ -139,7 +124,7 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                 Align(
                   alignment: Alignment.topLeft,
                   child: Text(
-                    "Block E (IEB)",
+                    "Indoor Facility",
                     style: TextStyle(fontSize: 30),
                     textAlign: TextAlign.left,
                   ),
@@ -153,7 +138,7 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                     runSpacing: 25,
                     children: [
                       Image.asset(
-                        'lib/images/TwinSharing.jpg',
+                        'lib/images/badminton.png',
                         width: 300,
                       ),
                       Container(
@@ -164,7 +149,7 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                         child: Column(
                           children: [
                             Text(
-                              'Twin Sharing Room \n(Air Conditioned)',
+                              'Badminton Court',
                               style: TextStyle(fontSize: 25),
                               textAlign: TextAlign.center,
                             ),
@@ -172,49 +157,32 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                               height: 5,
                             ),
                             Text(
-                              '-  Location: Block E \n- RM 2 250 (Long Trimester)\n- RM 1 500 (Short Trimester) ',
+                              'Location: Multipurpose Hall  \n Opening Hour : 8AM - 6PM\n Number of Court : 4',
                               style: TextStyle(fontSize: 15),
                             ),
                             SizedBox(
                               height: 10,
                             ),
-                            Align(
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                      context, '/room_information_twin_E');
-                                },
-                                child: Text("Click here to get more detailed",
-                                    style: TextStyle(
-                                      color: Colors.blue,
-                                    )),
-                              ),
-                              alignment: Alignment.bottomRight,
-                            )
                           ],
                         ),
                       ),
 
-                      SizedBox(
-                        height: 25,
-                      ),
                       // 2
                       Container(
                           child: Column(
                         children: [
                           Image.asset(
-                            'lib/images/TrioSharing.jpg',
+                            'lib/images/gymcenter.png',
                             width: 300,
                           ),
                           Container(
                             padding: EdgeInsets.all(15),
                             width: 300,
-                            height: 200,
                             color: Colors.white,
                             child: Column(
                               children: [
                                 Text(
-                                  'Trio Sharing Room \n(Air Conditioned)',
+                                  'Gym Center',
                                   style: TextStyle(fontSize: 25),
                                   textAlign: TextAlign.center,
                                 ),
@@ -222,26 +190,13 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                                   height: 5,
                                 ),
                                 Text(
-                                  '-  Block B & D \n- RM 1 260 (Long Tri-mester)\n- RM 840 (Short Trimester)',
+                                  'Location: International Education Building (IEB)\n Opening Hour : 8AM - 6PM\nFacility:\n- Cardio Area \n- Cycling studio\n- Strength area\n- Locker ',
+                                  textAlign: TextAlign.center,
                                   style: TextStyle(fontSize: 15),
                                 ),
                                 SizedBox(
                                   height: 10,
                                 ),
-                                Align(
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.pushNamed(
-                                          context, '/room_information_trio_E');
-                                    },
-                                    child:
-                                        Text("Click here to get more detailed",
-                                            style: TextStyle(
-                                              color: Colors.blue,
-                                            )),
-                                  ),
-                                  alignment: Alignment.bottomRight,
-                                )
                               ],
                             ),
                           ),

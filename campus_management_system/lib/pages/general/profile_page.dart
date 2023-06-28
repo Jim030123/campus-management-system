@@ -39,8 +39,8 @@ class _ProfilePageState extends State<ProfilePage> {
     String nric = await snapshot.get('nric').toString();
     String email = await snapshot.get('email').toString();
     String id = await snapshot.get('id').toString();
-
-    return [name, gender, dob, nric, email, role, id];
+    String fulldetail = await snapshot.get('full_detail').toString();
+    return [name, gender, dob, nric, email, role, id, fulldetail];
   }
 
   @override
@@ -54,15 +54,16 @@ class _ProfilePageState extends State<ProfilePage> {
           builder: (context, snapshot) {
             // String name = snapshot.data as String;
 
-            List<String> basicProfileDetail = snapshot.data as List<String>;
-            String name = basicProfileDetail[0];
-            String gender = basicProfileDetail[1];
-            String dob = basicProfileDetail[2];
-            String nric = basicProfileDetail[3];
-            String email = basicProfileDetail[4];
+            List<String> studentdetail = snapshot.data as List<String>;
+            String name = studentdetail[0];
+            String gender = studentdetail[1];
+            String dob = studentdetail[2];
+            String nric = studentdetail[3];
+            String email = studentdetail[4];
 
-            String role = basicProfileDetail[5];
-            String id = basicProfileDetail[6];
+            String role = studentdetail[5];
+            String id = studentdetail[6];
+            String full_detail = studentdetail[7];
 
             return SingleChildScrollView(
               child: Container(
@@ -111,7 +112,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     maxWidth: MediaQuery.of(context)
                                             .size
                                             .width *
-                                        0.7, // Set a maximum width for the program text
+                                        0.8, // Set a maximum width for the program text
                                   ),
                                   // color: Colors.blue,
                                   alignment: Alignment.topLeft,
@@ -130,14 +131,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                         child: Text(
                                           'Name: ' +
                                               name +
-                                              '\nDate of Birth: ' +
-                                              dob +
                                               "\nGender: " +
                                               gender +
+                                              '\nDate of Birth: ' +
+                                              dob +
+                                              "\nNRIC: " +
+                                              nric +
                                               "\nEmail: " +
                                               email +
                                               "\nRole: " +
-                                              role,
+                                              role +
+                                              "\nID: " +
+                                              id,
                                           style: TextStyle(fontSize: 18),
                                         ),
                                       ),
@@ -153,8 +158,42 @@ class _ProfilePageState extends State<ProfilePage> {
                                           return roleinfo(role, roledetail);
                                         },
                                       ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      FutureBuilder(
+                                        future: residentstudentdetail(),
+                                        builder: (context, snapshot) {
+                                          List<String> residentdetail =
+                                              snapshot.data as List<String>;
+                                          String roomtype = residentdetail[0];
+                                          String status = residentdetail[1];
 
-                                      residentstudentdetail()
+                                          return Column(
+                                            children: [
+                                              Align(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: MyMiddleText(
+                                                    text:
+                                                        'Resident information',
+                                                  )),
+                                              MyDivider(),
+                                              Align(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Column(
+                                                    children: [
+                                                      Text("Room Type: " +
+                                                          roomtype +
+                                                          "\nStatus: " +
+                                                          status)
+                                                    ],
+                                                  ))
+                                            ],
+                                          );
+                                        },
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -174,16 +213,17 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
-residentstudentdetail()async{
-    final user = FirebaseAuth.instance.currentUser!.uid;
+
+residentstudentdetail() async {
+  final user = FirebaseAuth.instance.currentUser!.uid;
   DocumentSnapshot snapshot = await FirebaseFirestore.instance
-      .collection('users') // Replace with your collection name
+      .collection('resident_application') // Replace with your collection name
       .doc(user) // Use the provided document ID
       .get();
 
-       String homeaddress = snapshot.get('home_address').toString();
-
-
+  String roomtype = snapshot.get('room_type');
+  String status = snapshot.get('status');
+  return [roomtype, status];
 }
 
 fulldetail(String role) async {
@@ -233,7 +273,7 @@ fulldetail(String role) async {
 roleinfo(String role, List roledetail) {
   String nationality = roledetail[0];
 
-  if (role == "Student") {
+  if (role == "Student" && nationality == "Foreign Resident") {
     String stateOrcountry = roledetail[1];
     String postcode = roledetail[2];
     String homeaddress = roledetail[3];

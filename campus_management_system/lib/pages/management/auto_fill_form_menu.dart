@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../resident_form.dart';
+import '../student/resident_form.dart';
 import 'qr_auto_fill_.dart';
 
 class AutoFillFormMenu extends StatelessWidget {

@@ -32,7 +32,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
   final TextEditingController supportingEvidenceController =
       TextEditingController();
   final TextEditingController relationController = TextEditingController();
-  final String status = "Wait the Management Review";
+  final String status = "Waiting the Management Review";
 
   Timestamp timestamp = Timestamp.now();
   DateTime now = DateTime.now();

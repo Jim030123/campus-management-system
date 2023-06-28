@@ -1,3 +1,4 @@
+import 'package:campus_management_system/components/my_textstyle.dart';
 import 'package:campus_management_system/pages/management/room.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -33,44 +34,118 @@ class _StudentResidentApplicationPageState
   }
 
   void _openNewPage(DocumentSnapshot user) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ApplicationDetail(user: user),
-      ),
-    );
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => ApplicationDetail(user: user),
+    //   ),
+    // );
   }
+
+  List<String> status = [
+    'Waiting the Management Review',
+    'Approved',
+    'Declined'
+  ];
+  late String _selectedStatus = status[0];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Student Resident Application List'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.filter_none_outlined,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Filter the Student Application'),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _selectedStatus = status[0];
+                            });
+                            Navigator.pop(context);
+                          },
+                          child: Text(status[0]),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _selectedStatus = status[1];
+                            });
+                            Navigator.pop(context); // Close the dialog
+                          },
+                          child: Text(status[1]),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _selectedStatus = status[2];
+                            });
+                            Navigator.pop(context); // Close the dialog
+                          },
+                          child: Text(status[2]),
+                        ),
+                      ],
+                    ),
+                    actions: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context); // Close the dialog
+                        },
+                        child: Text('Cancel'),
+                      )
+                    ],
+                  );
+                },
+              );
+            },
+          )
+        ],
       ),
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: _allApplication.length,
-              itemBuilder: (context, index) {
-                DocumentSnapshot user = _allApplication[index];
+      body: filter(_selectedStatus),
+    );
+  }
 
-                if (user['status'] != 'Wait the Managemnet Review') {
-                  // If the status is not 'wait', return an empty container
-                  return null;
-                }
+  Widget filter(String selectedStatus) {
+    print(_selectedStatus);
+    return _isLoading
+        ? Center(child: CircularProgressIndicator())
+        : ListView.builder(
+            itemCount: _allApplication.length,
+            itemBuilder: (context, index) {
+              DocumentSnapshot user = _allApplication[index];
 
+              if (user['status'] == selectedStatus) {
                 return Padding(
                   padding: EdgeInsets.all(16),
                   child: ListTile(
                     tileColor: Colors.grey,
                     title: Text(user['email'] ?? 'No Email'),
                     subtitle: Text(user['status']),
-                    onTap: () => _openNewPage(user),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ApplicationDetail(user: user),
+                        ),
+                      );
+                    },
                   ),
                 );
-              },
-            ),
-    );
+              }
+            },
+          );
   }
 }
 
@@ -126,22 +201,38 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
                 ),
               ),
               Container(
+                padding: EdgeInsets.all(25),
                 decoration: BoxDecoration(
                     color: Colors.grey,
                     borderRadius: BorderRadius.all(Radius.circular(25))),
                 child: Center(
                   child: Column(
                     children: [
-                      Text("Name: " + widget.user['name']),
-                      Text("Student ID: " + widget.user['id'] ?? 'No ID'),
-                      Text("Room Type: " + widget.user['room_type']),
-                      s(),
-                      Text(widget.user.id),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: MySmallText(
+                            text: "Name: " +
+                                widget.user['name'] +
+                                "\nStudent ID: " +
+                                widget.user['id'] +
+                                "\nStudent Email: " +
+                                widget.user['email'] +
+                                "\nGender: " +
+                                widget.user['gender'] +
+                                "\nParent Name: " +
+                                widget.user['parent_name'] +
+                                "\nRelationship: " +
+                                widget.user['relationship'] +
+                                "\nParent Email: " +
+                                widget.user['parent_email'] +
+                                "\nRoom Type: " +
+                                widget.user['room_type']),
+                      ),
                       ElevatedButton(
                           onPressed: () {
                             _openNewPage(widget.user);
                           },
-                          child: Text('Choose'))
+                          child: Text('Choose Room'))
                     ],
                   ),
                 ),
@@ -157,21 +248,5 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
   void initState() {
     super.initState();
     fetchUsers();
-  }
-
-  s() {
-    if (widget.user['room_type'] == null) {
-      return Text('a');
-    } else if (widget.user['room_type'] ==
-        "Twin Sharing (Air Conditioned) (Block A & C) RM 660 (Short Semester) RM 990 (Long Semester)") {
-      return Text('sa');
-
-      // } else if (widget.user['room_type'] ==
-      //     'Twin Sharing (Non Air Conditioned) (Block B & D) RM 840 (Short Semester) RM 1 260 (Long Semester)') {
-      // } else if (widget.user['room_type'] ==
-      //     'Twin Sharing (Air Conditioned) (Block E) RM 1 500 (Short Semester)  RM 2 250 (Long Semester)') {
-      // } else if (widget.user['room_type' ==
-      //     'Trio Sharing (Air Conditioned) (Block E) RM 1 050 (Short Semester)  RM 1 575 (Long Semester)']) {}
-    }
   }
 }

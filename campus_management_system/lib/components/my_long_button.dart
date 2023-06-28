@@ -16,6 +16,7 @@ class MyLongButton extends StatelessWidget {
               child: Text(
                 text,
                 style: TextStyle(fontSize: 25),
+                textAlign: TextAlign.center,
               ),
             ),
             alignment: AlignmentDirectional.center),

@@ -41,27 +41,27 @@ class _RoomAvailableState extends State<RoomAvailable> {
               : ListView.builder(
                   itemCount: _allRoom.length,
                   itemBuilder: (context, index) {
-                    DocumentSnapshot user = _allRoom[index];
-                    // String studentList =
-                    //     user['student_ID'] + " " + user['name'].toString();
+                    DocumentSnapshot Room = _allRoom[index];
 
                     return Container(
-                      padding: EdgeInsets.all(8),
-                      child: ListTile(
-                        tileColor: Colors.grey,
-                        title: Text(user['room_no']),
-                        subtitle: Text("Remaining Beds: " +
-                            user['current_person'].toString() +
-                            " / " +
-                            user['max_capacity'].toString() +
-                            "\n" +
-                            user['student_ID'].toString() +
-                            "\n" +
-                            user['name'].toString()),
-                      ),
-                    );
+                        padding: EdgeInsets.all(8),
+                        child: ListTile(
+                          tileColor: Colors.grey,
+                          title:
+                              Text(Room['room_no'] + " " + Room['room_type']),
+                          subtitle: Text("Remaining Beds: " +
+                              Room['current_person'].toString() +
+                              " / " +
+                              Room['max_capacity'].toString() +
+                              "\nCurrent Student: " +
+                              Room['student_name_id'].toString() +
+                              "\nRoom Gender: " +
+                              Room['room_gender'].toString()),
+                        ));
                   },
                 ),
         ));
   }
+
+// still testing
 }

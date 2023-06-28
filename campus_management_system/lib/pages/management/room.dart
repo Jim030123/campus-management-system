@@ -18,6 +18,7 @@ class _RoomState extends State<Room> {
 
   bool _isLoading = true;
   late List<DocumentSnapshot> _allRoom;
+  String status = "Approved";
 
   final CollectionReference studentResidentApplicationCollection =
       FirebaseFirestore.instance.collection('room_available');
@@ -68,22 +69,19 @@ class _RoomState extends State<Room> {
       await FirebaseFirestore.instance
           .collection('resident_application')
           .doc(widget.user.id)
-          .update({
-        "room_no": selectedValue,
-      });
+          .update({"room_no": selectedValue, "status": status,
+          
+"current_person": FieldValue.increment(1)
+         
+          });
     } on FirebaseAuthException catch (e) {
       // Handle the exception if needed
     }
 
-    try {
-      await FirebaseFirestore.instance
-          .collection('room_available')
-          .doc(selectedValue)
-          .update({"current_person": FieldValue.increment(1)});
-    } on FirebaseAuthException catch (e) {
-      // Handle the exception if needed
-    }
+  
   }
+
+  
 
   confirmDialog() {
     showDialog(

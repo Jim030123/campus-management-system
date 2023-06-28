@@ -323,8 +323,7 @@ class _PersonalFormState extends State<PersonalForm> {
                               onPressed: checkboxValue
                                   ? () {
                                       if (_formKey.currentState!.validate()) {
-                                        updatePersonalInfo(context);
-                                        // _confirmDialog();
+                                        confirmDialog();
                                       }
                                     }
                                   : null,
@@ -428,6 +427,54 @@ class _PersonalFormState extends State<PersonalForm> {
     }
   }
 
+  confirmDialog() {
+    showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+              title: const Text("Confirmation"),
+              content: const Text(
+                  "I already confirm all my detail insert correctly "),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(ctx).pop();
+                  },
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        child: Container(
+                          color: Colors.green,
+                          padding: const EdgeInsets.all(14),
+                          child: const Text(
+                            "Yes",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        onTap: () {
+                          //navigator
+                          updatePersonalInfo(context);
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/auth', (route) => false);
+                        },
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Container(
+                        color: Colors.green,
+                        padding: const EdgeInsets.all(14),
+                        child: const Text(
+                          "Cancel",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ));
+  }
+
 // havent done
   updatePersonalInfo(BuildContext context) async {
     try {
@@ -478,28 +525,3 @@ class _PersonalFormState extends State<PersonalForm> {
     );
   }
 }
-
-
-
-
-
-//   void _confirmDialog() async {
-//     showDialog(
-//       context: context,
-//       builder: (BuildContext context) {
-//         return AlertDialog(
-//           title: Text('Send Feedback'),
-//           content: Text('This will send the feedback to management '),
-//           actions: [
-//             TextButton(
-//               child: Text('OK'),
-//               onPressed: () {
-//                 Navigator.pop(context);
-//               },
-//             ),
-//           ],
-//         );
-//       },
-//     );
-//   }
-// }

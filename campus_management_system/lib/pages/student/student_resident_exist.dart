@@ -16,17 +16,32 @@ class StudentResidentExist extends StatelessWidget {
         .doc(user) // Use the provided document ID
         .get();
 
-    // Access the "role" field and convert it to a string
     String email = await snapshot.get('email').toString();
     String name = await snapshot.get('name').toString();
+    String gender = await snapshot.get('gender').toString();
     String parentcontactno = await snapshot.get('parent_contact_no').toString();
     String parentname = await snapshot.get('parent_name').toString();
     String id = await snapshot.get('id').toString();
-    String roomno = await snapshot.get('room_no').toString();
+    // String roomno = await snapshot.get('room_no').toString();
     String roomtype = await snapshot.get('room_type').toString();
+    String relationship = await snapshot.get('relationship').toString();
+    String roomno = await snapshot.get('room_no').toString();
+
+    String status = await snapshot.get('status').toString();
 
     print(name + id);
-    return [name, email, id, roomtype, roomno, parentname, parentcontactno];
+    return [
+      name,
+      email,
+      gender,
+      id,
+      roomtype,
+      roomno,
+      parentname,
+      relationship,
+      parentcontactno,
+      status,
+    ];
   }
 
   @override
@@ -34,68 +49,84 @@ class StudentResidentExist extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: MyAppBar(),
-        body: FutureBuilder(
-            future: getdatafromDB(),
-            builder: (context, snapshot) {
-              List<String> dataList = snapshot.data as List<String>;
-              String name = dataList[0];
-              String email = dataList[1];
-              String id = dataList[2];
-              String roomtype = dataList[3];
-              String roomno = dataList[4];
-              String parentname = dataList[5];
-              String parentcontactno = dataList[6];
+        body: Container(
+          padding: EdgeInsets.all(25),
+          child: FutureBuilder(
+              future: getdatafromDB(),
+              builder: (context, snapshot) {
+                List<String> dataList = snapshot.data as List<String>;
+                String name = dataList[0];
+                String email = dataList[1];
+                String gender = dataList[2];
+                String id = dataList[3];
+                String roomtype = dataList[4];
+                String roomno = dataList[5];
+                String parentname = dataList[6];
+                String relationship = dataList[7];
+                String parentcontactno = dataList[8];
+                String status = dataList[9];
 
-              final user = FirebaseAuth.instance.currentUser!.uid;
+                final user = FirebaseAuth.instance.currentUser!.uid;
 
-              return Container(
-                  child: Column(
-                children: [
-                  Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'Student Resident Profile',
-                        style: TextStyle(fontSize: 25),
-                      )),
-                  Container(
-                    padding: EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      color: Colors.grey,
-                    ),
-                    child: Column(children: [
-                      QrImageView(
-                        backgroundColor: Colors.white,
-                        data: user,
-                        version: QrVersions.auto,
-                        size: 150.0,
+                return Container(
+                    child: Column(
+                  children: [
+                    Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          'Student Resident Profile',
+                          style: TextStyle(fontSize: 25),
+                        )),
+                    Container(
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        color: Colors.grey,
                       ),
-                      Text('Name: ' + name),
-                      Text('Email: ' + email),
-                      Text('ID: ' + id),
-                      Text('Room Type: ' + roomtype),
-                      Text('Room No: ' + roomno),
-                      Text('Parent Name:' + parentname),
-                      Text('Parent Contact No: ' + parentcontactno),
-                    ]),
-                  ),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  MyLongButton(
-                    text: 'Resident Feedback',
-                    routename: '/resident_feedback',
-                  ),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  MyLongButton(
-                    text: 'Resident Facility',
-                    routename: '/resident_facility',
-                  ),
-                ],
-              ));
-            }),
+                      child: Column(children: [
+                        QrImageView(
+                          backgroundColor: Colors.white,
+                          data: user,
+                          version: QrVersions.auto,
+                          size: 150.0,
+                        ),
+                        Text("User ID: " + user),
+                        Text('Name: ' +
+                            name +
+                            '\nEmail: ' +
+                            email +
+                            '\nGender: ' +
+                            gender +
+                            '\nID: ' +
+                            id +
+                            '\nRoom Type: ' +
+                            roomtype +
+                            '\nRoom No: ' +
+                            roomno +
+                            '\nParent Name: ' +
+                            parentname +
+                            '\nRelationship: ' +
+                            relationship +
+                            '\nParent Contact No: ' +
+                            parentcontactno +
+                            '\nStatus: ' +
+                            status),
+                      ]),
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    MyLongButton(
+                      text: 'Resident Feedback',
+                      routename: '/resident_feedback',
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                  ],
+                ));
+              }),
+        ),
       ),
     );
   }

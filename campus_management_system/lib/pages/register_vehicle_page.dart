@@ -35,7 +35,7 @@ class _RegistrationVehiclePageState extends State<RegistrationVehiclePage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController idController = TextEditingController();
-  final String status = "Wait the Management Review";
+  final String status = "Waiting the Management Review";
 
   bool checkboxValue = false;
 
@@ -183,8 +183,11 @@ class _RegistrationVehiclePageState extends State<RegistrationVehiclePage> {
                                   });
                                 },
                               ),
-                              Text(
-                                  "I have read and agree to Terms of Service and Privacy Policy")
+                              Container(
+                                
+                                child: Text(
+                                    "I have read and agree to Terms of Service and Privacy Policy"),
+                              )
                             ],
                           ),
 

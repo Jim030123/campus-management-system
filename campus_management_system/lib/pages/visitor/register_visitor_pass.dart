@@ -32,7 +32,7 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
   final TextEditingController vehicleplatenumberController =
       TextEditingController();
   final TextEditingController relationController = TextEditingController();
-  final String status = "Wait the Management Review";
+  final String status = "Waiting the Management Review";
 
   final _vehicletype = ['Motorcycle', 'Car', 'Bus'];
 

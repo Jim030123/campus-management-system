@@ -117,7 +117,7 @@ class RedirectProfileForm extends StatelessWidget {
                 ),
                 ElevatedButton(
                     onPressed: () {
-                      Navigator.popAndPushNamed(context, '/personal_form');
+                      Navigator.pushNamed(context, '/personal_form');
                     },
                     child: Text('Go'))
               ],

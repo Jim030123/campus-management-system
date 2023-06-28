@@ -3,37 +3,44 @@ import 'package:campus_management_system/components/my_icon_tile.dart';
 import 'package:campus_management_system/components/my_logo.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
-import '../components/my_appbar.dart';
-import '../components/my_long_button.dart';
+import '../../components/my_appbar.dart';
+import '../../components/my_long_button.dart';
 
-class BookingMenuPage extends StatelessWidget {
-  const BookingMenuPage({super.key});
+class StudentResidentManagementMenu extends StatelessWidget {
+  const StudentResidentManagementMenu({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(),
-      drawer: MyStudentDrawer(),
+      drawer: MyManagementDrawer(),
       body: Container(
         color: Colors.white,
         child: Column(children: [
           MyLogo(),
-          MyIconTile(iconnumber: 0xf01c8, text: 'Facility'),
+          MyIconTile(
+              iconnumber: 0xf0110, text: 'Student Resident (Management)'),
           SizedBox(
             height: 25,
           ),
           MyLongButton(
-            text: 'Booking and Facility Information',
-            routename: '/facility_information',
+            text: 'Student Resident Application',
+            routename: '/student_resident_application',
           ),
           SizedBox(
             height: 25,
           ),
           MyLongButton(
-            text: 'Booking Facility Record',
-            routename: '',
+            text: 'Room Availability',
+            routename: '/room_available',
+          ),
+          SizedBox(
+            height: 25,
+          ),
+          MyLongButton(
+            text: 'Add Room',
+            routename: '/add_room',
           ),
         ]),
       ),

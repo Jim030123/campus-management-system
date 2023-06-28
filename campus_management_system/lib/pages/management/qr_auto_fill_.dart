@@ -1,6 +1,6 @@
 import 'package:campus_management_system/pages/management/auto_fill_form_menu.dart';
 import 'package:campus_management_system/pages/management/visitor_pass_application.dart';
-import 'package:campus_management_system/pages/resident_form.dart';
+import 'package:campus_management_system/pages/student/resident_form.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 

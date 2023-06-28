@@ -311,7 +311,7 @@ class _RegistrationAccountState extends State<RegistrationAccount> {
               "\nEmail: " +
               emailController.text +
               "\nRole: " +
-              role),
+              _selectedRole!),
           actions: [
             TextButton(
               child: Text('OK'),
