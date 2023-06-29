@@ -121,6 +121,8 @@ class _VisitorRegisterPageState extends State<VisitorRegisterPage> {
                       MyButton(
                         onTap: () {
                           signUpWithEmail(context);
+                          Navigator.pushReplacementNamed(
+                              context, '/visitor_main');
                         },
                         text: 'Sign Up',
                       ),

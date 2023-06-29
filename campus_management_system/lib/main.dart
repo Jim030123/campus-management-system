@@ -10,7 +10,7 @@ import 'package:campus_management_system/pages/Security/register_vehicle_page.da
 import 'package:campus_management_system/pages/Security/security_menu.dart';
 import 'package:campus_management_system/pages/Security/show_car_registered.dart';
 import 'package:campus_management_system/pages/Facility/facility_information.dart';
-import 'package:campus_management_system/pages/Account/fill_personal_information.dart';
+import 'package:campus_management_system/pages/General/personal_form.dart';
 import 'package:campus_management_system/pages/Student_Resident/add_room.dart';
 import 'package:campus_management_system/pages/Feedback/feedback_received.dart';
 import 'package:campus_management_system/pages/Autofill/auto_fill_form_menu.dart';
@@ -127,9 +127,11 @@ class MainApp extends StatelessWidget {
             ),
         '/visitor_register': (context) => VisitorRegisterPage(),
         '/visitor_pass_progress': (context) => VisitorPassProgress(),
+
+        '/test': (context) => VisitorPersonalForm(),
       },
 
-      initialRoute: '/',
+      initialRoute: '/test',
       debugShowCheckedModeBanner: true,
       // home: AuthPage(),
       theme: ThemeData(

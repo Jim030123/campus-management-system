@@ -5,8 +5,7 @@ class MyLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
+    return Container(
       child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
 
@@ -25,16 +24,17 @@ class MyLogo extends StatelessWidget {
 
             // word
             Container(
-                // color: Color.fromARGB(255, 56, 201, 97),
-                width: 250,
                 height: 100,
-                child: const Column(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      "Campus Management System",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 25),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.7,
+                      child: Text(
+                        "Campus Management System",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 25),
+                      ),
                     ),
                   ],
                 )),

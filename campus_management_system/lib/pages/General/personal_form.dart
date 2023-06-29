@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../documentation/term_and_condition.dart';
+import '../../function/database.dart';
 
 class PersonalForm extends StatefulWidget {
   PersonalForm({
@@ -28,7 +29,6 @@ class _PersonalFormState extends State<PersonalForm> {
   final TextEditingController genderController = TextEditingController();
   final TextEditingController dobController = TextEditingController();
   final TextEditingController nricController = TextEditingController();
-
   final TextEditingController emailController = TextEditingController();
   final TextEditingController idController = TextEditingController();
   final TextEditingController roleController = TextEditingController();
@@ -515,6 +515,174 @@ class _PersonalFormState extends State<PersonalForm> {
           actions: [
             TextButton(
               child: Text('Close'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class VisitorPersonalForm extends StatefulWidget {
+  VisitorPersonalForm({Key? key});
+
+  @override
+  State<VisitorPersonalForm> createState() => _VisitorPersonalFormState();
+}
+
+class _VisitorPersonalFormState extends State<VisitorPersonalForm> {
+  String user = FirebaseAuth.instance.currentUser!.uid;
+
+  final TextEditingController nricController = TextEditingController();
+  bool checkboxValue = false;
+
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: FutureBuilder<DocumentSnapshot>(
+        future: findUserById(user),
+        builder: (context, snapshot) {
+          DocumentSnapshot documentSnapshot = snapshot.data!;
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // Display a loading indicator while waiting for the data
+            return CircularProgressIndicator();
+          }
+
+          if (snapshot.hasError) {
+            // Handle any potential error while fetching the data
+            return Text('Error: ${snapshot.error}');
+          }
+
+          if (!snapshot.hasData) {
+            // Handle the case where data is not available
+            return Text('No data available');
+          }
+
+          return Container(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  Align(
+                      alignment: Alignment.bottomLeft,
+                      child: MyLargeText(text: 'Visitor Personal Form')),
+                  MyDivider(),
+                  Container(
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.circular(25 )),
+                    child: Column(
+                      children: [
+                        // Text(documentSnapshot['roles']),
+
+                        Form(
+                          key: _formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextFormField(
+                                enabled: false,
+                                controller: nricController,
+                                decoration: InputDecoration(
+                                  labelText: 'NRIC',
+                                ),
+                                validator: (value) {
+                                  return null;
+                                },
+                              ),
+                              Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      _showAlertDialog();
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Checkbox(
+                                          value: checkboxValue,
+                                          onChanged: (bool? value) {
+                                            setState(() {
+                                              checkboxValue = value ?? false;
+                                            });
+                                          },
+                                        ),
+                                        Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.7,
+                                            child: Text(
+                                                'I agree all Term & Condition'))
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 25,
+                              ),
+                              Align(
+                                alignment: Alignment.bottomRight,
+                                child: ElevatedButton(
+                                  onPressed: checkboxValue
+                                      ? () {
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            confirmDialog();
+                                          }
+                                        }
+                                      : null,
+                                  child: Text('Update'),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ));
+        },
+      ),
+    );
+  }
+
+  void _showAlertDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Terms of Service and Privacy Policy'),
+          content: VisitorPassTnC(),
+          actions: [
+            TextButton(
+              child: Text('Close'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void confirmDialog() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Send Feedback'),
+          content: Text('This will send the feedback to management '),
+          actions: [
+            TextButton(
+              child: Text('OK'),
               onPressed: () {
                 Navigator.pop(context);
               },

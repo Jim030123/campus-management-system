@@ -42,8 +42,7 @@ class _FeedbackSubmittedState extends State<FeedbackSubmitted> {
                   itemCount: _allFeedback.length,
                   itemBuilder: (context, index) {
                     DocumentSnapshot feedback = _allFeedback[index];
-                    // String studentList =
-                    //     user['student_ID'] + " " + user['name'].toString();
+                   
 
                     return Container(
                         padding: EdgeInsets.all(8),

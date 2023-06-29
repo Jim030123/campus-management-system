@@ -94,6 +94,7 @@ class _VisitorMenuPageState extends State<VisitorMenuPage> {
               ),
             ),
           ),
-        ));
+        )
+        );
   }
 }
