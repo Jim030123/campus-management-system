@@ -2,8 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../pages/preview_page.dart';
-import '../pages/register_vehicle_page.dart';
+import '../pages/Security/preview_page.dart';
 
 class CameraPage extends StatefulWidget {
   const CameraPage({Key? key, required this.cameras}) : super(key: key);

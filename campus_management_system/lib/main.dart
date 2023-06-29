@@ -1,40 +1,40 @@
-import 'package:campus_management_system/pages/account_management_page.dart';
-import 'package:campus_management_system/pages/auth_page.dart';
-import 'package:campus_management_system/pages/facility_information.dart';
-import 'package:campus_management_system/pages/general/fill_personal_information.dart';
-import 'package:campus_management_system/pages/management/add_room.dart';
-import 'package:campus_management_system/pages/management/feedback_received.dart';
-import 'package:campus_management_system/pages/management/auto_fill_form_menu.dart';
-import 'package:campus_management_system/pages/management/management_main_page.dart';
-import 'package:campus_management_system/pages/management/room_availble_page.dart';
-import 'package:campus_management_system/pages/management/student_resident_application.dart';
-import 'package:campus_management_system/pages/general/redirect_page.dart';
-import 'package:campus_management_system/pages/booking_menu_page.dart';
-import 'package:campus_management_system/pages/booking_page.dart';
-import 'package:campus_management_system/pages/management/student_resident_management_menu.dart';
-import 'package:campus_management_system/pages/student/check_facility_available.dart';
-import 'package:campus_management_system/pages/student/feedback_menu_page.dart';
-import 'package:campus_management_system/pages/management/visitor_pass_application.dart';
-import 'package:campus_management_system/pages/register_vehicle_page.dart';
-import 'package:campus_management_system/pages/student/resident_form.dart';
-import 'package:campus_management_system/pages/resident_menu_page.dart';
-import 'package:campus_management_system/pages/student/feedback_form.dart';
-import 'package:campus_management_system/pages/student/feedback_submitted.dart';
-import 'package:campus_management_system/pages/student/student_main_page.dart';
-import 'package:campus_management_system/pages/introduction_page.dart';
-import 'package:campus_management_system/pages/general/login_page.dart';
-import 'package:campus_management_system/pages/management/registration_account.dart';
-import 'package:campus_management_system/pages/general/profile_page.dart';
-import 'package:campus_management_system/pages/security_menu.dart';
-import 'package:campus_management_system/pages/show_car_registered.dart';
-import 'package:campus_management_system/pages/student/resident_information.dart';
-import 'package:campus_management_system/pages/student/student_resident_exist.dart';
-import 'package:campus_management_system/pages/view_all_account.dart';
-import 'package:campus_management_system/pages/visitor/register_visitor_pass.dart';
-import 'package:campus_management_system/pages/visitor/visitor_login.dart';
-import 'package:campus_management_system/pages/visitor/visitor_register_page.dart';
-import 'package:campus_management_system/pages/visitor_page.dart';
-import 'package:campus_management_system/pages/visitor_pass_progress.dart';
+import 'package:campus_management_system/pages/Account/Management/management_main_page.dart';
+import 'package:campus_management_system/pages/Account/Visitor/visitor_login.dart';
+import 'package:campus_management_system/pages/Account/Visitor/visitor_register_page.dart';
+import 'package:campus_management_system/pages/Account/account_management_page.dart';
+import 'package:campus_management_system/pages/Feedback/feedback_form.dart';
+import 'package:campus_management_system/pages/Feedback/feedback_menu_page.dart';
+import 'package:campus_management_system/pages/Feedback/feedback_submitted.dart';
+import 'package:campus_management_system/pages/General/auth_page.dart';
+import 'package:campus_management_system/pages/Security/register_vehicle_page.dart';
+import 'package:campus_management_system/pages/Security/security_menu.dart';
+import 'package:campus_management_system/pages/Security/show_car_registered.dart';
+import 'package:campus_management_system/pages/Facility/facility_information.dart';
+import 'package:campus_management_system/pages/Account/fill_personal_information.dart';
+import 'package:campus_management_system/pages/Student_Resident/add_room.dart';
+import 'package:campus_management_system/pages/Feedback/feedback_received.dart';
+import 'package:campus_management_system/pages/Autofill/auto_fill_form_menu.dart';
+import 'package:campus_management_system/pages/Student_Resident/room_availble_page.dart';
+import 'package:campus_management_system/pages/Student_Resident/student_resident_application.dart';
+import 'package:campus_management_system/pages/General/redirect_page.dart';
+import 'package:campus_management_system/pages/Facility/booking_menu_page.dart';
+import 'package:campus_management_system/pages/Student_Resident/student_resident_exist.dart';
+import 'package:campus_management_system/pages/Student_Resident/student_resident_management_menu.dart';
+import 'package:campus_management_system/pages/Facility/check_facility_available.dart';
+import 'package:campus_management_system/pages/Visitor_Pass/visitor_pass_application.dart';
+import 'package:campus_management_system/pages/Student_Resident/resident_menu_page.dart';
+import 'package:campus_management_system/pages/General/introduction_page.dart';
+import 'package:campus_management_system/pages/General/login_page.dart';
+import 'package:campus_management_system/pages/Account/registration_account.dart';
+import 'package:campus_management_system/pages/General/profile_page.dart';
+import 'package:campus_management_system/pages/Student_Resident/resident_form.dart';
+
+import 'package:campus_management_system/pages/Student_Resident/resident_information.dart';
+import 'package:campus_management_system/pages/Account/Student/student_main_page.dart';
+import 'package:campus_management_system/pages/Account/view_all_account.dart';
+import 'package:campus_management_system/pages/Visitor_Pass/register_visitor_pass.dart';
+import 'package:campus_management_system/pages/Account/Visitor/visitor_main_page.dart';
+import 'package:campus_management_system/pages/Visitor_Pass/visitor_pass_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'documentation/room_type.dart';
@@ -64,7 +64,7 @@ class MainApp extends StatelessWidget {
         // General
         '/': (context) => IntroductionPage(),
         '/student_main': (context) => StudentMainPage(),
-        '/management_main': (context) => MagnagementMainPage(),
+        '/management_main': (context) => ManagementMainPage(),
         '/auth': (context) => AuthPage(),
         '/login': (context) => MyLoginPage(),
         '/profile': (context) => ProfilePage(),
@@ -120,7 +120,7 @@ class MainApp extends StatelessWidget {
             StudentResidentManagementMenu(),
 
         // Visitor
-        '/visitor_main': (context) => VisitorPage(),
+        '/visitor_main': (context) => VisitorMainPage(),
         '/visitor_login': (context) => VisitorLoginPage(),
         '/register_visitor_pass': (context) => RegisterVisitorPass(
               id: id,

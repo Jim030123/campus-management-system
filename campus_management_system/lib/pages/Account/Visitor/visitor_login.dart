@@ -6,18 +6,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../components/sample_my_textfield.dart';
+import '../../../components/sample_my_textfield.dart';
 
-class MyLoginPage extends StatefulWidget {
-  MyLoginPage({
+
+class VisitorLoginPage extends StatefulWidget {
+  VisitorLoginPage({
     super.key,
   });
 
   @override
-  State<MyLoginPage> createState() => _MyLoginPageState();
+  State<VisitorLoginPage> createState() => _VisitorLoginPageState();
 }
 
-class _MyLoginPageState extends State<MyLoginPage> {
+class _VisitorLoginPageState extends State<VisitorLoginPage> {
   final _emailController = TextEditingController();
 
   final _passwordController = TextEditingController();
@@ -36,7 +37,6 @@ class _MyLoginPageState extends State<MyLoginPage> {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _emailController.text, password: _passwordController.text);
       Navigator.pop(context);
-      Navigator.pushNamedAndRemoveUntil(context, '', (route) => false);
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
 
@@ -68,10 +68,10 @@ class _MyLoginPageState extends State<MyLoginPage> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
-                      child: Text('If you are visitor, register Here '),
+                      child: Text('Switch to Student / Management'),
                       onPressed: () {
                         Navigator.pushNamedAndRemoveUntil(
-                            context, '/visitor_register', (route) => false);
+                            context, '/login', (route) => false);
                       },
                     ),
                   ),
@@ -81,6 +81,11 @@ class _MyLoginPageState extends State<MyLoginPage> {
                   ),
                   // Allign center
                   MyLogo(),
+
+                  Text(
+                    "Visitor Portal",
+                    style: TextStyle(fontSize: 30),
+                  ),
 
                   SizedBox(
                     height: 25.0,

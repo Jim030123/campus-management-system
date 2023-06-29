@@ -6,18 +6,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../components/sample_my_textfield.dart';
+import '../../../components/my_long_button.dart';
 
-class MyLoginPage extends StatefulWidget {
-  MyLoginPage({
+
+class VisitorMenuPage extends StatefulWidget {
+  VisitorMenuPage({
     super.key,
   });
 
   @override
-  State<MyLoginPage> createState() => _MyLoginPageState();
+  State<VisitorMenuPage> createState() => _VisitorMenuPageState();
 }
 
-class _MyLoginPageState extends State<MyLoginPage> {
+class _VisitorMenuPageState extends State<VisitorMenuPage> {
   final _emailController = TextEditingController();
 
   final _passwordController = TextEditingController();
@@ -31,21 +32,6 @@ class _MyLoginPageState extends State<MyLoginPage> {
             child: CircularProgressIndicator(),
           );
         });
-
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _emailController.text, password: _passwordController.text);
-      Navigator.pop(context);
-      Navigator.pushNamedAndRemoveUntil(context, '', (route) => false);
-    } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
-
-      if (e.code == 'user-not-found') {
-        wrongEmailMessage();
-      } else if (e.code == 'wrong-password') {
-        wrongPasswordMessage();
-      }
-    }
 
     // pop the loading circle
   }
@@ -68,10 +54,10 @@ class _MyLoginPageState extends State<MyLoginPage> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
-                      child: Text('If you are visitor, register Here '),
+                      child: Text('Switch to Student / Management'),
                       onPressed: () {
                         Navigator.pushNamedAndRemoveUntil(
-                            context, '/visitor_register', (route) => false);
+                            context, '/login', (route) => false);
                       },
                     ),
                   ),
@@ -89,21 +75,18 @@ class _MyLoginPageState extends State<MyLoginPage> {
                   Container(
                     // color: Colors.red,
                     width: 300,
-                    height: 300,
+                    height: 400,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        SampleTextField(
-                          controller: _emailController,
-                          hintText: 'Email',
-                          obsecureText: false,
+                        MyLongButton(
+                          text: 'Register Visitor Pass',
+                          routename: '/visitor_auth',
                         ),
-                        SampleTextField(
-                          controller: _passwordController,
-                          hintText: 'Password',
-                          obsecureText: true,
+                        MyLongButton(
+                          text: 'View Visitor Pass',
+                          routename: '',
                         ),
-                        MyButton(onTap: signUserIn, text: 'Log In'),
                       ],
                     ),
                   )
@@ -112,25 +95,5 @@ class _MyLoginPageState extends State<MyLoginPage> {
             ),
           ),
         ));
-  }
-
-  void wrongEmailMessage() {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return const AlertDialog(
-            title: Text('Incorrect Email'),
-          );
-        });
-  }
-
-  void wrongPasswordMessage() {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return const AlertDialog(
-            title: Text('Incorrect Password'),
-          );
-        });
   }
 }
