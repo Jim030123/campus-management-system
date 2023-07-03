@@ -12,7 +12,7 @@ final _contactnumberController = TextEditingController();
 final _passwordController = TextEditingController();
 final _confirmpasswordController = TextEditingController();
 final String role = "Visitor";
-  String fullDetail = "0";
+String fullDetail = "0";
 
 class VisitorRegisterPage extends StatefulWidget {
   VisitorRegisterPage({super.key});
@@ -59,6 +59,9 @@ class _VisitorRegisterPageState extends State<VisitorRegisterPage> {
               padding: const EdgeInsets.all(25),
               child: Column(children: [
                 MyLogo(),
+                SizedBox(
+                  height: 25,
+                ),
                 Container(
                     width: 300,
                     child: Column(children: [
@@ -171,7 +174,7 @@ Future<void> signUpWithEmail(BuildContext context) async {
       "contact_no": _contactnumberController.text,
       "email": _emailController.text,
       "roles": role,
-      "full_detail":fullDetail
+      "full_detail": fullDetail
     });
 
     await FirebaseAuth.instance

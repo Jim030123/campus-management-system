@@ -130,6 +130,7 @@ class MainApp extends StatelessWidget {
         '/visitor_register': (context) => VisitorRegisterPage(),
         '/visitor_pass_progress': (context) => VisitorPassProgress(),
         '/visitor_personal_form': (context) => VisitorPersonalForm(),
+        '/visitor_profile_page':(context) => VistitorProfilePage(),
       },
 
       initialRoute: '/',

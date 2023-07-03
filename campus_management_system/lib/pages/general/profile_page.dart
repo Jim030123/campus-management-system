@@ -2,6 +2,7 @@ import 'package:campus_management_system/components/my_appbar.dart';
 import 'package:campus_management_system/components/my_divider.dart';
 import 'package:campus_management_system/components/my_drawer.dart';
 import 'package:campus_management_system/components/my_textstyle.dart';
+import 'package:campus_management_system/pages/Account/Student/student_main_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -22,22 +23,54 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
+    // getdatafromDB();
+  }
+
+  getdatafromDB() async {
+    final user = FirebaseAuth.instance.currentUser!.uid;
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection('users') // Replace with your collection name
+        .doc(user) // Use the provided document ID
+        .get();
+
+    // Access the "role" field and convert it to a string
+    String role = await snapshot.get('roles').toString();
+
+    if (role == "Student") {
+      String gender = await snapshot.get('gender').toString();
+      String name = await snapshot.get('name').toString();
+      String dob = await snapshot.get('dob').toString();
+      String contactno = await snapshot.get('contact_no').toString();
+      String nric = await snapshot.get('nric').toString();
+      String email = await snapshot.get('email').toString();
+      String id = await snapshot.get('id').toString();
+      String fulldetail = await snapshot.get('full_detail').toString();
+      return [name, gender, dob, nric, email, contactno, role, id, fulldetail];
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    String userid = FirebaseAuth.instance.currentUser!.uid;
-
     return Scaffold(
       appBar: MyAppBar(),
       drawer: MyStudentDrawer(),
       body: SingleChildScrollView(
         child: FutureBuilder(
-          future: findUserById(userid),
+          future: getdatafromDB(),
           builder: (context, snapshot) {
             // String name = snapshot.data as String;
 
-            DocumentSnapshot documentSnapshot = snapshot.data!;
+            List<String> studentdetail = snapshot.data as List<String>;
+            String name = studentdetail[0];
+            String gender = studentdetail[1];
+            String dob = studentdetail[2];
+            String nric = studentdetail[3];
+            String email = studentdetail[4];
+            String contactno = studentdetail[5];
+
+            String role = studentdetail[6];
+            String id = studentdetail[7];
+            String full_detail = studentdetail[8];
 
             return SingleChildScrollView(
               child: Container(
@@ -104,19 +137,21 @@ class _ProfilePageState extends State<ProfilePage> {
                                         alignment: Alignment.centerLeft,
                                         child: Text(
                                           'Name: ' +
-                                              documentSnapshot['name'] +
+                                              name +
                                               "\nGender: " +
-                                              documentSnapshot['gender'] +
+                                              gender +
                                               '\nDate of Birth: ' +
-                                              documentSnapshot['dob'] +
+                                              dob +
                                               "\nNRIC: " +
-                                              documentSnapshot['nric'] +
+                                              nric +
                                               "\nEmail: " +
-                                              documentSnapshot['email'] +
+                                              email +
+                                              "\nContact No: " +
+                                              contactno +
                                               "\nRole: " +
-                                              documentSnapshot['roles'] +
+                                              role +
                                               "\nID: " +
-                                              documentSnapshot['id'],
+                                              id,
                                           style: TextStyle(fontSize: 18),
                                         ),
                                       ),
@@ -124,15 +159,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                         height: 20,
                                       ),
                                       FutureBuilder(
-                                        future: fulldetail(
-                                            documentSnapshot['roles']),
+                                        future: fulldetail(role),
                                         builder: (context, snapshot) {
                                           List<String> roledetail =
                                               snapshot.data as List<String>;
 
-                                          return roleinfo(
-                                              documentSnapshot['roles'],
-                                              roledetail);
+                                          return roleinfo(role, roledetail);
                                         },
                                       ),
                                       SizedBox(
@@ -203,6 +235,8 @@ residentstudentdetail() async {
   return [roomtype, status];
 }
 
+// get data
+
 fulldetail(String role) async {
   final user = FirebaseAuth.instance.currentUser!.uid;
   DocumentSnapshot snapshot = await FirebaseFirestore.instance
@@ -232,7 +266,7 @@ fulldetail(String role) async {
       parentemail,
       parentcontactno
     ];
-  } else if (nationality == "country") {
+  } else if (nationality == "Foreign Resident") {
     String country = snapshot.get('country').toString();
     return [
       nationality,
@@ -250,7 +284,7 @@ fulldetail(String role) async {
 roleinfo(String role, List roledetail) {
   String nationality = roledetail[0];
 
-  if (role == "Student" && nationality == "Foreign Resident") {
+  if (role == "Student" && nationality == "National Resident") {
     String stateOrcountry = roledetail[1];
     String postcode = roledetail[2];
     String homeaddress = roledetail[3];
@@ -293,5 +327,73 @@ roleinfo(String role, List roledetail) {
     );
   } else {
     return Container();
+  }
+}
+
+class VistitorProfilePage extends StatelessWidget {
+  VistitorProfilePage({super.key});
+
+  String userid = FirebaseAuth.instance.currentUser!.uid;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: MyAppBar(),
+        body: FutureBuilder(
+          future: findUserById(userid),
+          builder: (context, snapshot) {
+            DocumentSnapshot visitorData = snapshot.data!;
+
+            return Container(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Align(
+                      alignment: Alignment.topLeft,
+                      child: MyLargeText(text: "Visitor Personal Detail")),
+                  MyDivider(),
+                  Container(
+                    padding: EdgeInsets.all(25),
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
+                        color: Colors.grey),
+                    child: Column(children: [
+                      QrImageView(
+                        backgroundColor: Colors.white,
+                        data: userid,
+                        version: QrVersions.auto,
+                        size: 150.0,
+                      ),
+                      Text("UserID :" + userid),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: MySmallText(
+                            text: "Name: " +
+                                visitorData["name"] +
+                                "\nNRIC: " +
+                                visitorData["nric"] +
+                                "\nGender: " +
+                                visitorData["gender"] +
+                                "\nEmail: " +
+                                visitorData["email"] +
+                                "\nContact No: " +
+                                visitorData["contact_no"] +
+                                "\nHome Address: " +
+                                visitorData["home_address"] +
+                                "\nState: " +
+                                visitorData["state"] +
+                                "\nPostcode: " +
+                                visitorData["postcode"]),
+                      )
+                    ]),
+                  ),
+                ],
+              ),
+            );
+          },
+        ));
   }
 }

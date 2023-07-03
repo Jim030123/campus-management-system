@@ -5,40 +5,41 @@ class MyLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
 
-          // LOGO
-          children: [
-            Container(
-              // color: Colors.indigoAccent,
+        // LOGO
+        children: [
+          Container(
+            // color: Colors.indigoAccent,
+            width: 100,
+            height: 100,
+            child: Image.asset(
+              "lib/images/logo.png",
               width: 100,
               height: 100,
-              child: Image.asset(
-                "lib/images/logo.png",
-                width: 100,
-                height: 100,
-              ),
             ),
+          ),
 
-            // word
-            Container(
-                height: 100,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.7,
-                      child: Text(
-                        "Campus Management System",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 25),
-                      ),
-                    ),
-                  ],
-                )),
-          ]),
-    );
+          // word
+          Container(
+              // color: Color.fromARGB(255, 56, 201, 97),
+              width: 200,
+              height: 100,
+              child: const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Southern University College",
+                    style: TextStyle(fontSize: 25),
+                  ),
+                  Text(
+                    "Campus Management System",
+                    textAlign: TextAlign.start,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ],
+              )),
+        ]);
   }
 }

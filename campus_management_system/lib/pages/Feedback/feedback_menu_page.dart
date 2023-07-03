@@ -18,24 +18,26 @@ class FeedbackPage extends StatelessWidget {
       drawer: MyStudentDrawer(),
       body: Container(
         color: Colors.white,
-        child: Column(children: [
-          MyLogo(),
-          MyIconTile(iconnumber: 0xf73b, text: 'Feedback'),
-          SizedBox(
-            height: 25,
-          ),
-          MyLongButton(
-            text: 'Fill Feedback',
-            routename: '/feedback_form',
-          ),
-          SizedBox(
-            height: 25,
-          ),
-          MyLongButton(
-            text: 'Feedback Submitted',
-            routename: '/feedback_submitted',
-          ),
-        ]),
+        child: Center(
+          child: Column(children: [
+            MyLogo(),
+            MyIconTile(iconnumber: 0xf73b, text: 'Feedback'),
+            SizedBox(
+              height: 25,
+            ),
+            MyLongButton(
+              text: 'Fill Feedback',
+              routename: '/feedback_form',
+            ),
+            SizedBox(
+              height: 25,
+            ),
+            MyLongButton(
+              text: 'Feedback Submitted',
+              routename: '/feedback_submitted',
+            ),
+          ]),
+        ),
       ),
     );
   }

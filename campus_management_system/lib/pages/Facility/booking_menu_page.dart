@@ -18,24 +18,26 @@ class BookingMenuPage extends StatelessWidget {
       drawer: MyStudentDrawer(),
       body: Container(
         color: Colors.white,
-        child: Column(children: [
-          MyLogo(),
-          MyIconTile(iconnumber: 0xf01c8, text: 'Facility'),
-          SizedBox(
-            height: 25,
-          ),
-          MyLongButton(
-            text: 'Booking and Facility Information',
-            routename: '/facility_information',
-          ),
-          SizedBox(
-            height: 25,
-          ),
-          MyLongButton(
-            text: 'Booking Facility Record',
-            routename: '',
-          ),
-        ]),
+        child: Center(
+          child: Column(children: [
+            MyLogo(),
+            MyIconTile(iconnumber: 0xf01c8, text: 'Facility'),
+            SizedBox(
+              height: 25,
+            ),
+            MyLongButton(
+              text: 'Booking and Facility Information',
+              routename: '/facility_information',
+            ),
+            SizedBox(
+              height: 25,
+            ),
+            MyLongButton(
+              text: 'Booking Facility Record',
+              routename: '',
+            ),
+          ]),
+        ),
       ),
     );
   }

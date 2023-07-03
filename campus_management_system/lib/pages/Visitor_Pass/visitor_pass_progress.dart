@@ -16,19 +16,22 @@ class _VisitorPassProgressState extends State<VisitorPassProgress> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(),
-      body: ListView.builder(
-        itemCount: progress.length,
-        itemBuilder: (context, index) {
-          final item = progress.elementAt(progress.length - 1 - index);
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: ListView.builder(
+          itemCount: progress.length,
+          itemBuilder: (context, index) {
+            final item = progress.elementAt(progress.length - 1 - index);
 
-          if (item == 'start') {
-            return VP_Progress_start();
-          } else if (item == 'approve') {
-            return VP_Progress_Approve();
-          } else if (item == 'decline') {
-            return VP_Progress_Decline();
-          }
-        },
+            if (item == 'start') {
+              return VP_Progress_start();
+            } else if (item == 'approve') {
+              return VP_Progress_Approve();
+            } else if (item == 'decline') {
+              return VP_Progress_Decline();
+            }
+          },
+        ),
       ),
     );
   }

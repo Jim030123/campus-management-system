@@ -21,8 +21,8 @@ class StudentResidentExist extends StatelessWidget {
     String gender = await snapshot.get('gender').toString();
     String parentcontactno = await snapshot.get('parent_contact_no').toString();
     String parentname = await snapshot.get('parent_name').toString();
-    String id = await snapshot.get('id').toString();
-    // String roomno = await snapshot.get('room_no').toString();
+    String id = await snapshot.get('student_id').toString();
+
     String roomtype = await snapshot.get('room_type').toString();
     String relationship = await snapshot.get('relationship').toString();
     String roomno = await snapshot.get('room_no').toString();

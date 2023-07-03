@@ -8,7 +8,6 @@ import 'package:flutter/widgets.dart';
 import '../../components/my_appbar.dart';
 import '../../components/my_long_button.dart';
 
-
 class SecurityMenuPage extends StatelessWidget {
   const SecurityMenuPage({super.key});
 
@@ -19,31 +18,33 @@ class SecurityMenuPage extends StatelessWidget {
       drawer: MyStudentDrawer(),
       body: Container(
         color: Colors.white,
-        child: Column(children: [
-          MyLogo(),
-          MyIconTile(iconnumber: 0xf013e, text: 'Security'),
-          SizedBox(
-            height: 25,
-          ),
-          MyLongButton(
-            text: 'Register Vehicle',
-            routename: '/register_vehicle',
-          ),
-          SizedBox(
-            height: 25,
-          ),
-          MyLongButton(
-            text: 'Show Vechicle Registered',
-            routename: '/show_registered_car',
-          ),
-          SizedBox(
-            height: 25,
-          ),
-          MyLongButton(
-            text: 'Entry Record (Comming Soon)',
-            routename: '',
-          ),
-        ]),
+        child: Center(
+          child: Column(children: [
+            MyLogo(),
+            MyIconTile(iconnumber: 0xf013e, text: 'Security'),
+            SizedBox(
+              height: 25,
+            ),
+            MyLongButton(
+              text: 'Register Vehicle',
+              routename: '/register_vehicle',
+            ),
+            SizedBox(
+              height: 25,
+            ),
+            MyLongButton(
+              text: 'Show Vechicle Registered',
+              routename: '/show_registered_car',
+            ),
+            SizedBox(
+              height: 25,
+            ),
+            MyLongButton(
+              text: 'Entry Record (Comming Soon)',
+              routename: '',
+            ),
+          ]),
+        ),
       ),
     );
   }

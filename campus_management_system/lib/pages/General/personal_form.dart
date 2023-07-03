@@ -481,6 +481,7 @@ class _PersonalFormState extends State<PersonalForm> {
       String uid = FirebaseAuth.instance.currentUser!.uid;
 
       await FirebaseFirestore.instance.collection('users').doc(uid).update({
+        "contact_no":contactnoController.text,
         "home_address": homeaddressController.text,
         "nationality": _selectedNationality as String,
         "postcode": postcodeController.text,
@@ -536,6 +537,7 @@ class VisitorPersonalForm extends StatefulWidget {
 class _VisitorPersonalFormState extends State<VisitorPersonalForm> {
   _VisitorPersonalFormState() {
     _selectedState = _state[0];
+    _selectedGender = _gender[0];
   }
 
   String user = FirebaseAuth.instance.currentUser!.uid;
@@ -558,6 +560,8 @@ class _VisitorPersonalFormState extends State<VisitorPersonalForm> {
     'Selangor',
     'Terrengganu'
   ];
+  final _gender = ['Male', 'Female'];
+  String? _selectedGender = "";
 
   String? _selectedState = "";
 
@@ -580,21 +584,6 @@ class _VisitorPersonalFormState extends State<VisitorPersonalForm> {
           nameController.text = documentSnapshot['name'];
           contactnoController.text = documentSnapshot['contact_no'];
           emailController.text = documentSnapshot['email'];
-
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // Display a loading indicator while waiting for the data
-            return CircularProgressIndicator();
-          }
-
-          if (snapshot.hasError) {
-            // Handle any potential error while fetching the data
-            return Text('Error: ${snapshot.error}');
-          }
-
-          if (!snapshot.hasData) {
-            // Handle the case where data is not available
-            return Text('No data available');
-          }
 
           return SingleChildScrollView(
             child: Container(
@@ -653,6 +642,25 @@ class _VisitorPersonalFormState extends State<VisitorPersonalForm> {
                                 ),
                                 MyMiddleText(text: "Detail Information"),
                                 MyDivider(),
+                                DropdownButtonFormField(
+                                  decoration: InputDecoration(
+                                      labelText: "Gender",
+                                      prefixIcon: Icon(
+                                          Icons.supervisor_account_rounded),
+                                      border: UnderlineInputBorder()),
+                                  value: _selectedGender,
+                                  items: _gender
+                                      .map((e) => DropdownMenuItem(
+                                            child: Text(e),
+                                            value: e,
+                                          ))
+                                      .toList(),
+                                  onChanged: (val) {
+                                    setState(() {
+                                      _selectedGender = val as String;
+                                    });
+                                  },
+                                ),
                                 TextFormField(
                                   controller: nricController,
                                   decoration: InputDecoration(
@@ -837,7 +845,8 @@ class _VisitorPersonalFormState extends State<VisitorPersonalForm> {
 
       await FirebaseFirestore.instance.collection('users').doc(uid).update({
         "home_address": homeaddressController.text,
-        "NRIC": nricController.text,
+        "gender": _selectedGender as String,
+        "nric": nricController.text,
         "state": _selectedState as String,
         "postcode": postcodeController.text,
         "full_detail": fulldetail

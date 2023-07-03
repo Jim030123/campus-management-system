@@ -1,4 +1,5 @@
 import 'package:campus_management_system/components/my_button.dart';
+import 'package:campus_management_system/components/my_logo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class _VisitorMainPageState extends State<VisitorMainPage> {
       future: findUserById(userid),
       builder: (context, snapshot) {
         DocumentSnapshot documentSnapshot = snapshot.data!;
-     
+
         if (documentSnapshot['full_detail'] == "0") {
           Future.delayed(Duration(seconds: 3), () {
             Navigator.pushReplacementNamed(
@@ -31,88 +32,50 @@ class _VisitorMainPageState extends State<VisitorMainPage> {
         }
         return Scaffold(
           body: Container(
-            child: Card(
-              color: Colors.grey[300],
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                // column child
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              // column child
 
-                children: [
-                  SizedBox(
-                    height: 70.0,
-                  ),
+              children: [
+                SizedBox(
+                  height: 70.0,
+                ),
 
-                  SizedBox(
-                    height: 50.0,
-                  ),
-                  // Allign center
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                SizedBox(
+                  height: 50.0,
+                ),
+                // Allign center
+                MyLogo(),
 
-                      // LOGO
-                      children: [
-                        Container(
-                          // color: Colors.indigoAccent,
-                          width: 100,
-                          height: 100,
-                          child: Image.asset(
-                            "lib/images/logo.png",
-                            width: 100,
-                            height: 100,
-                          ),
-                        ),
+                SizedBox(
+                  height: 25.0,
+                ),
 
-                        // word
-                        Container(
-                            // color: Color.fromARGB(255, 56, 201, 97),
-                            width: 200,
-                            height: 100,
-                            child: const Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Southern University College",
-                                  style: TextStyle(fontSize: 25),
-                                ),
-                                Text(
-                                  "Campus Management Syetem",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                              ],
-                            )),
-                      ]),
-
-                  SizedBox(
-                    height: 25.0,
-                  ),
-
-                  Container(
-                    // color: Colors.red,
-                    width: 300,
-                    height: 400,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        MyButton(
+                Container(
+                  // color: Colors.red,
+                  width: 300,
+                  height: 400,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      MyButton(
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, '/register_visitor_pass');
+                        },
+                        text: 'Register Visitor Pass',
+                      ),
+                      MyButton(
                           onTap: () {
                             Navigator.pushNamed(
-                                context, '/register_visitor_pass');
+                                context, '/visitor_pass_progress');
                           },
-                          text: 'Register Visitor Pass',
-                        ),
-                        MyButton(
-                            onTap: () {
-                              Navigator.pushNamed(
-                                  context, '/visitor_pass_progress');
-                            },
-                            text: 'View Progress'),
-                        MyButton(onTap: onTap, text: 'View Visitor Pass'),
-                      ],
-                    ),
-                  )
-                ],
-              ),
+                          text: 'View Progress'),
+                      MyButton(onTap: onTap, text: 'View Visitor Pass'),
+                    ],
+                  ),
+                )
+              ],
             ),
           ),
           bottomNavigationBar: Container(
@@ -137,7 +100,7 @@ class _VisitorMainPageState extends State<VisitorMainPage> {
                       ),
                       tooltip: 'User Profile',
                       onPressed: () {
-                        Navigator.pushNamed(context, '/profile');
+                        Navigator.pushNamed(context, '/visitor_profile_page');
                       }),
                   IconButton(
                       icon: const Icon(

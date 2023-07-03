@@ -1,17 +1,17 @@
-import 'package:campus_management_system/components/my_alert_dialog.dart';
-import 'package:campus_management_system/components/my_appbar.dart';
-import 'package:campus_management_system/components/my_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:campus_management_system/pages/general/login_page.dart';
 
 import '../../documentation/term_and_condition.dart';
+import '../../components/my_alert_dialog.dart';
+import '../../components/my_appbar.dart';
+import '../../components/my_drawer.dart';
+import '../general/login_page.dart';
 
 class RegisterVisitorPass extends StatefulWidget {
-   String id;
-  RegisterVisitorPass({super.key, required this.id});
+  String id;
+  RegisterVisitorPass({Key? key, required this.id}) : super(key: key);
 
   @override
   _RegisterVisitorPassState createState() => _RegisterVisitorPassState();
@@ -44,10 +44,10 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
   Future<void> _selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialTime: _selectedTime ?? TimeOfDay.now(),
+      initialTime: _selectedTime,
     );
 
-    if (picked != null && picked != _selectedTime) {
+    if (picked != null) {
       setState(() {
         _selectedTime = picked;
       });
@@ -144,55 +144,43 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
                           ),
                           Container(
                             padding: EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                                border: Border.all(),
-                                borderRadius: BorderRadius.circular(10)),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 Text(
-                                  'Date Visit: ${datevisit.year}/${datevisit.month}/${datevisit.day}',
+                                  'Date Selected: ${datevisit.year}/${datevisit.month}/${datevisit.day}',
                                   style: TextStyle(fontSize: 20),
                                 ),
                                 ElevatedButton(
-                                    onPressed: () async {
-                                      DateTime? newDate = await showDatePicker(
-                                          context: context,
-                                          initialDate: datevisit,
-                                          firstDate: DateTime(1900),
-                                          lastDate: DateTime(2100));
+                                  onPressed: () async {
+                                    DateTime? newDate = await showDatePicker(
+                                      context: context,
+                                      initialDate: datevisit,
+                                      firstDate: DateTime(1900),
+                                      lastDate: DateTime(2100),
+                                    );
 
-                                      if (newDate == null) return;
-                                      setState(() => datevisit = newDate);
-                                    },
-                                    child: Text('Select Visit Date')),
-                                SizedBox(
-                                  height: 16,
+                                    if (newDate == null) return;
+                                    setState(() => datevisit = newDate);
+                                  },
+                                  child: Text('Select Visit Date'),
                                 ),
-                                GestureDetector(
-                                  onTap: () {
+                              ],
+                            ),
+                          ),
+                          Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Text(
+                                  'Time Selected: ${_selectedTime.format(context)}',
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
                                     _selectTime(context);
                                   },
-                                  child: Container(
-                                    padding: EdgeInsets.all(10.0),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(),
-                                      borderRadius: BorderRadius.circular(5.0),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: <Widget>[
-                                        Icon(Icons.access_time),
-                                        Text('  Time:  '),
-                                        Text(
-                                          _selectedTime != null
-                                              ? '${_selectedTime.hour}:${_selectedTime.minute.toString().padLeft(2, '0')}'
-                                              : 'Select time',
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                  child: Text('Select Visit Time'),
                                 ),
                               ],
                             ),
@@ -302,18 +290,21 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
     try {
       String auth = FirebaseAuth.instance.currentUser!.uid;
       String formattedDateVisit = DateFormat('yyyy/MM/dd').format(datevisit);
-      String formattedTimeVisit = DateFormat.jm() as String;
+      String formattedTimeVisit = DateFormat.Hm().format(
+        DateTime(datevisit.year, datevisit.month, datevisit.day,
+            _selectedTime.hour, _selectedTime.minute),
+      );
       await FirebaseFirestore.instance
           .collection('visitor_pass_application')
           .doc(auth)
           .set({
         "name": nameController.text,
         "email": emailController.text,
-        "NRIC": nricController.text,
+        "nric": nricController.text,
         "vehicle_plate_number": vehicleplatenumberController.text,
         "vehicle_type": _selectedVehicleType as String,
         "date_visit": formattedDateVisit,
-        // "time_visit": formattedTimeVisit,
+        "time_visit": formattedTimeVisit,
         "status": status,
         "reason": reasonController.text
       });
@@ -321,28 +312,6 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
     } on FirebaseAuthException catch (e) {
       // Handle the exception if needed
     }
-  }
-
-  void _confirmDialog() async {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Create Visitor Pass'),
-          content: Text(
-            'Please waiting management approve this Visitor Pass, the Management will review this visitor pass within 24 hour.',
-          ),
-          actions: [
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   void _showAlertDialog() {
@@ -355,6 +324,26 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
           actions: [
             TextButton(
               child: Text('Close'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _confirmDialog() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Send Feedback'),
+          content: Text('This will send the feedback to management '),
+          actions: [
+            TextButton(
+              child: Text('OK'),
               onPressed: () {
                 Navigator.pop(context);
               },

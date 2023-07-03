@@ -80,7 +80,8 @@ class _MyLoginPageState extends State<MyLoginPage> {
                     height: 50.0,
                   ),
                   // Allign center
-                  Container(child: MyLogo()),
+
+                  MyLogo(),
 
                   SizedBox(
                     height: 25.0,
