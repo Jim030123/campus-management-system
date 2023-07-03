@@ -75,6 +75,8 @@ class MainApp extends StatelessWidget {
         // Redirect Page
         '': (context) => RedirectLoginPage(),
         '/redirect_personal_form': (context) => RedirectProfileForm(),
+        '/redirect_visitor_personal_form': (context) =>
+            RedirectVisitorProfileForm(),
 
         // Student
 
@@ -97,7 +99,7 @@ class MainApp extends StatelessWidget {
         // Security
         '/security_menu': (context) => SecurityMenuPage(),
         '/show_registered_car': (context) => ShowRegisterdCarPage(),
-        '/register_vehicle': (context) => RegistrationVehiclePage(
+        '/register_vehicle': (context) => RegistrationVehicleForm(
               id: id,
             ),
 
@@ -127,11 +129,10 @@ class MainApp extends StatelessWidget {
             ),
         '/visitor_register': (context) => VisitorRegisterPage(),
         '/visitor_pass_progress': (context) => VisitorPassProgress(),
-
-        '/test': (context) => VisitorPersonalForm(),
+        '/visitor_personal_form': (context) => VisitorPersonalForm(),
       },
 
-      initialRoute: '/test',
+      initialRoute: '/',
       debugShowCheckedModeBanner: true,
       // home: AuthPage(),
       theme: ThemeData(

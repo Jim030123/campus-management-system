@@ -19,6 +19,9 @@ class VisitorMenuPage extends StatefulWidget {
 }
 
 class _VisitorMenuPageState extends State<VisitorMenuPage> {
+
+
+  
   final _emailController = TextEditingController();
 
   final _passwordController = TextEditingController();
@@ -35,6 +38,10 @@ class _VisitorMenuPageState extends State<VisitorMenuPage> {
 
     // pop the loading circle
   }
+
+
+
+ 
 
   @override
   Widget build(BuildContext context) {

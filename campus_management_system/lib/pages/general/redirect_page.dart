@@ -126,3 +126,46 @@ class RedirectProfileForm extends StatelessWidget {
     );
   }
 }
+
+class RedirectVisitorProfileForm extends StatelessWidget {
+  const RedirectVisitorProfileForm({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Container(
+            padding: EdgeInsets.all(16),
+            decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.all(Radius.circular(25))),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                    textAlign: TextAlign.center,
+                    'Detect your personal detail is incomplete ' +
+                        'please wait' +
+                        ' \nRedirecting to the Personal Form...',
+                    style: TextStyle(fontSize: 30)),
+                SizedBox(
+                  height: 25,
+                ),
+                Text(
+                  'You should be redirected automatically in 3 second if not please press Go Button',
+                  style: TextStyle(fontSize: 15),
+                ),
+                SizedBox(
+                  height: 25,
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/visitor_personal_form');
+                    },
+                    child: Text('Go'))
+              ],
+            )),
+      ),
+    );
+  }
+}

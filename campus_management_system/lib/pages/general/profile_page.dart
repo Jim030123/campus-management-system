@@ -7,6 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+import '../../function/database.dart';
+
 class ProfilePage extends StatefulWidget {
   ProfilePage({super.key});
 
@@ -20,49 +22,22 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    // getdatafromDB();
-  }
-
-  getdatafromDB() async {
-    final user = FirebaseAuth.instance.currentUser!.uid;
-    DocumentSnapshot snapshot = await FirebaseFirestore.instance
-        .collection('users') // Replace with your collection name
-        .doc(user) // Use the provided document ID
-        .get();
-
-    // Access the "role" field and convert it to a string
-    String role = await snapshot.get('roles').toString();
-    String gender = await snapshot.get('gender').toString();
-    String name = await snapshot.get('name').toString();
-    String dob = await snapshot.get('dob').toString();
-    String nric = await snapshot.get('nric').toString();
-    String email = await snapshot.get('email').toString();
-    String id = await snapshot.get('id').toString();
-    String fulldetail = await snapshot.get('full_detail').toString();
-    return [name, gender, dob, nric, email, role, id, fulldetail];
   }
 
   @override
   Widget build(BuildContext context) {
+    String userid = FirebaseAuth.instance.currentUser!.uid;
+
     return Scaffold(
       appBar: MyAppBar(),
       drawer: MyStudentDrawer(),
       body: SingleChildScrollView(
         child: FutureBuilder(
-          future: getdatafromDB(),
+          future: findUserById(userid),
           builder: (context, snapshot) {
             // String name = snapshot.data as String;
 
-            List<String> studentdetail = snapshot.data as List<String>;
-            String name = studentdetail[0];
-            String gender = studentdetail[1];
-            String dob = studentdetail[2];
-            String nric = studentdetail[3];
-            String email = studentdetail[4];
-
-            String role = studentdetail[5];
-            String id = studentdetail[6];
-            String full_detail = studentdetail[7];
+            DocumentSnapshot documentSnapshot = snapshot.data!;
 
             return SingleChildScrollView(
               child: Container(
@@ -129,19 +104,19 @@ class _ProfilePageState extends State<ProfilePage> {
                                         alignment: Alignment.centerLeft,
                                         child: Text(
                                           'Name: ' +
-                                              name +
+                                              documentSnapshot['name'] +
                                               "\nGender: " +
-                                              gender +
+                                              documentSnapshot['gender'] +
                                               '\nDate of Birth: ' +
-                                              dob +
+                                              documentSnapshot['dob'] +
                                               "\nNRIC: " +
-                                              nric +
+                                              documentSnapshot['nric'] +
                                               "\nEmail: " +
-                                              email +
+                                              documentSnapshot['email'] +
                                               "\nRole: " +
-                                              role +
+                                              documentSnapshot['roles'] +
                                               "\nID: " +
-                                              id,
+                                              documentSnapshot['id'],
                                           style: TextStyle(fontSize: 18),
                                         ),
                                       ),
@@ -149,12 +124,15 @@ class _ProfilePageState extends State<ProfilePage> {
                                         height: 20,
                                       ),
                                       FutureBuilder(
-                                        future: fulldetail(role),
+                                        future: fulldetail(
+                                            documentSnapshot['roles']),
                                         builder: (context, snapshot) {
                                           List<String> roledetail =
                                               snapshot.data as List<String>;
 
-                                          return roleinfo(role, roledetail);
+                                          return roleinfo(
+                                              documentSnapshot['roles'],
+                                              roledetail);
                                         },
                                       ),
                                       SizedBox(

@@ -534,12 +534,41 @@ class VisitorPersonalForm extends StatefulWidget {
 }
 
 class _VisitorPersonalFormState extends State<VisitorPersonalForm> {
+  _VisitorPersonalFormState() {
+    _selectedState = _state[0];
+  }
+
   String user = FirebaseAuth.instance.currentUser!.uid;
+  final TextEditingController homeaddressController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+
+  final TextEditingController postcodeController = TextEditingController();
+  final _state = [
+    'Johor',
+    'Kedah',
+    'Kelantan',
+    'Melaka',
+    'Negeri Sembilan',
+    'Pahang',
+    'Penang',
+    'Perak',
+    'Perlis',
+    'Sabah',
+    'Sarawak',
+    'Selangor',
+    'Terrengganu'
+  ];
+
+  String? _selectedState = "";
 
   final TextEditingController nricController = TextEditingController();
+  final TextEditingController contactnoController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+
   bool checkboxValue = false;
 
   final _formKey = GlobalKey<FormState>();
+  String? fulldetail = '1';
 
   @override
   Widget build(BuildContext context) {
@@ -548,6 +577,10 @@ class _VisitorPersonalFormState extends State<VisitorPersonalForm> {
         future: findUserById(user),
         builder: (context, snapshot) {
           DocumentSnapshot documentSnapshot = snapshot.data!;
+          nameController.text = documentSnapshot['name'];
+          contactnoController.text = documentSnapshot['contact_no'];
+          emailController.text = documentSnapshot['email'];
+
           if (snapshot.connectionState == ConnectionState.waiting) {
             // Display a loading indicator while waiting for the data
             return CircularProgressIndicator();
@@ -563,91 +596,168 @@ class _VisitorPersonalFormState extends State<VisitorPersonalForm> {
             return Text('No data available');
           }
 
-          return Container(
-              padding: EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  Align(
-                      alignment: Alignment.bottomLeft,
-                      child: MyLargeText(text: 'Visitor Personal Form')),
-                  MyDivider(),
-                  Container(
-                    padding: EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: BorderRadius.circular(25 )),
-                    child: Column(
-                      children: [
-                        // Text(documentSnapshot['roles']),
+          return SingleChildScrollView(
+            child: Container(
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    Align(
+                        alignment: Alignment.bottomLeft,
+                        child: MyLargeText(text: 'Visitor Personal Form')),
+                    MyDivider(),
+                    Container(
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(25)),
+                      child: Column(
+                        children: [
+                          // Text(documentSnapshot['roles']),
 
-                        Form(
-                          key: _formKey,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              TextFormField(
-                                enabled: false,
-                                controller: nricController,
-                                decoration: InputDecoration(
-                                  labelText: 'NRIC',
+                          Form(
+                            key: _formKey,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                MyMiddleText(text: "Basic Information"),
+                                MyDivider(),
+                                TextFormField(
+                                  enabled: false,
+                                  controller: nameController,
+                                  decoration:
+                                      InputDecoration(labelText: 'Name'),
+                                  validator: (value) {
+                                    return null;
+                                  },
                                 ),
-                                validator: (value) {
-                                  return null;
-                                },
-                              ),
-                              Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      _showAlertDialog();
-                                    },
-                                    child: Row(
-                                      children: [
-                                        Checkbox(
-                                          value: checkboxValue,
-                                          onChanged: (bool? value) {
-                                            setState(() {
-                                              checkboxValue = value ?? false;
-                                            });
-                                          },
-                                        ),
-                                        Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.7,
-                                            child: Text(
-                                                'I agree all Term & Condition'))
-                                      ],
-                                    ),
+                                TextFormField(
+                                  enabled: false,
+                                  controller: contactnoController,
+                                  decoration:
+                                      InputDecoration(labelText: 'Contact No'),
+                                  validator: (value) {
+                                    return null;
+                                  },
+                                ),
+                                TextFormField(
+                                  enabled: false,
+                                  controller: emailController,
+                                  decoration:
+                                      InputDecoration(labelText: 'Email'),
+                                  validator: (value) {
+                                    return null;
+                                  },
+                                ),
+                                SizedBox(
+                                  height: 25,
+                                ),
+                                MyMiddleText(text: "Detail Information"),
+                                MyDivider(),
+                                TextFormField(
+                                  controller: nricController,
+                                  decoration: InputDecoration(
+                                    labelText: 'NRIC',
                                   ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 25,
-                              ),
-                              Align(
-                                alignment: Alignment.bottomRight,
-                                child: ElevatedButton(
-                                  onPressed: checkboxValue
-                                      ? () {
-                                          if (_formKey.currentState!
-                                              .validate()) {
-                                            confirmDialog();
-                                          }
-                                        }
-                                      : null,
-                                  child: Text('Update'),
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Please enter your home address';
+                                    }
+                                    return null;
+                                  },
                                 ),
-                              ),
-                            ],
+                                TextFormField(
+                                  controller: homeaddressController,
+                                  decoration: InputDecoration(
+                                    labelText: 'Home Address',
+                                  ),
+                                  validator: (value) {
+                                    return null;
+                                  },
+                                ),
+                                DropdownButtonFormField(
+                                  decoration: InputDecoration(
+                                    labelText: "State",
+                                    border: UnderlineInputBorder(),
+                                  ),
+                                  value: _selectedState,
+                                  items: _state
+                                      .map((e) => DropdownMenuItem(
+                                            child: Text(e),
+                                            value: e,
+                                          ))
+                                      .toList(),
+                                  onChanged: (val) {
+                                    setState(() {
+                                      _selectedState = val as String;
+                                    });
+                                  },
+                                ),
+                                TextFormField(
+                                  controller: postcodeController,
+                                  decoration:
+                                      InputDecoration(labelText: 'Postcode'),
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Please enter your postcode';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                Row(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        _showAlertDialog();
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Checkbox(
+                                            value: checkboxValue,
+                                            onChanged: (bool? value) {
+                                              setState(() {
+                                                checkboxValue = value ?? false;
+                                              });
+                                            },
+                                          ),
+                                          Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.7,
+                                              child: Text(
+                                                  'I agree all Term & Condition'))
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 25,
+                                ),
+                                Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: ElevatedButton(
+                                    onPressed: checkboxValue
+                                        ? () {
+                                            if (_formKey.currentState!
+                                                .validate()) {
+                                              updatePersonalInfo(context);
+                                              confirmDialog();
+                                            }
+                                          }
+                                        : null,
+                                    child: Text('Update'),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ));
+                        ],
+                      ),
+                    )
+                  ],
+                )),
+          );
         },
       ),
     );
@@ -673,23 +783,67 @@ class _VisitorPersonalFormState extends State<VisitorPersonalForm> {
     );
   }
 
-  void confirmDialog() async {
+  confirmDialog() {
     showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Send Feedback'),
-          content: Text('This will send the feedback to management '),
-          actions: [
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
+        context: context,
+        builder: (ctx) => AlertDialog(
+              title: const Text("Confirmation"),
+              content: const Text(
+                  "I already confirm all my detail insert correctly "),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(ctx).pop();
+                  },
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        child: Container(
+                          color: Colors.green,
+                          padding: const EdgeInsets.all(14),
+                          child: const Text(
+                            "Yes",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        onTap: () {
+                          //navigator
+                          updatePersonalInfo(context);
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/auth', (route) => false);
+                        },
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Container(
+                        color: Colors.green,
+                        padding: const EdgeInsets.all(14),
+                        child: const Text(
+                          "Cancel",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ));
+  }
+
+  updatePersonalInfo(BuildContext context) async {
+    try {
+      String uid = FirebaseAuth.instance.currentUser!.uid;
+
+      await FirebaseFirestore.instance.collection('users').doc(uid).update({
+        "home_address": homeaddressController.text,
+        "NRIC": nricController.text,
+        "state": _selectedState as String,
+        "postcode": postcodeController.text,
+        "full_detail": fulldetail
+      });
+    } on FirebaseAuthException catch (e) {
+      // Handle the exception if needed
+    } // Handle the exception if needed
   }
 }

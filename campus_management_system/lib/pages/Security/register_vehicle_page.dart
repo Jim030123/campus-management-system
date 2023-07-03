@@ -13,20 +13,19 @@ import 'package:campus_management_system/pages/general/login_page.dart';
 
 import '../../components/my_camera.dart';
 
+class RegistrationVehicleForm extends StatefulWidget {
+  String id;
 
-class RegistrationVehiclePage extends StatefulWidget {
- String id;
-
-  RegistrationVehiclePage({super.key, required this.id});
+  RegistrationVehicleForm({super.key, required this.id});
 
   @override
-  _RegistrationVehiclePageState createState() =>
-      _RegistrationVehiclePageState();
+  _RegistrationVehicleFormState createState() =>
+      _RegistrationVehicleFormState();
 }
 
-class _RegistrationVehiclePageState extends State<RegistrationVehiclePage> {
+class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
   @override
-  _RegistrationVehiclePageState() {}
+  _RegistrationVehicleFormState() {}
 
   final _formKey = GlobalKey<FormState>();
 
@@ -49,8 +48,6 @@ class _RegistrationVehiclePageState extends State<RegistrationVehiclePage> {
           .collection('users') // Replace with your collection name
           .doc(user) // Use the provided document ID
           .get();
-
-      // Access the "role" field and convert it to a string
 
       String name = await snapshot.get('name');
       String email = await snapshot.get('email');

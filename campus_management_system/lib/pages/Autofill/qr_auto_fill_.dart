@@ -83,7 +83,7 @@ class _QRAutoFillFormPageState extends State<QRAutoFillFormPage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => RegistrationVehiclePage(id: scannedData),
+                builder: (context) => RegistrationVehicleForm(id: scannedData),
               ),
             ).then((_) {
               // Resume camera when returning from ScannedDataPage
@@ -94,8 +94,7 @@ class _QRAutoFillFormPageState extends State<QRAutoFillFormPage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    RegisterVisitorPass(id: scannedData),
+                builder: (context) => RegisterVisitorPass(id: scannedData),
               ),
             ).then((_) {
               // Resume camera when returning from ScannedDataPage

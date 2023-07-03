@@ -6,7 +6,7 @@ class MyLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Row(
+      child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
 
           // LOGO
