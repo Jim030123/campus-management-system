@@ -18,6 +18,7 @@ class _VisitorPassProgressState extends State<VisitorPassProgress> {
       appBar: MyAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(16),
+        
         child: ListView.builder(
           itemCount: progress.length,
           itemBuilder: (context, index) {

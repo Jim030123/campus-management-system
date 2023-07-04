@@ -287,6 +287,8 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
   }
 
   VisitorPassApplication(BuildContext context) async {
+    DateTime timestamp = DateTime.now();
+
     try {
       String auth = FirebaseAuth.instance.currentUser!.uid;
       String formattedDateVisit = DateFormat('yyyy/MM/dd').format(datevisit);
@@ -294,9 +296,12 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
         DateTime(datevisit.year, datevisit.month, datevisit.day,
             _selectedTime.hour, _selectedTime.minute),
       );
+      String formattedTimeStamp =
+          DateFormat('yyyy-MM-dd HH:mm:ss').format(timestamp);
+
       await FirebaseFirestore.instance
           .collection('visitor_pass_application')
-          .doc(auth)
+          .doc()
           .set({
         "name": nameController.text,
         "email": emailController.text,
@@ -306,7 +311,12 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
         "date_visit": formattedDateVisit,
         "time_visit": formattedTimeVisit,
         "status": status,
-        "reason": reasonController.text
+        "reason": reasonController.text,
+        "timestamp": formattedTimeStamp,
+        "entry_time":null,
+        "exit_time":null,
+
+        "visitorid": auth
       });
       print(auth);
     } on FirebaseAuthException catch (e) {
@@ -339,8 +349,9 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Send Feedback'),
-          content: Text('This will send the feedback to management '),
+          title: Text('Submit the visitor Pass'),
+          content:
+              Text('This will send the visitor pass to management to review'),
           actions: [
             TextButton(
               child: Text('OK'),

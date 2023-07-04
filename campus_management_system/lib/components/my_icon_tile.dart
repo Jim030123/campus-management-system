@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class MyIconTile extends StatelessWidget {
   MyIconTile({super.key, required this.iconnumber, required this.text});
@@ -10,7 +9,6 @@ class MyIconTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: 130,
         padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),

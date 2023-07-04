@@ -65,13 +65,18 @@ class _VisitorMainPageState extends State<VisitorMainPage> {
                         },
                         text: 'Register Visitor Pass',
                       ),
+                      // MyButton(
+                      //     onTap: () {
+                      //       Navigator.pushNamed(
+                      //           context, '/visitor_pass_progress');
+                      //     },
+                      //     text: 'View Progress'),
                       MyButton(
                           onTap: () {
                             Navigator.pushNamed(
-                                context, '/visitor_pass_progress');
+                                context, '/view_all_visitor_pass');
                           },
-                          text: 'View Progress'),
-                      MyButton(onTap: onTap, text: 'View Visitor Pass'),
+                          text: 'View All Visitor Pass'),
                     ],
                   ),
                 )

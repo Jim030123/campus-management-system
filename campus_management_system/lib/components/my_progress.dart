@@ -6,8 +6,10 @@ class VP_Progress_start extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.all(16),
       padding: EdgeInsets.all(16),
-      // color: Colors.green,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25), color: Colors.yellow),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Text('24 MAC 2023 16:00'),
         Align(
@@ -39,33 +41,30 @@ class VP_Progress_Approve extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.all(16),
       padding: EdgeInsets.all(16),
-      // color: Colors.green,
-      child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        Text(
-          '\n\n\n\no\n|\n|\n|\n|',
-          textAlign: TextAlign.center,
-        ),
-        SizedBox(
-          width: 10,
-        ),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25), color: Colors.green),
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Text('24 MAC 2023 16:00'),
-        SizedBox(
-          width: 200,
-        ),
         Align(
           alignment: Alignment.bottomLeft,
           child: Column(
             children: [
               Text(
-                'Approve ',
+                'Your visitor pass already approve',
                 style: TextStyle(fontSize: 25),
               ),
               Text(
                   'Your visitor pass approved by Management and click here view your visitor pass')
             ],
           ),
-        )
+        ),
+        Text(
+          textAlign: TextAlign.left,
+          'Status: Decline',
+          style: TextStyle(fontSize: 25),
+        ),
       ]),
     );
   }
@@ -78,6 +77,7 @@ class VP_Progress_Decline extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Container(
+        margin: EdgeInsets.all(16),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25), color: Colors.red),
         padding: EdgeInsets.all(16),
@@ -89,7 +89,7 @@ class VP_Progress_Decline extends StatelessWidget {
               Text(
                 textAlign: TextAlign.left,
                 'Your visitor pass decline',
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(fontSize: 25),
               ),
               Text(
                 'Reason:',

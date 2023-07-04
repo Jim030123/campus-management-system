@@ -125,14 +125,11 @@ class _ManagementMainPageState extends State<ManagementMainPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           MyMenuTile(
-                              text:
-                                  'Feedback Recieved',
+                              text: 'Feedback Recieved',
                               iconnumber: 0xe260,
                               routename: '/feedback_received'),
-
-                               MyMenuTile(
-                              text:
-                                  'Facility Management',
+                          MyMenuTile(
+                              text: 'Facility Management',
                               iconnumber: 0xe260,
                               routename: '/facility_management'),
                         ],
@@ -145,25 +142,14 @@ class _ManagementMainPageState extends State<ManagementMainPage> {
                               iconnumber: 0xf60d,
                               routename: '/auto_fill_form_menu'),
                           MyMenuTile(
-                              text: 'Visitor Pass Application',
-                              iconnumber: 0xf021b,
-                              routename: '/visitor_pass_application'),
+                              text: 'Visitor Pass Management',
+                              iconnumber: 0xef2e,
+                              routename: '/visitor_pass_management')
                         ],
-                      ),
-                      SizedBox(
-                        width: 25,
-                      ),
-                      Divider(
-                        height: 2.0,
-                        color: Colors.black,
-                      ),
-                      SizedBox(
-                        width: 25,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          // MyMenuTile(),
                           // MyMenuTile(),
                         ],
                       ),

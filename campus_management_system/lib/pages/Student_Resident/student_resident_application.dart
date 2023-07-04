@@ -47,7 +47,7 @@ class _StudentResidentApplicationPageState
     'Approved',
     'Declined'
   ];
-  late String _selectedStatus = status[0];
+  late String _selectedSRStatus = status[0];
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +72,7 @@ class _StudentResidentApplicationPageState
                         ElevatedButton(
                           onPressed: () {
                             setState(() {
-                              _selectedStatus = status[0];
+                              _selectedSRStatus = status[0];
                             });
                             Navigator.pop(context);
                           },
@@ -81,7 +81,7 @@ class _StudentResidentApplicationPageState
                         ElevatedButton(
                           onPressed: () {
                             setState(() {
-                              _selectedStatus = status[1];
+                              _selectedSRStatus = status[1];
                             });
                             Navigator.pop(context); // Close the dialog
                           },
@@ -90,7 +90,7 @@ class _StudentResidentApplicationPageState
                         ElevatedButton(
                           onPressed: () {
                             setState(() {
-                              _selectedStatus = status[2];
+                              _selectedSRStatus = status[2];
                             });
                             Navigator.pop(context); // Close the dialog
                           },
@@ -113,12 +113,12 @@ class _StudentResidentApplicationPageState
           )
         ],
       ),
-      body: filter(_selectedStatus),
+      body: filter(_selectedSRStatus),
     );
   }
 
   Widget filter(String selectedStatus) {
-    print(_selectedStatus);
+    print(_selectedSRStatus);
     return _isLoading
         ? Center(child: CircularProgressIndicator())
         : ListView.builder(

@@ -1,7 +1,7 @@
-import 'package:campus_management_system/pages/student_resident/room.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 class VisitorPassApplicationPage extends StatefulWidget {
   VisitorPassApplicationPage({super.key});
@@ -10,6 +10,9 @@ class VisitorPassApplicationPage extends StatefulWidget {
   _VisitorPassApplicationPageState createState() =>
       _VisitorPassApplicationPageState();
 }
+
+List<String> status = ['Waiting the Management Review', 'Approved', 'Declined'];
+late String _selectedVPStatus = status[0];
 
 class _VisitorPassApplicationPageState
     extends State<VisitorPassApplicationPage> {
@@ -45,26 +48,100 @@ class _VisitorPassApplicationPageState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Application List'),
+        title: Text('Visitor Pass Application List'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.filter_none_outlined,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Filter the Visitor Pass Application'),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _selectedVPStatus = status[0];
+                            });
+                            Navigator.pop(context);
+                          },
+                          child: Text(status[0]),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _selectedVPStatus = status[1];
+                            });
+                            Navigator.pop(context); // Close the dialog
+                          },
+                          child: Text(status[1]),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _selectedVPStatus = status[2];
+                            });
+                            Navigator.pop(context); // Close the dialog
+                          },
+                          child: Text(status[2]),
+                        ),
+                      ],
+                    ),
+                    actions: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context); // Close the dialog
+                        },
+                        child: Text('Cancel'),
+                      )
+                    ],
+                  );
+                },
+              );
+            },
+          )
+        ],
       ),
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: _allApplication.length,
-              itemBuilder: (context, index) {
-                DocumentSnapshot user = _allApplication[index];
+      body: filter(_selectedVPStatus),
+    );
+  }
+
+  Widget filter(String selectedStatus) {
+    print(_selectedVPStatus);
+    return _isLoading
+        ? Center(child: CircularProgressIndicator())
+        : ListView.builder(
+            itemCount: _allApplication.length,
+            itemBuilder: (context, index) {
+              DocumentSnapshot user = _allApplication[index];
+
+              if (user['status'] == selectedStatus) {
                 return Padding(
                   padding: EdgeInsets.all(16),
                   child: ListTile(
                     tileColor: Colors.grey,
-                    title: Text(user['email'] ?? 'No Email'),
-                    subtitle: Text(user.id),
-                    onTap: () => _openNewPage(user),
+                    title: Text(user['name'] ?? 'No Email'),
+                    subtitle: Text(user['reason']),
+                    trailing: Text(user['timestamp']),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ApplicationDetail(user: user),
+                        ),
+                      );
+                    },
                   ),
                 );
-              },
-            ),
-    );
+              }
+            },
+          );
   }
 }
 
@@ -88,10 +165,10 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
 
   bool _isLoading = true;
   late List<DocumentSnapshot> _allApplication;
-
+  final TextEditingController declinereasonController = TextEditingController();
   final CollectionReference visitorPassApplicationCollection =
       FirebaseFirestore.instance.collection('visitor_pass_available');
-
+  var uuid = Uuid();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,7 +180,7 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
           padding: EdgeInsets.all(25),
           child: Column(
             children: [
-              Align(
+              const Align(
                 alignment: Alignment.topLeft,
                 child: Text(
                   'The Visitor Profile',
@@ -123,11 +200,14 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
                           "Name: " +
                               widget.user['name'] +
                               "\nNRIC: " +
-                              widget.user['NRIC'] +
-                              "\nStatus: " +
-                              widget.user['status'] +
+                              widget.user['nric'] +
                               "\nDate Visit: " +
                               widget.user['date_visit'] +
+                              "\nTime Visit: " +
+                              widget.user['time_visit'] +
+                              "\nVehicle Type: " +
+                              "\nReason: " +
+                              widget.user['reason'] +
                               "\nVehicle Type: " +
                               widget.user['vehicle_type'] +
                               "\nVehicle Plate Number: " +
@@ -139,11 +219,16 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
                               ApproveVisitorPass(context);
                             },
                             child: Text('Approve')),
+                        TextFormField(
+                          controller: declinereasonController,
+                          decoration:
+                              InputDecoration(labelText: 'Decline Reason'),
+                        ),
                         ElevatedButton(
                             onPressed: () {
                               DeclineVisitorPass(context);
                             },
-                            child: Text('Decline'))
+                            child: Text('Decline')),
                       ],
                     ),
                   ),
@@ -164,12 +249,12 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
 
   ApproveVisitorPass(BuildContext context) async {
     try {
-      String status = "Approve";
+      String status = "Approved";
 
       await FirebaseFirestore.instance
           .collection('visitor_pass_application')
           .doc(widget.user.id)
-          .update({"status": status});
+          .update({"status": status, "visitorpassid": uuid.v1().toString()});
     } on FirebaseAuthException catch (e) {}
     ;
 
@@ -179,12 +264,15 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
 
   DeclineVisitorPass(BuildContext context) async {
     try {
-      String status = "Decline";
+      String status = "Declined";
 
       await FirebaseFirestore.instance
           .collection('visitor_pass_application')
           .doc(widget.user.id)
-          .update({"status": status});
+          .update({
+        "status": status,
+        "decline_reason": declinereasonController.text
+      });
 
       Navigator.popUntil(context, ModalRoute.withName('/management_main'));
     } on FirebaseAuthException catch (e) {}
