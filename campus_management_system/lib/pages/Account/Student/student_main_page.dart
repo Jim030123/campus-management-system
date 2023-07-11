@@ -56,7 +56,7 @@ class _StudentMainPageState extends State<StudentMainPage> {
           body: SingleChildScrollView(
             child: Center(
               child: Container(
-                // width: 1000,
+                
                 height: 1200,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,

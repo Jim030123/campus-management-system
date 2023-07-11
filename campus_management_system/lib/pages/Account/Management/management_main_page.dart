@@ -29,12 +29,10 @@ class _ManagementMainPageState extends State<ManagementMainPage> {
       String name = await snapshot.get('name');
       String email = await snapshot.get('email');
       String id = await snapshot.get('id');
-      return [name, email, id];
+      String fulldetail = await snapshot.get('full_detail');
+      return [name, email, id, fulldetail];
     }
 
-    // String batch = 'db get';
-    // String studentID = 'db get';
-    // String name = 'db get';
     return Scaffold(
       body: FutureBuilder(
           future: getdatafromDB(),
@@ -43,6 +41,14 @@ class _ManagementMainPageState extends State<ManagementMainPage> {
             String name = dataList[0];
             String email = dataList[1];
             String id = dataList[2];
+            String fulldetail = dataList[3];
+
+            if (fulldetail == "0") {
+              Future.delayed(Duration(seconds: 3), () {
+                Navigator.pushReplacementNamed(
+                    context, '/redirect_personal_form');
+              });
+            }
 
             return SingleChildScrollView(
               child: Center(
@@ -180,7 +186,7 @@ class _ManagementMainPageState extends State<ManagementMainPage> {
                   ),
                   tooltip: 'User Profile',
                   onPressed: () {
-                    Navigator.pushNamed(context, '/profile');
+                    Navigator.pushNamed(context, '/management_profile');
                   }),
               IconButton(
                   icon: const Icon(

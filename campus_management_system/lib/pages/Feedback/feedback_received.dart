@@ -3,14 +3,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class FeedbackRecieved extends StatefulWidget {
-  FeedbackRecieved({super.key});
+class FeedbackReceived extends StatefulWidget {
+  FeedbackReceived({super.key});
 
   @override
-  State<FeedbackRecieved> createState() => _FeedbackRecievedState();
+  State<FeedbackReceived> createState() => _FeedbackReceivedState();
 }
 
-class _FeedbackRecievedState extends State<FeedbackRecieved> {
+class _FeedbackReceivedState extends State<FeedbackReceived> {
   bool _isLoading = true;
   int favourite = 1;
 

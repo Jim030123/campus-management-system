@@ -98,24 +98,28 @@ class MyManagementDrawer extends StatelessWidget {
               color: Colors.black,
             ),
             MyDrawerListtile(
-                pagename: 'Main Page', routename: '/main', icon: 0xe328),
+                pagename: 'Main Page',
+                routename: '/management_main',
+                icon: 0xe328),
             MyDrawerListtile(
-                pagename: 'Profile', routename: '/profile', icon: 0xf522),
+                pagename: 'Management Profile',
+                routename: '/profile',
+                icon: 0xf522),
             MyDrawerListtile(
-                pagename: 'Security',
-                routename: '/security_menu',
+                pagename: 'Security Management',
+                routename: '/security_management_menu',
                 icon: 0xf013e),
             MyDrawerListtile(
-                pagename: 'Feedback',
-                routename: '/feedback_menu',
+                pagename: 'Feedback Received',
+                routename: '/feedback_received',
                 icon: 0xf73b),
             MyDrawerListtile(
-                pagename: 'Billing (havent done)',
-                routename: '/facility_menu',
+                pagename: 'Student Resident Management',
+                routename: '/student_resident_management_menu',
                 icon: 0xe481),
             MyDrawerListtile(
-                pagename: 'Facility (Done)',
-                routename: '/facility_menu',
+                pagename: 'Facility Management',
+                routename: '/facility_management_menu',
                 icon: 0xf01c8),
             SizedBox(height: 50),
             Column(

@@ -18,7 +18,7 @@ class MyDrawerListtile extends StatelessWidget {
       leading: Icon(IconData(icon, fontFamily: 'MaterialIcons')),
       title: Text(pagename),
       onTap: () {
-        Navigator.pushNamed(context, routename);
+        Navigator.pushNamedAndRemoveUntil(context, routename, (route) => false);
       },
     );
   }

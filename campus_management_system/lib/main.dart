@@ -74,7 +74,7 @@ class MainApp extends StatelessWidget {
 
         '/auth': (context) => AuthPage(),
         '/login': (context) => MyLoginPage(),
-        '/profile': (context) => ProfilePage(),
+        '/profile': (context) => StudentProfilePage(),
         '/logout': (context) => MyLoginPage(),
 
         '/personal_form': (context) => PersonalForm(),
@@ -101,11 +101,11 @@ class MainApp extends StatelessWidget {
         '/feedback_menu': (context) => FeedbackPage(),
         '/feedback_form': (context) => FeedbackForm(id: id),
         '/feedback_submitted': (context) => FeedbackSubmitted(),
-        '/feedback_received': (context) => FeedbackRecieved(),
+        '/feedback_received': (context) => FeedbackReceived(),
 
         // Security
         '/security_menu': (context) => SecurityMenuPage(),
-        '/show_registered_car': (context) => ShowRegisterdCarPage(),
+        '/show_registered_car': (context) => ShowRegisteredCarPage(),
         '/register_vehicle': (context) => RegistrationVehicleForm(
               id: id,
             ),
@@ -116,6 +116,7 @@ class MainApp extends StatelessWidget {
         '/check_facility_available': (context) => CheckFacilityAvailable(),
 
         // Management
+        '/management_profile': (context) => ManagementProfilePage(),
         '/account_management_menu': (context) => AccountManagementMenuPage(),
         '/registeration': (context) => RegistrationAccount(),
         '/view_all_account': (context) => ViewAllAccountPage(),

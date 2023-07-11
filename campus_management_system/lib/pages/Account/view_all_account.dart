@@ -49,7 +49,7 @@ class _UserAccountsScreenState extends State<ViewAllAccountPage> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(16),
             child: TextField(
               onChanged: filterUsers,
               decoration: InputDecoration(
@@ -69,6 +69,7 @@ class _UserAccountsScreenState extends State<ViewAllAccountPage> {
                   return ListTile(
                     title: Text(user['email'] ?? 'No Email'),
                     subtitle: Text(user.id),
+                    leading: Text(user['roles']),
                   );
                 },
               ),
