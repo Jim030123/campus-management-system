@@ -55,10 +55,8 @@ class _ViewAllVisitorPassState extends State<ViewAllVisitorPass> {
                     child: ListTile(
                         tileColor: Colors.grey,
                         title: Text(filter['reason'] +
-                            "\nVistit time: " +
-                            filter['date_visit'] +
-                            " " +
-                            filter['time_visit'] +
+                            "\nVistitor Pass Type: " +
+                            filter["visitor_pass_type"] +
                             "\nSubmit Time: " +
                             filter['timestamp']),
                         leading: Text(index1.toString()),
@@ -103,12 +101,8 @@ class _ViewAllVisitorPassState extends State<ViewAllVisitorPass> {
                     MyMiddleText(
                         text: "Date Time: " +
                             filter['date_visit'] +
-                            "\nEntry Time: " +
-                            filter['entry_time'] +
                             "\nReason: " +
-                            filter['reason'] +
-                            "\n Exit Time : " +
-                            filter['exit_time'])
+                            filter['reason'])
                   ],
                 ),
               ));

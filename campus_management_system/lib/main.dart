@@ -8,9 +8,11 @@ import 'package:campus_management_system/pages/Feedback/feedback_submitted.dart'
 import 'package:campus_management_system/pages/General/auth_page.dart';
 import 'package:campus_management_system/pages/Security/register_vehicle_page.dart';
 import 'package:campus_management_system/pages/Security/security_menu.dart';
+import 'package:campus_management_system/pages/Security/security_management._menu.dart';
 import 'package:campus_management_system/pages/Security/show_car_registered.dart';
 import 'package:campus_management_system/pages/Facility/facility_information.dart';
 import 'package:campus_management_system/pages/General/personal_form.dart';
+import 'package:campus_management_system/pages/Security/view_all_vehicle.dart';
 import 'package:campus_management_system/pages/Student_Resident/add_room.dart';
 import 'package:campus_management_system/pages/Feedback/feedback_received.dart';
 import 'package:campus_management_system/pages/Autofill/auto_fill_form_menu.dart';
@@ -90,7 +92,7 @@ class MainApp extends StatelessWidget {
         // Student Resident
         '/resident_menu': (context) => StudentResidentMenuPage(),
         '/resident_student': (context) => StudentResidentExist(),
-        '/resident_application': (context) => ResidentApplicationPage(id: id),
+        '/resident_application': (context) => ResidentApplicationPage(),
         '/resident_information': (context) => ResidentInformationPage(),
         '/room_information_A_C': (context) => TwinSharingRoomBlock_A_C(),
         '/room_information_B_D': (context) => TwinSharingRoomBlock_B_D(),
@@ -106,9 +108,10 @@ class MainApp extends StatelessWidget {
         // Security
         '/security_menu': (context) => SecurityMenuPage(),
         '/show_registered_car': (context) => ShowRegisteredCarPage(),
-        '/register_vehicle': (context) => RegistrationVehicleForm(
-              id: id,
-            ),
+        '/register_vehicle': (context) => RegistrationVehicleForm(),
+
+        '/security_management_menu': (context) => SecurityManagementMenu(),
+        '/view_all_vehicle': (context) => ViewAllVehicle(),
 
         // Facility
         '/facility_menu': (context) => BookingMenuPage(),
@@ -131,9 +134,7 @@ class MainApp extends StatelessWidget {
 
         // Visitor
         '/visitor_main': (context) => VisitorMainPage(),
-        '/register_visitor_pass': (context) => RegisterVisitorPass(
-              id: id,
-            ),
+        '/register_visitor_pass': (context) => RegisterVisitorPass(),
         '/visitor_pass_management': (context) => VisitorPassManagementMenu(),
 
         '/visitor_register': (context) => VisitorRegisterPage(),

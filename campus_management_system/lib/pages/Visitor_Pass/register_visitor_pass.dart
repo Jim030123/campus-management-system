@@ -10,8 +10,7 @@ import '../../components/my_drawer.dart';
 import '../general/login_page.dart';
 
 class RegisterVisitorPass extends StatefulWidget {
-  String id;
-  RegisterVisitorPass({Key? key, required this.id}) : super(key: key);
+  RegisterVisitorPass({Key? key}) : super(key: key);
 
   @override
   _RegisterVisitorPassState createState() => _RegisterVisitorPassState();
@@ -19,7 +18,8 @@ class RegisterVisitorPass extends StatefulWidget {
 
 class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
   _RegisterVisitorPassState() {
-    _selectedVehicleType = _vehicletype[0];
+    _selectedVehicleType = _vehicleType[0];
+    _selectedVisitorPassType = _visitorPassType[0];
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -33,11 +33,19 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
   final TextEditingController relationController = TextEditingController();
   final String status = "Waiting the Management Review";
 
-  final _vehicletype = ['Motorcycle', 'Car', 'Bus'];
+  final _visitorPassType = [
+    'Short term visitor pass',
+    'Long Term visitor pass'
+  ];
+
+  String? _selectedVisitorPassType = "";
+
+  final _vehicleType = ['Motorcycle', 'Car', 'Bus'];
 
   String? _selectedVehicleType = "";
 
   DateTime datevisit = DateTime.now();
+  DateTime enddatevisit = DateTime.now();
   bool checkboxValue = false;
   TimeOfDay _selectedTime = TimeOfDay.now();
 
@@ -67,8 +75,8 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
 
       String name = await snapshot.get('name');
       String email = await snapshot.get('email');
-      // String id = await snapshot.get('id');
-      return [name, email];
+      String nric = await snapshot.get('nric');
+      return [name, email, nric];
     }
 
     return Scaffold(
@@ -80,9 +88,11 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
             List<String> dataList = snapshot.data as List<String>;
             String name = dataList[0];
             String email = dataList[1];
+            String nric = dataList[2];
 
             nameController.text = name;
             emailController.text = email;
+            nricController.text = nric;
 
             return Container(
               padding: EdgeInsets.all(16.0),
@@ -134,7 +144,7 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
                             decoration: InputDecoration(labelText: 'NRIC'),
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return 'Please enter your Email';
+                                return 'Please enter your NRIC';
                               }
                               return null;
                             },
@@ -142,49 +152,26 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
                           SizedBox(
                             height: 25,
                           ),
-                          Container(
-                            padding: EdgeInsets.all(16),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Text(
-                                  'Date Selected: ${datevisit.year}/${datevisit.month}/${datevisit.day}',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                                ElevatedButton(
-                                  onPressed: () async {
-                                    DateTime? newDate = await showDatePicker(
-                                      context: context,
-                                      initialDate: datevisit,
-                                      firstDate: DateTime(1900),
-                                      lastDate: DateTime(2100),
-                                    );
-
-                                    if (newDate == null) return;
-                                    setState(() => datevisit = newDate);
-                                  },
-                                  child: Text('Select Visit Date'),
-                                ),
-                              ],
+                          DropdownButtonFormField(
+                            decoration: InputDecoration(
+                              labelText: "Visitor Pass Type",
+                              prefixIcon: Icon(Icons.verified_user),
+                              border: UnderlineInputBorder(),
                             ),
+                            value: _selectedVisitorPassType,
+                            items: _visitorPassType
+                                .map((e) => DropdownMenuItem(
+                                      child: Text(e),
+                                      value: e,
+                                    ))
+                                .toList(),
+                            onChanged: (val) {
+                              setState(() {
+                                _selectedVisitorPassType = val as String;
+                              });
+                            },
                           ),
-                          Container(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Text(
-                                  'Time Selected: ${_selectedTime.format(context)}',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    _selectTime(context);
-                                  },
-                                  child: Text('Select Visit Time'),
-                                ),
-                              ],
-                            ),
-                          ),
+                          visitorType(),
                           TextFormField(
                             controller: reasonController,
                             decoration:
@@ -203,7 +190,7 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
                               border: UnderlineInputBorder(),
                             ),
                             value: _selectedVehicleType,
-                            items: _vehicletype
+                            items: _vehicleType
                                 .map((e) => DropdownMenuItem(
                                       child: Text(e),
                                       value: e,
@@ -299,26 +286,45 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
       String formattedTimeStamp =
           DateFormat('yyyy-MM-dd HH:mm:ss').format(timestamp);
 
-      await FirebaseFirestore.instance
-          .collection('visitor_pass_application')
-          .doc()
-          .set({
-        "name": nameController.text,
-        "email": emailController.text,
-        "nric": nricController.text,
-        "vehicle_plate_number": vehicleplatenumberController.text,
-        "vehicle_type": _selectedVehicleType as String,
-        "date_visit": formattedDateVisit,
-        "time_visit": formattedTimeVisit,
-        "status": status,
-        "reason": reasonController.text,
-        "timestamp": formattedTimeStamp,
-        "entry_time":null,
-        "exit_time":null,
-
-        "visitorid": auth
-      });
-      print(auth);
+      if (_selectedVisitorPassType == _visitorPassType[0]) {
+        await FirebaseFirestore.instance
+            .collection('visitor_pass_application')
+            .doc()
+            .set({
+          "name": nameController.text,
+          "email": emailController.text,
+          "nric": nricController.text,
+          "vehicle_plate_number": vehicleplatenumberController.text,
+          "vehicle_type": _selectedVehicleType as String,
+          "date_visit": formattedDateVisit,
+          "status": status,
+          "reason": reasonController.text,
+          "timestamp": formattedTimeStamp,
+          "entry_time": null,
+          "exit_time": null,
+          "visitorid": auth,
+          "time_visit": formattedTimeVisit,
+          "visitor_pass_type": _selectedVisitorPassType as String
+        });
+      } else if (_selectedVisitorPassType == _visitorPassType[1]) {
+        await FirebaseFirestore.instance
+            .collection('visitor_pass_application')
+            .doc()
+            .set({
+          "name": nameController.text,
+          "email": emailController.text,
+          "nric": nricController.text,
+          "vehicle_plate_number": vehicleplatenumberController.text,
+          "vehicle_type": _selectedVehicleType as String,
+          "date_visit": formattedDateVisit,
+          "status": status,
+          "reason": reasonController.text,
+          "timestamp": formattedTimeStamp,
+          "visitorid": auth,
+          "end_date_visit": enddatevisit,
+          "visitor_pass_type": _selectedVisitorPassType as String
+        });
+      }
     } on FirebaseAuthException catch (e) {
       // Handle the exception if needed
     }
@@ -363,5 +369,113 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
         );
       },
     );
+  }
+
+  visitorType() {
+    if (_selectedVisitorPassType == _visitorPassType[0]) {
+      return Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  'Date Selected: ${datevisit.year}/${datevisit.month}/${datevisit.day}',
+                  style: TextStyle(fontSize: 20),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    DateTime? newDate = await showDatePicker(
+                      context: context,
+                      initialDate: datevisit,
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime(2100),
+                    );
+
+                    if (newDate == null) return;
+                    setState(() => datevisit = newDate);
+                  },
+                  child: Text('Select Visit Date'),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  'Time Selected: ${_selectedTime.format(context)}',
+                  style: TextStyle(fontSize: 20),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    _selectTime(context);
+                  },
+                  child: Text('Select Visit Time'),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    } else if (_selectedVisitorPassType == _visitorPassType[1]) {
+      return Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  'Start Date: ${datevisit.year}/${datevisit.month}/${datevisit.day}',
+                  style: TextStyle(fontSize: 20),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    DateTime? newDate = await showDatePicker(
+                      context: context,
+                      initialDate: datevisit,
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime(2100),
+                    );
+
+                    if (newDate == null) return;
+                    setState(() => datevisit = newDate);
+                  },
+                  child: Text('Select Visit Start Date'),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  'Date End: ${enddatevisit.year}/${enddatevisit.month}/${enddatevisit.day}',
+                  style: TextStyle(fontSize: 20),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    DateTime? newDate = await showDatePicker(
+                      context: context,
+                      initialDate: enddatevisit,
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime(2100),
+                    );
+
+                    if (newDate == null) return;
+                    setState(() => enddatevisit = newDate);
+                  },
+                  child: Text('Select Visit End Date'),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    }
   }
 }

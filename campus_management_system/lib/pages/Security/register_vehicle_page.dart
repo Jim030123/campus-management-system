@@ -14,9 +14,7 @@ import 'package:campus_management_system/pages/general/login_page.dart';
 import '../../components/my_camera.dart';
 
 class RegistrationVehicleForm extends StatefulWidget {
-  String id;
-
-  RegistrationVehicleForm({super.key, required this.id});
+  RegistrationVehicleForm({super.key});
 
   @override
   _RegistrationVehicleFormState createState() =>
@@ -43,7 +41,7 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
   @override
   Widget build(BuildContext context) {
     getdatafromDB() async {
-      final user = widget.id;
+      final user = FirebaseAuth.instance.currentUser!.uid;
       DocumentSnapshot snapshot = await FirebaseFirestore.instance
           .collection('users') // Replace with your collection name
           .doc(user) // Use the provided document ID
@@ -158,17 +156,17 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
 
                           SizedBox(height: 16.0),
 
-                          ElevatedButton(
-                            child: Text('Take Photo'),
-                            onPressed: () async {
-                              await availableCameras().then((value) =>
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (_) =>
-                                              CameraPage(cameras: value))));
-                            },
-                          ),
+                          // ElevatedButton(
+                          //   child: Text('Take Photo'),
+                          //   onPressed: () async {
+                          //     await availableCameras().then((value) =>
+                          //         Navigator.push(
+                          //             context,
+                          //             MaterialPageRoute(
+                          //                 builder: (_) =>
+                          //                     CameraPage(cameras: value))));
+                          //   },
+                          // ),
 
                           Row(
                             children: [

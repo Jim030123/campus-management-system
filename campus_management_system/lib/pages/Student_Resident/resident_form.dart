@@ -10,9 +10,9 @@ import 'package:campus_management_system/pages/general/login_page.dart';
 import '../../documentation/term_and_condition.dart';
 
 class ResidentApplicationPage extends StatefulWidget {
-  String id;
 
-  ResidentApplicationPage({super.key, required this.id});
+
+  ResidentApplicationPage({super.key});
 
   @override
   _ResidentApplicationPageState createState() =>
@@ -51,7 +51,7 @@ class _ResidentApplicationPageState extends State<ResidentApplicationPage> {
   @override
   Widget build(BuildContext context) {
     getdatafromDB() async {
-      final user = widget.id;
+      final user = FirebaseAuth.instance.currentUser!.uid;
 
       DocumentSnapshot snapshot = await FirebaseFirestore.instance
           .collection('users') // Replace with your collection name

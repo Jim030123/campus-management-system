@@ -5,6 +5,7 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import '../Security/register_vehicle_page.dart';
 import '../student_resident/resident_form.dart';
 import '../visitor_pass/register_visitor_pass.dart';
+import 'form.dart';
 
 class QRAutoFillFormPage extends StatefulWidget {
   int selectedbutton;
@@ -69,7 +70,7 @@ class _QRAutoFillFormPageState extends State<QRAutoFillFormPage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ResidentApplicationPage(id: scannedData),
+                builder: (context) => ResidentApplicationPageM(id: scannedData),
               ),
             ).then((_) {
               // Resume camera when returning from ScannedDataPage
@@ -83,7 +84,7 @@ class _QRAutoFillFormPageState extends State<QRAutoFillFormPage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => RegistrationVehicleForm(id: scannedData),
+                builder: (context) => RegistrationVehicleFormM(id: scannedData),
               ),
             ).then((_) {
               // Resume camera when returning from ScannedDataPage
@@ -94,7 +95,7 @@ class _QRAutoFillFormPageState extends State<QRAutoFillFormPage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => RegisterVisitorPass(id: scannedData),
+                builder: (context) => RegisterVisitorPassM(id: scannedData),
               ),
             ).then((_) {
               // Resume camera when returning from ScannedDataPage

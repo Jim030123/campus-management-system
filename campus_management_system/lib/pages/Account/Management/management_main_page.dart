@@ -156,7 +156,10 @@ class _ManagementMainPageState extends State<ManagementMainPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          // MyMenuTile(),
+                          MyMenuTile(
+                              text: 'Security Management',
+                              iconnumber: 0xef2e,
+                              routename: '/security_management_menu')
                         ],
                       ),
                     ],
