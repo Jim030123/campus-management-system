@@ -45,7 +45,19 @@ class _StudentProfilePageState extends State<StudentProfilePage> {
       String email = await snapshot.get('email').toString();
       String id = await snapshot.get('id').toString();
       String fulldetail = await snapshot.get('full_detail').toString();
-      return [name, gender, dob, nric, email, contactno, role, id, fulldetail];
+      String residentstatus = await snapshot.get('resident_status').toString();
+      return [
+        name,
+        gender,
+        dob,
+        nric,
+        email,
+        contactno,
+        role,
+        id,
+        fulldetail,
+        residentstatus
+      ];
     }
   }
 
@@ -59,6 +71,13 @@ class _StudentProfilePageState extends State<StudentProfilePage> {
           future: getdatafromDB(),
           builder: (context, snapshot) {
             // String name = snapshot.data as String;
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator(); // Display circular progress indicator while data is loading
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text('Error fetching data'), // Display error message
+              );
+            }
 
             List<String> studentdetail = snapshot.data as List<String>;
             String name = studentdetail[0];
@@ -71,6 +90,7 @@ class _StudentProfilePageState extends State<StudentProfilePage> {
             String role = studentdetail[6];
             String id = studentdetail[7];
             String full_detail = studentdetail[8];
+            String residentstatus = studentdetail[9];
 
             return SingleChildScrollView(
               child: Container(
@@ -222,6 +242,7 @@ class _StudentProfilePageState extends State<StudentProfilePage> {
     );
   }
 
+// probe
   residentstudentdetail() async {
     final user = FirebaseAuth.instance.currentUser!.uid;
     DocumentSnapshot snapshot = await FirebaseFirestore.instance
@@ -685,5 +706,3 @@ class _ManagementProfilePage extends State<ManagementProfilePage> {
     }
   }
 }
-
-

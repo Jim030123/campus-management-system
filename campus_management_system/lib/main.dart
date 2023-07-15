@@ -39,9 +39,9 @@ import 'package:campus_management_system/pages/Account/view_all_account.dart';
 import 'package:campus_management_system/pages/Visitor_Pass/register_visitor_pass.dart';
 import 'package:campus_management_system/pages/Account/Visitor/visitor_main_page.dart';
 import 'package:campus_management_system/pages/Visitor_Pass/visitor_pass_management.dart';
-import 'package:campus_management_system/pages/Visitor_Pass/visitor_pass_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'documentation/info_page.dart';
 import 'documentation/room_type.dart';
 import 'firebase_options.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -52,6 +52,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  
   runApp(MainApp());
 }
 
@@ -88,6 +89,8 @@ class MainApp extends StatelessWidget {
             RedirectVisitorProfileForm(),
 
         // Student
+        // Info
+        '/payment_info':(context) =>PaymentInfoPage(), 
 
         // Student Resident
         '/resident_menu': (context) => StudentResidentMenuPage(),
@@ -138,11 +141,11 @@ class MainApp extends StatelessWidget {
         '/visitor_pass_management': (context) => VisitorPassManagementMenu(),
 
         '/visitor_register': (context) => VisitorRegisterPage(),
-        '/visitor_pass_progress': (context) => VisitorPassProgress(),
         '/visitor_personal_form': (context) => VisitorPersonalForm(),
         '/visitor_profile_page': (context) => VistitorProfilePage(),
         '/view_all_visitor_pass': (context) => ViewAllVisitorPass(),
         '/visitor_pass_scanner': (context) => VisitorPassScanner(),
+
       },
 
       initialRoute: '/',

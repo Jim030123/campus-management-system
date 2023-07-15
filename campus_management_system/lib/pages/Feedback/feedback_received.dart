@@ -63,8 +63,8 @@ class _FeedbackReceivedState extends State<FeedbackReceived> {
                               child: IconButton(
                                 icon: isFavourite
                                     ? Icon(Icons.favorite, color: Colors.red)
-                                    : Icon(Icons.favorite_border_outlined,
-                                        color: Colors.red),
+                                    :Icon(Icons.favorite_border_outlined,
+                                        color: Colors.red) ,
                                 onPressed: () {
                                   String feedbackid = feedback.id;
                                   clickfavourite(feedbackid);
@@ -82,12 +82,13 @@ class _FeedbackReceivedState extends State<FeedbackReceived> {
       await FirebaseFirestore.instance
           .collection('feedback')
           .doc(feedbackid)
-          .update({"favourite": 1});
+          .update({"favourite": isFavourite});
     } on FirebaseAuthException catch (e) {}
     ;
 
     setState(() {
       isFavourite = !isFavourite;
+      print(isFavourite);
     });
 
     // pop the loading circle

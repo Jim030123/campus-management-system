@@ -47,7 +47,6 @@ class _AddRoomFormState extends State<AddRoomForm> {
   late List name;
   late List id;
   late int currentperson = 0;
-  late List<String> currentPersonName;
 
   @override
   Widget build(BuildContext context) {
@@ -55,10 +54,8 @@ class _AddRoomFormState extends State<AddRoomForm> {
         _selectedroomType == _roomtype[1] ||
         _selectedroomType == _roomtype[2]) {
       maxCapacity = 2;
-      currentPersonName = List<String>.filled(2, "empty");
     } else {
       maxCapacity = 3;
-      currentPersonName = List<String>.filled(3, "empty");
     }
     return Scaffold(
         appBar: MyAppBar(),
@@ -160,6 +157,7 @@ class _AddRoomFormState extends State<AddRoomForm> {
   }
 
   room(BuildContext context) async {
+    String empty = "empty";
     try {
       String auth = FirebaseAuth.instance.currentUser!.uid;
 
@@ -172,8 +170,28 @@ class _AddRoomFormState extends State<AddRoomForm> {
         "room_type": _selectedroomType as String,
         "max_capacity": maxCapacity,
         "current_person": currentperson,
-        "student_name_id": currentPersonName
       });
+
+      if (_selectedroomType == _roomtype[0] ||
+          _selectedroomType == _roomtype[1] ||
+          _selectedroomType == _roomtype[2]) {
+        await FirebaseFirestore.instance
+            .collection('room_available')
+            .doc(roomnoController.text)
+            .update({
+          "room_bed_1": empty,
+          "room_bed_2": empty,
+        });
+      } else if (_selectedroomType == _roomtype[3]) {
+        await FirebaseFirestore.instance
+            .collection('room_available')
+            .doc(roomnoController.text)
+            .update({
+          "room_bed_1": empty,
+          "room_bed_2": empty,
+          "room_bed_3": empty,
+        });
+      }
     } on FirebaseAuthException catch (e) {
       // Handle the exception if needed
     }

@@ -1,3 +1,4 @@
+import 'package:campus_management_system/components/my_divider.dart';
 import 'package:campus_management_system/components/my_textstyle.dart';
 import 'package:campus_management_system/pages/student_resident/room.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -45,8 +46,10 @@ class _StudentResidentApplicationPageState
   List<String> status = [
     'Waiting the Management Review',
     'Approved',
-    'Declined'
+    'Paid',
+    'Declined',
   ];
+
   late String _selectedSRStatus = status[0];
 
   @override
@@ -85,8 +88,10 @@ class _StudentResidentApplicationPageState
                             });
                             Navigator.pop(context); // Close the dialog
                           },
-                          child: Text(status[1]),
+                          child: Text("Waitting for Student Make Payment"),
                         ),
+
+                        // TODO : Waitting payment
                         ElevatedButton(
                           onPressed: () {
                             setState(() {
@@ -95,6 +100,16 @@ class _StudentResidentApplicationPageState
                             Navigator.pop(context); // Close the dialog
                           },
                           child: Text(status[2]),
+                        ),
+
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _selectedSRStatus = status[3];
+                            });
+                            Navigator.pop(context); // Close the dialog
+                          },
+                          child: Text(status[3]),
                         ),
                       ],
                     ),
@@ -125,7 +140,7 @@ class _StudentResidentApplicationPageState
             itemCount: _allApplication.length,
             itemBuilder: (context, index) {
               DocumentSnapshot user = _allApplication[index];
-
+              print(_allApplication.length);
               if (user['status'] == selectedStatus) {
                 return Padding(
                   padding: EdgeInsets.all(16),
@@ -137,12 +152,15 @@ class _StudentResidentApplicationPageState
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ApplicationDetail(user: user),
+                          builder: (context) =>
+                              ApplicationDetail(student: user),
                         ),
                       );
                     },
                   ),
                 );
+              } else {
+                return Container();
               }
             },
           );
@@ -150,9 +168,9 @@ class _StudentResidentApplicationPageState
 }
 
 class ApplicationDetail extends StatefulWidget {
-  final DocumentSnapshot user;
+  final DocumentSnapshot student;
 
-  const ApplicationDetail({required this.user, Key? key}) : super(key: key);
+  const ApplicationDetail({required this.student, Key? key}) : super(key: key);
 
   @override
   State<ApplicationDetail> createState() => _ApplicationDetailState();
@@ -167,11 +185,11 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
     });
   }
 
-  void _openNewPage(DocumentSnapshot user) {
+  _openNewPage(DocumentSnapshot student) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => Room(user: user),
+        builder: (context) => Room(user: student),
       ),
     );
   }
@@ -182,7 +200,7 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
   final CollectionReference studentResidentApplicationCollection =
       FirebaseFirestore.instance.collection('room_available');
 
-  late String statusDecline;
+  late String SRstatus;
 
   @override
   Widget build(BuildContext context) {
@@ -202,6 +220,7 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
                   style: TextStyle(fontSize: 25),
                 ),
               ),
+              MyDivider(),
               Container(
                 padding: EdgeInsets.all(25),
                 decoration: BoxDecoration(
@@ -214,34 +233,47 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
                         alignment: Alignment.centerLeft,
                         child: MySmallText(
                             text: "Name: " +
-                                widget.user['name'] +
+                                widget.student['name'] +
                                 "\nStudent ID: " +
-                                widget.user['student_id'] +
+                                widget.student['student_id'] +
                                 "\nStudent Email: " +
-                                widget.user['email'] +
+                                widget.student['email'] +
                                 "\nGender: " +
-                                widget.user['gender'] +
+                                widget.student['gender'] +
                                 "\nParent Name: " +
-                                widget.user['parent_name'] +
+                                widget.student['parent_name'] +
                                 "\nRelationship: " +
-                                widget.user['relationship'] +
+                                widget.student['relationship'] +
                                 "\nParent Email: " +
-                                widget.user['parent_email'] +
+                                widget.student['parent_email'] +
                                 "\nRoom Type: " +
-                                widget.user['room_type']),
+                                widget.student['room_type'] +
+                                "\nStatus: " +
+                                widget.student['status']),
                       ),
                       ElevatedButton(
-                          onPressed: () {
-                            _openNewPage(widget.user);
-                          },
-                          child: Text('Choose Room')),
+                          onPressed: (widget.student['status'] == 'Paid')
+                              ? null
+                              : () {
+                                  SRstatus = "Approve";
+                                },
+                          child: Text('Approved')),
                       ElevatedButton(
-                          onPressed: () {
-                            statusDecline = "Decline";
-                            declineApplication(context, statusDecline);
-                          
-                          },
-                          child: Text('Decline'))
+                          onPressed: (widget.student['status'] == 'Paid')
+                              ? null
+                              : () {
+                                  SRstatus = "Declined";
+                                  updateSRApplicationStatus(context, SRstatus);
+                                },
+                          child: Text('Decline')),
+                      ElevatedButton(
+                        onPressed: (widget.student['status'] != 'Paid')
+                            ? null
+                            : () {
+                                _openNewPage(widget.student);
+                              },
+                        child: Text('Choose Room'),
+                      )
                     ],
                   ),
                 ),
@@ -259,9 +291,9 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
     fetchUsers();
   }
 
-  declineApplication(BuildContext context, String status) async {
+  updateSRApplicationStatus(BuildContext context, String status) async {
     try {
-      String auth = widget.user.id;
+      String auth = widget.student.id;
       print(status);
       await FirebaseFirestore.instance
           .collection('resident_application')

@@ -76,7 +76,7 @@ class _RedirectLoginPageState extends State<RedirectLoginPage> {
                     onPressed: () async {
                       getRoleFieldValue(user).toString();
                     },
-                    child: Text('Main page'))
+                    child: Text('Login Page'))
               ],
             )),
       ),

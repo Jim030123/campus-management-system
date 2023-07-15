@@ -68,6 +68,11 @@ class StudentResidentExist extends StatelessWidget {
 
                 final user = FirebaseAuth.instance.currentUser!.uid;
 
+                if (status == "Approved") {
+                  Future.delayed(Duration.zero, () {
+                    Navigator.pushReplacementNamed(context, '/payment_info');
+                  });
+                }
                 return Container(
                     child: Column(
                   children: [

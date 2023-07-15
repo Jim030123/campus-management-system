@@ -154,15 +154,7 @@ class _StudentMainPageState extends State<StudentMainPage> {
                             routename: '/feedback_menu'),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        MyMenuTile(
-                            text: 'Billing',
-                            iconnumber: 0xe481,
-                            routename: '/facility_menu'),
-                      ],
-                    ),
+                    
                     SizedBox(
                       width: 25,
                     ),

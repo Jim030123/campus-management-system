@@ -10,8 +10,6 @@ import 'package:campus_management_system/pages/general/login_page.dart';
 import '../../documentation/term_and_condition.dart';
 
 class ResidentApplicationPage extends StatefulWidget {
-
-
   ResidentApplicationPage({super.key});
 
   @override
@@ -35,7 +33,7 @@ class _ResidentApplicationPageState extends State<ResidentApplicationPage> {
       TextEditingController();
   final TextEditingController relationshipController = TextEditingController();
   final TextEditingController parentemailController = TextEditingController();
-  final String status = "Wait the Management Review";
+  final String status = "Waiting the Management Review";
   final String roomno = "";
   final _roomtype = [
     'Twin Sharing (Air Conditioned) (Block A & C) RM 660 (Short Semester) RM 990 (Long Semester)',

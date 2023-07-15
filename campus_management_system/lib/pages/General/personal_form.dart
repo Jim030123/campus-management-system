@@ -481,7 +481,7 @@ class _PersonalFormState extends State<PersonalForm> {
       String uid = FirebaseAuth.instance.currentUser!.uid;
 
       await FirebaseFirestore.instance.collection('users').doc(uid).update({
-        "contact_no":contactnoController.text,
+        "contact_no": contactnoController.text,
         "home_address": homeaddressController.text,
         "nationality": _selectedNationality as String,
         "postcode": postcodeController.text,
@@ -489,7 +489,8 @@ class _PersonalFormState extends State<PersonalForm> {
         "relationship": _selectedRelationship as String,
         "parent_contact_no": parentcontactnoController.text,
         "parent_email": parentemailController.text,
-        "full_detail": fulldetail
+        "full_detail": fulldetail,
+        "resident_status": 0
       });
 
       if (_selectedNationality == _nationaltype[0]) {
