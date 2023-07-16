@@ -20,7 +20,6 @@ class _RoomState extends State<Room> {
 
   bool _isLoading = true;
   late List<DocumentSnapshot> _allRoom;
-  String status = "Approved";
 
   final CollectionReference studentResidentApplicationCollection =
       FirebaseFirestore.instance.collection('room_available');
@@ -140,23 +139,6 @@ class _RoomState extends State<Room> {
     );
   }
 
-  assignRoom() async {
-    print(selectedRoomNo);
-    try {
-      await FirebaseFirestore.instance
-          .collection('resident_application')
-          .doc(widget.user.id)
-          .update({
-        "room_no": selectedRoomNo,
-        "status": status,
-        "room_bed_no": roomBedNo,
-      
-      });
-    } on FirebaseAuthException catch (e) {
-      // Handle the exception if needed
-    }
-  }
-
   button(DocumentSnapshot room) {
     if (room['current_person'] < room['max_capacity']) {
       return ElevatedButton(
@@ -212,7 +194,6 @@ class _RoomState extends State<Room> {
               ),
             ),
             onTap: () async {
-              
               roomBedNo = "1";
 
               try {
@@ -221,14 +202,14 @@ class _RoomState extends State<Room> {
                     .doc(selectedRoomNo)
                     .update({
                   "room_no": selectedRoomNo,
-                  "status": status,
                   "room_bed_1": widget.user['name'],
+                  "room_bed_1_id": widget.user.id,
                   "current_person": FieldValue.increment(1),
                 });
               } on FirebaseAuthException catch (e) {}
 
               print(roomBedNo);
-              assignRoom();
+              assignRoom(roomBedNo);
               Navigator.popUntil(context,
                   ModalRoute.withName('/student_resident_application'));
             },
@@ -257,10 +238,11 @@ class _RoomState extends State<Room> {
                     .update({
                   "room_no": selectedRoomNo,
                   "room_bed_2": widget.user['name'],
+                  "room_bed_2_id": widget.user.id,
                   "current_person": FieldValue.increment(1),
                 });
               } on FirebaseAuthException catch (e) {}
-              assignRoom();
+              assignRoom(roomBedNo);
               Navigator.popUntil(context,
                   ModalRoute.withName('/student_resident_application'));
             },
@@ -295,10 +277,11 @@ class _RoomState extends State<Room> {
                     .update({
                   "room_no": selectedRoomNo,
                   "room_bed_1": widget.user['name'],
+                  "room_bed_1_id": widget.user.id,
                   "current_person": FieldValue.increment(1),
                 });
               } on FirebaseAuthException catch (e) {}
-              assignRoom();
+              assignRoom(roomBedNo);
               Navigator.popUntil(context,
                   ModalRoute.withName('/student_resident_application'));
             },
@@ -327,12 +310,13 @@ class _RoomState extends State<Room> {
                     .update({
                   "room_no": selectedRoomNo,
                   "room_bed_2": widget.user['name'],
+                  "room_bed_2_id": widget.user.id,
                   "current_person": FieldValue.increment(1),
                 });
               } on FirebaseAuthException catch (e) {}
               Navigator.popUntil(context,
                   ModalRoute.withName('/student_resident_application'));
-              assignRoom();
+              assignRoom(roomBedNo);
             },
           ),
 
@@ -359,10 +343,11 @@ class _RoomState extends State<Room> {
                     .update({
                   "room_no": selectedRoomNo,
                   "room_bed_3": widget.user['name'],
+                  "room_bed_3_id": widget.user.id,
                   "current_person": FieldValue.increment(1),
                 });
               } on FirebaseAuthException catch (e) {}
-              assignRoom();
+              assignRoom(roomBedNo);
 
               Navigator.popUntil(context,
                   ModalRoute.withName('/student_resident_application'));
@@ -372,6 +357,22 @@ class _RoomState extends State<Room> {
       );
     } else {
       return Container();
+    }
+  }
+
+  assignRoom(String roomBedNo) async {
+    String status = "Student Resident";
+    try {
+      await FirebaseFirestore.instance
+          .collection('resident_application')
+          .doc(widget.user.id)
+          .update({
+        "room_no": selectedRoomNo,
+        "status": status,
+        "room_bed_no": roomBedNo,
+      });
+    } on FirebaseAuthException catch (e) {
+      // Handle the exception if needed
     }
   }
 }

@@ -56,7 +56,6 @@ class _StudentMainPageState extends State<StudentMainPage> {
           body: SingleChildScrollView(
             child: Center(
               child: Container(
-                
                 height: 1200,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -154,7 +153,6 @@ class _StudentMainPageState extends State<StudentMainPage> {
                             routename: '/feedback_menu'),
                       ],
                     ),
-                    
                     SizedBox(
                       width: 25,
                     ),

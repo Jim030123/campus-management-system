@@ -207,18 +207,8 @@ class _RoomAvailableState extends State<RoomAvailable> {
       } on FirebaseAuthException catch (e) {
         // Handle the exception
       }
-
-      try {
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc()
-            .update({
-          "room_bed_1": "empty",
-          "current_person": FieldValue.increment(-1),
-        });
-      } on FirebaseAuthException catch (e) {
-        // Handle the exception
-      }
+// update profile status after delete
+      statusUpdate(room, roombed);
     } else if (roombed == "2") {
       try {
         await FirebaseFirestore.instance
@@ -231,6 +221,7 @@ class _RoomAvailableState extends State<RoomAvailable> {
       } on FirebaseAuthException catch (e) {
         // Handle the exception
       }
+      statusUpdate(room, roombed);
     } else if (roombed == "3") {
       try {
         await FirebaseFirestore.instance
@@ -243,6 +234,7 @@ class _RoomAvailableState extends State<RoomAvailable> {
       } on FirebaseAuthException catch (e) {
         // Handle the exception
       }
+      statusUpdate(room, roombed);
     } else {
       print("Invalid room bed number");
     }
@@ -356,6 +348,56 @@ class _RoomAvailableState extends State<RoomAvailable> {
         roombed2 = room["room_bed_2"];
         roombed3 = room["room_bed_3"];
       });
+    }
+  }
+
+  // Delete and update
+
+  statusUpdate(DocumentSnapshot room, String roombed) async {
+    String uid;
+    if (roombed == "1") {
+      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(room["room_bed_1_id"])
+          .get();
+
+      uid = documentSnapshot.id;
+    } else if (roombed == "2") {
+      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(room["room_bed_2_id"])
+          .get();
+
+      uid = documentSnapshot.id;
+    } else if (roombed == "3") {
+      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(room["room_bed_3_id"])
+          .get();
+
+      uid = documentSnapshot.id;
+    } else {
+      uid = "";
+    }
+
+    try {
+      await FirebaseFirestore.instance.collection('users').doc(uid).update({
+        "resident_status": 0,
+      });
+    } on FirebaseAuthException catch (e) {
+      // Handle the exception
+    }
+
+    try {
+      await FirebaseFirestore.instance
+          .collection('resident_application')
+          .doc(uid)
+          .update({
+
+        "status": "",
+      });
+    } on FirebaseAuthException catch (e) {
+      // Handle the exception
     }
   }
 }

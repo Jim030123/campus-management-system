@@ -180,7 +180,9 @@ class _AddRoomFormState extends State<AddRoomForm> {
             .doc(roomnoController.text)
             .update({
           "room_bed_1": empty,
+          "room_bed_1_id": empty,
           "room_bed_2": empty,
+          "room_bed_2_id": empty,
         });
       } else if (_selectedroomType == _roomtype[3]) {
         await FirebaseFirestore.instance
@@ -188,8 +190,11 @@ class _AddRoomFormState extends State<AddRoomForm> {
             .doc(roomnoController.text)
             .update({
           "room_bed_1": empty,
+          "room_bed_1_id": empty,
           "room_bed_2": empty,
+          "room_bed_2_id": empty,
           "room_bed_3": empty,
+          "room_bed_3_id": empty,
         });
       }
     } on FirebaseAuthException catch (e) {

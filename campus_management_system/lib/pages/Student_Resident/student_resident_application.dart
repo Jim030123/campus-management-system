@@ -6,8 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class StudentResidentApplicationPage extends StatefulWidget {
-  const StudentResidentApplicationPage({Key? key}) : super(key: key);
-
   @override
   _StudentResidentApplicationPageState createState() =>
       _StudentResidentApplicationPageState();
@@ -47,10 +45,15 @@ class _StudentResidentApplicationPageState
     'Waiting the Management Review',
     'Approved',
     'Paid',
+    'Student Resident',
     'Declined',
   ];
 
   late String _selectedSRStatus = status[0];
+
+  Stream<QuerySnapshot> getStudentResidentApplications() {
+    return studentResidentApplicationCollection.snapshots();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,8 +93,6 @@ class _StudentResidentApplicationPageState
                           },
                           child: Text("Waitting for Student Make Payment"),
                         ),
-
-                        // TODO : Waitting payment
                         ElevatedButton(
                           onPressed: () {
                             setState(() {
@@ -101,7 +102,6 @@ class _StudentResidentApplicationPageState
                           },
                           child: Text(status[2]),
                         ),
-
                         ElevatedButton(
                           onPressed: () {
                             setState(() {
@@ -110,6 +110,15 @@ class _StudentResidentApplicationPageState
                             Navigator.pop(context); // Close the dialog
                           },
                           child: Text(status[3]),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _selectedSRStatus = status[4];
+                            });
+                            Navigator.pop(context); // Close the dialog
+                          },
+                          child: Text(status[4]),
                         ),
                       ],
                     ),
@@ -128,7 +137,19 @@ class _StudentResidentApplicationPageState
           )
         ],
       ),
-      body: filter(_selectedSRStatus),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: getStudentResidentApplications(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            _allApplication = snapshot.data!.docs;
+            return filter(_selectedSRStatus);
+          }
+        },
+      ),
     );
   }
 
@@ -303,7 +324,6 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
                             ? null
                             : () {
                                 _openNewPage(widget.student);
-
                               },
                         child: Text('Choose Room'),
                       )
@@ -333,7 +353,6 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
           .doc(auth)
           .update({
         "status": status,
-       
       });
     } on FirebaseAuthException catch (e) {}
     ;
