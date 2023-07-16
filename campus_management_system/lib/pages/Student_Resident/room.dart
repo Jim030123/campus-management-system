@@ -71,7 +71,7 @@ class _RoomState extends State<Room> {
 
                         if (room['room_type'] == _selectedRoomType) {
                           return Container(
-                            padding: EdgeInsets.all(8),
+                            padding: EdgeInsets.all(16),
                             child: ListTile(
                               tileColor: Colors.grey,
                               title: Text(room.id + " " + room['room_type']),
@@ -103,20 +103,19 @@ class _RoomState extends State<Room> {
   }
 
   assignRoom() async {
-    // try {
-    //   await FirebaseFirestore.instance
-    //       .collection('resident_application')
-    //       .doc(widget.user.id)
-    //       .update({
-    //     "room_no": selectedRoomNo,
-    //     "status": status,
-    //     "room_bed_no": roombedno,
-    //     "current_person": FieldValue.increment(1),
-
-    //   });
-    // } on FirebaseAuthException catch (e) {
-    //   // Handle the exception if needed
-    // }
+    try {
+      await FirebaseFirestore.instance
+          .collection('resident_application')
+          .doc(widget.user.id)
+          .update({
+        "room_no": selectedRoomNo,
+        "status": status,
+        "room_bed_no": roombedno,
+        "current_person": FieldValue.increment(1),
+      });
+    } on FirebaseAuthException catch (e) {
+      // Handle the exception if needed
+    }
   }
 
   confirmDialog(DocumentSnapshot<Object?> room) {
@@ -225,6 +224,7 @@ class _RoomState extends State<Room> {
               } on FirebaseAuthException catch (e) {}
               Navigator.popUntil(context,
                   ModalRoute.withName('/student_resident_application'));
+              assignRoom();
             },
           ),
 
@@ -248,13 +248,13 @@ class _RoomState extends State<Room> {
                     .doc(selectedRoomNo)
                     .update({
                   "room_no": selectedRoomNo,
-                  "status": status,
                   "room_bed_2": widget.user['name'],
                   "current_person": FieldValue.increment(1),
                 });
               } on FirebaseAuthException catch (e) {}
               Navigator.popUntil(context,
                   ModalRoute.withName('/student_resident_application'));
+              assignRoom();
             },
           ),
         ],
@@ -284,13 +284,13 @@ class _RoomState extends State<Room> {
                     .doc(selectedRoomNo)
                     .update({
                   "room_no": selectedRoomNo,
-                  "status": status,
                   "room_bed_1": widget.user['name'],
                   "current_person": FieldValue.increment(1),
                 });
               } on FirebaseAuthException catch (e) {}
               Navigator.popUntil(context,
                   ModalRoute.withName('/student_resident_application'));
+              assignRoom();
             },
           ),
 
@@ -314,13 +314,13 @@ class _RoomState extends State<Room> {
                     .doc(selectedRoomNo)
                     .update({
                   "room_no": selectedRoomNo,
-                  "status": status,
                   "room_bed_2": widget.user['name'],
                   "current_person": FieldValue.increment(1),
                 });
               } on FirebaseAuthException catch (e) {}
               Navigator.popUntil(context,
                   ModalRoute.withName('/student_resident_application'));
+              assignRoom();
             },
           ),
 
@@ -344,13 +344,14 @@ class _RoomState extends State<Room> {
                     .doc(selectedRoomNo)
                     .update({
                   "room_no": selectedRoomNo,
-                  "status": status,
                   "room_bed_3": widget.user['name'],
                   "current_person": FieldValue.increment(1),
                 });
               } on FirebaseAuthException catch (e) {}
+
               Navigator.popUntil(context,
                   ModalRoute.withName('/student_resident_application'));
+              assignRoom();
             },
           ),
         ],
@@ -358,100 +359,5 @@ class _RoomState extends State<Room> {
     } else {
       return Container();
     }
-    return Wrap(
-      spacing: 25,
-      runSpacing: 25,
-      children: [
-        // 1
-        GestureDetector(
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(16)),
-              color: Colors.green,
-            ),
-            padding: const EdgeInsets.all(14),
-            child: const Text(
-              "Room Bed 1",
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-          onTap: () async {
-            try {
-              await FirebaseFirestore.instance
-                  .collection('room_available')
-                  .doc(selectedRoomNo)
-                  .update({
-                "room_no": selectedRoomNo,
-                "status": status,
-                "room_bed_1": widget.user['name'],
-                "current_person": FieldValue.increment(1),
-              });
-            } on FirebaseAuthException catch (e) {}
-            Navigator.popUntil(
-                context, ModalRoute.withName('/student_resident_application'));
-          },
-        ),
-
-        // 2
-        GestureDetector(
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(16)),
-              color: Colors.green,
-            ),
-            padding: const EdgeInsets.all(14),
-            child: const Text(
-              "Room Bed 2",
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-          onTap: () async {
-            try {
-              await FirebaseFirestore.instance
-                  .collection('room_available')
-                  .doc(selectedRoomNo)
-                  .update({
-                "room_no": selectedRoomNo,
-                "status": status,
-                "room_bed_2": widget.user['name'],
-                "current_person": FieldValue.increment(1),
-              });
-            } on FirebaseAuthException catch (e) {}
-            Navigator.popUntil(
-                context, ModalRoute.withName('/student_resident_application'));
-          },
-        ),
-
-        // 3
-        GestureDetector(
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(16)),
-              color: Colors.green,
-            ),
-            padding: const EdgeInsets.all(14),
-            child: const Text(
-              "Room Bed 3",
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-          onTap: () async {
-            try {
-              await FirebaseFirestore.instance
-                  .collection('room_available')
-                  .doc(selectedRoomNo)
-                  .update({
-                "room_no": selectedRoomNo,
-                "status": status,
-                "room_bed_3": widget.user['name'],
-                "current_person": FieldValue.increment(1),
-              });
-            } on FirebaseAuthException catch (e) {}
-            Navigator.popUntil(
-                context, ModalRoute.withName('/student_resident_application'));
-          },
-        ),
-      ],
-    );
   }
 }

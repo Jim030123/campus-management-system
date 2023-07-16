@@ -23,7 +23,7 @@ class PaymentInfoPage extends StatelessWidget {
                   height: 25,
                 ),
                 Text(
-                  'Campus Address: PTD 64888, Jalan Selatan Utama, KM 15, Off, Skudai Lbh, 81300 Skudai, Johor \nOnline Banking:\n CIMB XXXX_XXXX_XXXX_XXXX',
+                  'Campus Address: PTD 64888, Jalan Selatan Utama, KM 15, Off, Skudai Lbh, 81300 Skudai, Johor \nPayee Name: Kolej University Selatan\nOnline Banking:\nCIMB 800 628 951 5\nPublic Bank 315 001 226 6\nRHB Bank 201 400 000 497 39\nPlease fax (07-558 9986) or email (accfin@sc.edu.my) payment notice together with bank in slip which indicates student name, student ID, contact number and payment details.',
                   style: TextStyle(fontSize: 15),
                 ),
                 SizedBox(

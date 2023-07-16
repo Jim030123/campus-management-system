@@ -56,7 +56,7 @@ class _StudentResidentApplicationPageState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Student Resident Application List'),
+        title: Text('Student Resident Management'),
         actions: <Widget>[
           IconButton(
             icon: Icon(
@@ -136,33 +136,51 @@ class _StudentResidentApplicationPageState
     print(_selectedSRStatus);
     return _isLoading
         ? Center(child: CircularProgressIndicator())
-        : ListView.builder(
-            itemCount: _allApplication.length,
-            itemBuilder: (context, index) {
-              DocumentSnapshot user = _allApplication[index];
-              print(_allApplication.length);
-              if (user['status'] == selectedStatus) {
-                return Padding(
-                  padding: EdgeInsets.all(16),
-                  child: ListTile(
-                    tileColor: Colors.grey,
-                    title: Text(user['email'] ?? 'No Email'),
-                    subtitle: Text(user['name'] + ' ' + user['student_id']),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              ApplicationDetail(student: user),
-                        ),
-                      );
+        : Container(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Container(
+                  child: Align(
+                      alignment: FractionalOffset.topLeft,
+                      child: MyMiddleText(
+                          text: 'Student Resident Application: ' +
+                              _selectedSRStatus)),
+                ),
+                MyDivider(),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: _allApplication.length,
+                    itemBuilder: (context, index) {
+                      DocumentSnapshot user = _allApplication[index];
+                      print(_allApplication.length);
+                      if (user['status'] == selectedStatus) {
+                        return Padding(
+                          padding: EdgeInsets.all(16),
+                          child: ListTile(
+                            tileColor: Colors.grey,
+                            title: Text(user['email'] ?? 'No Email'),
+                            subtitle:
+                                Text(user['name'] + ' ' + user['student_id']),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      ApplicationDetail(student: user),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      } else {
+                        return Container();
+                      }
                     },
                   ),
-                );
-              } else {
-                return Container();
-              }
-            },
+                ),
+              ],
+            ),
           );
   }
 }
@@ -255,7 +273,9 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
                           onPressed: (widget.student['status'] == 'Paid')
                               ? null
                               : () {
-                                  SRstatus = "Approve";
+                                  SRstatus = "Approved";
+                                  updateSRApplicationStatus(context, SRstatus);
+                                  Navigator.pop(context);
                                 },
                           child: Text('Approved')),
                       ElevatedButton(
@@ -264,6 +284,7 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
                               : () {
                                   SRstatus = "Declined";
                                   updateSRApplicationStatus(context, SRstatus);
+                                  Navigator.pop(context);
                                 },
                           child: Text('Decline')),
                       ElevatedButton(
