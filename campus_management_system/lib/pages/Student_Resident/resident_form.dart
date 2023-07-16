@@ -35,11 +35,12 @@ class _ResidentApplicationPageState extends State<ResidentApplicationPage> {
   final TextEditingController parentemailController = TextEditingController();
   final String status = "Waiting the Management Review";
   final String roomno = "";
+  final String roombedno = "";
   final _roomtype = [
-    'Twin Sharing (Air Conditioned) (Block A & C) RM 660 (Short Semester) RM 990 (Long Semester)',
-    'Twin Sharing (Non Air Conditioned) (Block B & D) RM 840 (Short Semester) RM 1 260 (Long Semester)',
-    'Twin Sharing (Air Conditioned) (Block E) RM 1 500 (Short Semester)  RM 2 250 (Long Semester)',
-    'Trio Sharing (Air Conditioned) (Block E) RM 1 050 (Short Semester)  RM 1 575 (Long Semester)'
+    'Twin Sharing (Air Conditioned) (Block A & C)',
+    'Twin Sharing (Non Air Conditioned) (Block B & D)',
+    'Twin Sharing (Air Conditioned) (Block E)',
+    'Trio Sharing (Air Conditioned) (Block E)'
   ];
 
   String? _selectedRoomType = "";
@@ -301,7 +302,7 @@ class _ResidentApplicationPageState extends State<ResidentApplicationPage> {
         "name": nameController.text,
         "email": emailController.text,
         "gender": genderController.text,
-        "stuednt_id": studentidController.text,
+        "student_id": studentidController.text,
         "parent_name": parentnameController.text,
         "relationship": relationshipController.text,
         "parent_contact_no": parentcontactnoController.text,
@@ -309,6 +310,8 @@ class _ResidentApplicationPageState extends State<ResidentApplicationPage> {
         "room_type": _selectedRoomType as String,
         "status": status,
         "room_no": roomno,
+        "room_bed_no": roombedno,
+        "id": auth
       });
       print(auth);
     } on FirebaseAuthException catch (e) {

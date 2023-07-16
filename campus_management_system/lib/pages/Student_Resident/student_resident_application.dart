@@ -270,7 +270,8 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
                                 widget.student['status']),
                       ),
                       ElevatedButton(
-                          onPressed: (widget.student['status'] == 'Paid')
+                          onPressed: (widget.student['status'] !=
+                                  'Waiting the Management Review')
                               ? null
                               : () {
                                   SRstatus = "Approved";
@@ -279,7 +280,8 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
                                 },
                           child: Text('Approved')),
                       ElevatedButton(
-                          onPressed: (widget.student['status'] == 'Paid')
+                          onPressed: (widget.student['status'] !=
+                                  'Waiting the Management Review')
                               ? null
                               : () {
                                   SRstatus = "Declined";
@@ -288,10 +290,20 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
                                 },
                           child: Text('Decline')),
                       ElevatedButton(
+                          onPressed: (widget.student['status'] != 'Approved')
+                              ? null
+                              : () {
+                                  SRstatus = "Paid";
+                                  updateSRApplicationStatus(context, SRstatus);
+                                  Navigator.pop(context);
+                                },
+                          child: Text('Paid')),
+                      ElevatedButton(
                         onPressed: (widget.student['status'] != 'Paid')
                             ? null
                             : () {
                                 _openNewPage(widget.student);
+
                               },
                         child: Text('Choose Room'),
                       )
@@ -319,7 +331,10 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
       await FirebaseFirestore.instance
           .collection('resident_application')
           .doc(auth)
-          .update({"status": status});
+          .update({
+        "status": status,
+       
+      });
     } on FirebaseAuthException catch (e) {}
     ;
     // pop the loading circle

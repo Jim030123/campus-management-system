@@ -40,93 +40,110 @@ class _RoomAvailableState extends State<RoomAvailable> {
   late String _selectedRoomType = RoomType[0];
   late String roombed1;
   late String roombed2;
+  late String roombed3;
+
   late String roombedno;
+
+  Stream<QuerySnapshot> roomStream() {
+    return RoomCollection.snapshots();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Room List'),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(
-                Icons.filter_none_outlined,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text('Select Room Type'),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                _selectedRoomType = RoomType[0];
-                              });
-                              Navigator.pop(context);
-                            },
-                            child: Text(RoomType[0]),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                _selectedRoomType = RoomType[1];
-                              });
-                              Navigator.pop(context); // Close the dialog
-                            },
-                            child: Text(RoomType[1]),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                _selectedRoomType = RoomType[2];
-                              });
-                              Navigator.pop(context); // Close the dialog
-                            },
-                            child: Text(RoomType[2]),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                _selectedRoomType = RoomType[3];
-                              });
-                              Navigator.pop(context); // Close the dialog
-                            },
-                            child: Text(RoomType[3]),
-                          ),
-                        ],
-                      ),
-                      actions: [
+      appBar: AppBar(
+        title: Text('Room List'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.filter_none_outlined,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Select Room Type'),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
                         ElevatedButton(
                           onPressed: () {
+                            setState(() {
+                              _selectedRoomType = RoomType[0];
+                            });
+                            Navigator.pop(context);
+                          },
+                          child: Text(RoomType[0]),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _selectedRoomType = RoomType[1];
+                            });
                             Navigator.pop(context); // Close the dialog
                           },
-                          child: Text('Cancel'),
-                        )
+                          child: Text(RoomType[1]),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _selectedRoomType = RoomType[2];
+                            });
+                            Navigator.pop(context); // Close the dialog
+                          },
+                          child: Text(RoomType[2]),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _selectedRoomType = RoomType[3];
+                            });
+                            Navigator.pop(context); // Close the dialog
+                          },
+                          child: Text(RoomType[3]),
+                        ),
                       ],
-                    );
-                  },
-                );
-              },
-            )
-          ],
-        ),
-        body: filter(_selectedRoomType));
+                    ),
+                    actions: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context); // Close the dialog
+                        },
+                        child: Text('Cancel'),
+                      )
+                    ],
+                  );
+                },
+              );
+            },
+          )
+        ],
+      ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: roomStream(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+          final roomDocs = snapshot.data?.docs ?? [];
+          return filter(roomDocs, _selectedRoomType);
+        },
+      ),
+    );
   }
 
-  Widget filter(String selectedRoomType) {
-    print(_selectedRoomType);
+  Widget filter(List<QueryDocumentSnapshot> roomDocs, String selectedRoomType) {
     return _isLoading
         ? Center(child: CircularProgressIndicator())
         : ListView.builder(
-            itemCount: _allRoomType.length,
+            itemCount: roomDocs.length,
             itemBuilder: (context, index) {
-              DocumentSnapshot room = _allRoomType[index];
-              print(_allRoomType.length);
+              DocumentSnapshot room = roomDocs[index];
 
               if (room['room_type'] == selectedRoomType) {
                 return Padding(
@@ -147,56 +164,10 @@ class _RoomAvailableState extends State<RoomAvailable> {
                     trailing: ElevatedButton(
                       child: Text("Modify"),
                       onPressed: () {
-                        setState(() {
-                          roombed1 = room["room_bed_1"];
-                          roombed2 = room["room_bed_2"];
-                        });
-
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text('Student in Room'),
-                              content: Text("Room Bed 1: " +
-                                  room["room_bed_1"] +
-                                  "\nRoom Bed 2: " +
-                                  room["room_bed_2"]),
-                              actions: [
-                                ElevatedButton(
-                                  onPressed: roombed1 == "empty"
-                                      ? null
-                                      : () {
-                                          setState(() {
-                                            roombedno = "1";
-                                          });
-                                          removeStudentfromSR(
-                                              room, room.id, roombedno);
-                                          Navigator.pop(
-                                              context); // Close the dialog
-                                        },
-                                  child: Text("Remove Room Bed 1 student"),
-                                ),
-                                ElevatedButton(
-                                  onPressed: roombed2 == "empty"
-                                      ? null
-                                      : () {
-                                          setState(() {
-                                            roombedno = "2";
-                                          });
-                                          removeStudentfromSR(
-                                              room, room.id, roombedno);
-                                          Navigator.pop(
-                                              context); // Close the dialog
-                                        },
-                                  child: Text("Remove Room Bed 2 student"),
-                                ),
-                              ],
-                            );
-                          },
-                        );
+                        setbedstate(room, room["max_capacity"]);
+                        numberBedInRoom(room, room["max_capacity"]);
                       },
                     ),
-                    onTap: () {},
                   ),
                 );
               } else {
@@ -223,33 +194,168 @@ class _RoomAvailableState extends State<RoomAvailable> {
   }
 
   removeStudentfromSR(
-      DocumentSnapshot room, String roomno, String roombed) async {
+      DocumentSnapshot room, String roomNo, String roombed) async {
     if (roombed == "1") {
       try {
         await FirebaseFirestore.instance
             .collection('room_available')
-            .doc(roomno)
+            .doc(roomNo)
             .update({
           "room_bed_1": "empty",
           "current_person": FieldValue.increment(-1),
         });
-      } on FirebaseAuthException catch (e) {}
-      ;
+      } on FirebaseAuthException catch (e) {
+        // Handle the exception
+      }
+
+      try {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc()
+            .update({
+          "room_bed_1": "empty",
+          "current_person": FieldValue.increment(-1),
+        });
+      } on FirebaseAuthException catch (e) {
+        // Handle the exception
+      }
     } else if (roombed == "2") {
       try {
         await FirebaseFirestore.instance
             .collection('room_available')
-            .doc(roomno)
+            .doc(roomNo)
             .update({
           "room_bed_2": "empty",
           "current_person": FieldValue.increment(-1),
         });
-      } on FirebaseAuthException catch (e) {}
-      ;
+      } on FirebaseAuthException catch (e) {
+        // Handle the exception
+      }
+    } else if (roombed == "3") {
+      try {
+        await FirebaseFirestore.instance
+            .collection('room_available')
+            .doc(roomNo)
+            .update({
+          "room_bed_3": "empty",
+          "current_person": FieldValue.increment(-1),
+        });
+      } on FirebaseAuthException catch (e) {
+        // Handle the exception
+      }
     } else {
-      print("as");
+      print("Invalid room bed number");
     }
+  }
 
-    // pop the loading circle
+  numberBedInRoom(DocumentSnapshot room, int sa) {
+    if (sa == 2) {
+      return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Student in Room'),
+            content: Text("Room Bed 1: " +
+                room["room_bed_1"] +
+                "\nRoom Bed 2: " +
+                room["room_bed_2"]),
+            actions: [
+              ElevatedButton(
+                onPressed: roombed1 == "empty"
+                    ? null
+                    : () {
+                        setState(() {
+                          roombedno = "1";
+                        });
+                        removeStudentfromSR(room, room.id, roombedno);
+                        Navigator.pop(context); // Close the dialog
+                      },
+                child: Text("Remove Room Bed 1 student"),
+              ),
+              ElevatedButton(
+                onPressed: roombed2 == "empty"
+                    ? null
+                    : () {
+                        setState(() {
+                          roombedno = "2";
+                        });
+                        removeStudentfromSR(room, room.id, roombedno);
+                        Navigator.pop(context); // Close the dialog
+                      },
+                child: Text("Remove Room Bed 2 student"),
+              ),
+            ],
+          );
+        },
+      );
+    } else if (sa == 3) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Student in Room'),
+            content: Text("Room Bed 1: " +
+                room["room_bed_1"] +
+                "\nRoom Bed 2: " +
+                room["room_bed_2"] +
+                "\nRoom Bed 3: " +
+                room["room_bed_3"]),
+            actions: [
+              ElevatedButton(
+                onPressed: roombed1 == "empty"
+                    ? null
+                    : () {
+                        setState(() {
+                          roombedno = "1";
+                        });
+                        removeStudentfromSR(room, room.id, roombedno);
+                        Navigator.pop(context); // Close the dialog
+                      },
+                child: Text("Remove Room Bed 1 student"),
+              ),
+              ElevatedButton(
+                onPressed: roombed2 == "empty"
+                    ? null
+                    : () {
+                        setState(() {
+                          roombedno = "2";
+                        });
+                        removeStudentfromSR(room, room.id, roombedno);
+                        Navigator.pop(context); // Close the dialog
+                      },
+                child: Text("Remove Room Bed 2 student"),
+              ),
+              ElevatedButton(
+                onPressed: roombed3 == "empty"
+                    ? null
+                    : () {
+                        setState(() {
+                          roombedno = "3";
+                        });
+                        removeStudentfromSR(room, room.id, roombedno);
+                        Navigator.pop(context); // Close the dialog
+                      },
+                child: Text("Remove Room Bed 3 student"),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  setbedstate(DocumentSnapshot room, int sa) {
+    if (sa == 2) {
+      return setState(() {
+        roombed1 = room["room_bed_1"];
+        roombed2 = room["room_bed_2"];
+      });
+    } else if (sa == 3) {
+      return setState(() {
+        roombed1 = room["room_bed_1"];
+        roombed2 = room["room_bed_2"];
+        roombed3 = room["room_bed_3"];
+      });
+    }
   }
 }

@@ -18,8 +18,6 @@ class Room extends StatefulWidget {
 class _RoomState extends State<Room> {
   late DocumentSnapshot user;
 
-  late String roombedno;
-
   bool _isLoading = true;
   late List<DocumentSnapshot> _allRoom;
   String status = "Approved";
@@ -31,7 +29,6 @@ class _RoomState extends State<Room> {
   void initState() {
     super.initState();
     fetchUsers();
-    print(_selectedRoomType);
   }
 
   Future<void> fetchUsers() async {
@@ -43,8 +40,10 @@ class _RoomState extends State<Room> {
   }
 
   late String selectedRoomNo;
+  late String roomBedNo = "";
 
   late String _selectedRoomType = widget.user['room_type'];
+  late String gender = widget.user['gender'];
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +68,8 @@ class _RoomState extends State<Room> {
                       itemBuilder: (context, index) {
                         DocumentSnapshot room = _allRoom[index];
 
-                        if (room['room_type'] == _selectedRoomType) {
+                        if (room['room_type'] == _selectedRoomType &&
+                            room['room_gender'] == gender) {
                           return Container(
                             padding: EdgeInsets.all(16),
                             child: ListTile(
@@ -102,22 +102,6 @@ class _RoomState extends State<Room> {
     );
   }
 
-  assignRoom() async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('resident_application')
-          .doc(widget.user.id)
-          .update({
-        "room_no": selectedRoomNo,
-        "status": status,
-        "room_bed_no": roombedno,
-        "current_person": FieldValue.increment(1),
-      });
-    } on FirebaseAuthException catch (e) {
-      // Handle the exception if needed
-    }
-  }
-
   confirmDialog(DocumentSnapshot<Object?> room) {
     showDialog(
       context: context,
@@ -136,7 +120,7 @@ class _RoomState extends State<Room> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                numberOfBed(room, room["max_capacity"]),
+                numberOfBed(room, room["max_capacity"], roomBedNo),
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(16)),
@@ -154,6 +138,23 @@ class _RoomState extends State<Room> {
         ],
       ),
     );
+  }
+
+  assignRoom() async {
+    print(selectedRoomNo);
+    try {
+      await FirebaseFirestore.instance
+          .collection('resident_application')
+          .doc(widget.user.id)
+          .update({
+        "room_no": selectedRoomNo,
+        "status": status,
+        "room_bed_no": roomBedNo,
+      
+      });
+    } on FirebaseAuthException catch (e) {
+      // Handle the exception if needed
+    }
   }
 
   button(DocumentSnapshot room) {
@@ -191,7 +192,7 @@ class _RoomState extends State<Room> {
     }
   }
 
-  numberOfBed(DocumentSnapshot room, int sa) {
+  numberOfBed(DocumentSnapshot room, int sa, String roomBedNo) {
     if (sa == 2) {
       return Wrap(
         spacing: 25,
@@ -211,6 +212,9 @@ class _RoomState extends State<Room> {
               ),
             ),
             onTap: () async {
+              
+              roomBedNo = "1";
+
               try {
                 await FirebaseFirestore.instance
                     .collection('room_available')
@@ -222,9 +226,11 @@ class _RoomState extends State<Room> {
                   "current_person": FieldValue.increment(1),
                 });
               } on FirebaseAuthException catch (e) {}
+
+              print(roomBedNo);
+              assignRoom();
               Navigator.popUntil(context,
                   ModalRoute.withName('/student_resident_application'));
-              assignRoom();
             },
           ),
 
@@ -242,6 +248,8 @@ class _RoomState extends State<Room> {
               ),
             ),
             onTap: () async {
+              roomBedNo = "2";
+
               try {
                 await FirebaseFirestore.instance
                     .collection('room_available')
@@ -252,9 +260,9 @@ class _RoomState extends State<Room> {
                   "current_person": FieldValue.increment(1),
                 });
               } on FirebaseAuthException catch (e) {}
+              assignRoom();
               Navigator.popUntil(context,
                   ModalRoute.withName('/student_resident_application'));
-              assignRoom();
             },
           ),
         ],
@@ -278,6 +286,8 @@ class _RoomState extends State<Room> {
               ),
             ),
             onTap: () async {
+              roomBedNo = "1";
+
               try {
                 await FirebaseFirestore.instance
                     .collection('room_available')
@@ -288,9 +298,9 @@ class _RoomState extends State<Room> {
                   "current_person": FieldValue.increment(1),
                 });
               } on FirebaseAuthException catch (e) {}
+              assignRoom();
               Navigator.popUntil(context,
                   ModalRoute.withName('/student_resident_application'));
-              assignRoom();
             },
           ),
 
@@ -308,6 +318,8 @@ class _RoomState extends State<Room> {
               ),
             ),
             onTap: () async {
+              roomBedNo = "2";
+
               try {
                 await FirebaseFirestore.instance
                     .collection('room_available')
@@ -338,6 +350,8 @@ class _RoomState extends State<Room> {
               ),
             ),
             onTap: () async {
+              roomBedNo = "3";
+
               try {
                 await FirebaseFirestore.instance
                     .collection('room_available')
@@ -348,10 +362,10 @@ class _RoomState extends State<Room> {
                   "current_person": FieldValue.increment(1),
                 });
               } on FirebaseAuthException catch (e) {}
+              assignRoom();
 
               Navigator.popUntil(context,
                   ModalRoute.withName('/student_resident_application'));
-              assignRoom();
             },
           ),
         ],
