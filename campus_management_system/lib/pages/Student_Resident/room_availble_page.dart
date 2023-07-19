@@ -387,15 +387,13 @@ class _RoomAvailableState extends State<RoomAvailable> {
     } on FirebaseAuthException catch (e) {
       // Handle the exception
     }
-
+    
+// delete document
     try {
       await FirebaseFirestore.instance
           .collection('resident_application')
           .doc(uid)
-          .update({
-
-        "status": "",
-      });
+          .delete();
     } on FirebaseAuthException catch (e) {
       // Handle the exception
     }

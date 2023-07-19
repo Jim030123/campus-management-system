@@ -12,6 +12,7 @@ import 'package:intl/intl.dart';
 import 'package:campus_management_system/pages/general/login_page.dart';
 
 import '../../components/my_camera.dart';
+import '../../documentation/term_and_condition.dart';
 
 class RegistrationVehicleForm extends StatefulWidget {
   RegistrationVehicleForm({super.key});
@@ -23,7 +24,9 @@ class RegistrationVehicleForm extends StatefulWidget {
 
 class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
   @override
-  _RegistrationVehicleFormState() {}
+  _RegistrationVehicleFormState() {
+    _selectedBrandType = _vehicleBrand[0];
+  }
 
   final _formKey = GlobalKey<FormState>();
 
@@ -35,6 +38,31 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
   final String status = "Waiting the Management Review";
 
   bool checkboxValue = false;
+
+  final _vehicleBrand = [
+    'Perodua',
+    'Proton',
+    'Honda',
+    'Toyota',
+    'BMW',
+    'Audi',
+    'Lexus',
+    'Mazda',
+    'Mercedes-Benz',
+    'Nissan',
+    'Suzuki',
+    'Volvo',
+    'Ford',
+    'Subaru',
+    'Porsche',
+    'Mitsubishi',
+    'Infiniti',
+    'Hyundai',
+    'Chevrolet',
+    'Isuzu'
+  ];
+
+  String? _selectedBrandType = "";
 
   bool value = false;
 
@@ -98,7 +126,7 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
                         children: [
                           // name
                           TextFormField(
-                            // readOnly: true,
+                            enabled: false,
                             controller: nameController,
                             decoration: InputDecoration(labelText: 'Name'),
                             validator: (value) {
@@ -110,7 +138,7 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
                           ),
 
                           TextFormField(
-                            // readOnly: true,
+                            enabled: false,
                             controller: emailController,
                             decoration: InputDecoration(labelText: 'Email'),
                             validator: (value) {
@@ -121,7 +149,7 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
                             },
                           ),
                           TextFormField(
-                            // readOnly: true,
+                            enabled: false,
                             controller: idController,
                             decoration: InputDecoration(labelText: 'ID'),
                             validator: (value) {
@@ -129,6 +157,26 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
                                 return 'Please enter your Email';
                               }
                               return null;
+                            },
+                          ),
+
+                          DropdownButtonFormField(
+                            decoration: InputDecoration(
+                              labelText: "Vehicle Type",
+                              prefixIcon: Icon(Icons.verified_user),
+                              border: UnderlineInputBorder(),
+                            ),
+                            value: _selectedBrandType,
+                            items: _vehicleBrand
+                                .map((e) => DropdownMenuItem(
+                                      child: Text(e),
+                                      value: e,
+                                    ))
+                                .toList(),
+                            onChanged: (val) {
+                              setState(() {
+                                _selectedBrandType = val as String;
+                              });
                             },
                           ),
                           TextFormField(
@@ -156,33 +204,43 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
 
                           SizedBox(height: 16.0),
 
-                          // ElevatedButton(
-                          //   child: Text('Take Photo'),
-                          //   onPressed: () async {
-                          //     await availableCameras().then((value) =>
-                          //         Navigator.push(
-                          //             context,
-                          //             MaterialPageRoute(
-                          //                 builder: (_) =>
-                          //                     CameraPage(cameras: value))));
-                          //   },
-                          // ),
+                          ElevatedButton(
+                            child: Text('Take Photo'),
+                            onPressed: () async {
+                              await availableCameras().then((value) =>
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) =>
+                                              CameraPage(cameras: value))));
+                            },
+                          ),
 
                           Row(
                             children: [
-                              Checkbox(
-                                value: checkboxValue,
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    checkboxValue = value ?? false;
-                                  });
+                              GestureDetector(
+                                onTap: () {
+                                  _showAlertDialog();
                                 },
+                                child: Row(
+                                  children: [
+                                    Checkbox(
+                                      value: checkboxValue,
+                                      onChanged: (bool? value) {
+                                        setState(() {
+                                          checkboxValue = value ?? false;
+                                        });
+                                      },
+                                    ),
+                                    Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.7,
+                                        child: Text(
+                                            'I agree all Term & Condition'))
+                                  ],
+                                ),
                               ),
-                              Container(
-                                width: MediaQuery.of(context).size.width * 0.7,
-                                child: Text(
-                                    "I have read and agree to Terms of Service and Privacy Policy"),
-                              )
                             ],
                           ),
 
@@ -222,8 +280,6 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
       String auth = FirebaseAuth.instance.currentUser!.uid;
 
       await FirebaseFirestore.instance
-          .collection('users')
-          .doc(auth)
           .collection('vehicle')
           .doc(vehiclenumberController.text)
           .set({
@@ -231,7 +287,8 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
         "email": emailController.text,
         "id": idController.text,
         "vehicle_number": vehiclenumberController.text,
-        "model": modelnameController.text,
+        "vehicle_brand": _selectedBrandType as String,
+        "vehicle_model": modelnameController.text,
         "status": status
       });
       print(auth);
@@ -247,9 +304,8 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Create account'),
-          content: Text(
-              'This also will create a profile for' + emailController.text),
+          title: Text('Register Vehicle'),
+          content: Text('The registration will send to management review'),
           actions: [
             TextButton(
               child: Text('OK'),
@@ -263,5 +319,25 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
     );
 
     // pop the loading circle
+  }
+
+  void _showAlertDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Terms of Service and Privacy Policy'),
+          content: SingleChildScrollView(child: RegisterVehicleTnC()),
+          actions: [
+            TextButton(
+              child: Text('Close'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

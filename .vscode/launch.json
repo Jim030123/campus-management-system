@@ -1,0 +1,28 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "campus_management_system",
+            "cwd": "campus_management_system",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "campus_management_system (profile mode)",
+            "cwd": "campus_management_system",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "campus_management_system (release mode)",
+            "cwd": "campus_management_system",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}

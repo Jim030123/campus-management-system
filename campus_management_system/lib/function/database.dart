@@ -5,8 +5,8 @@ List role = ['Student', 'Management', 'Visitor'];
 
 
 Future<DocumentSnapshot> findUserById(String userid) async {
-    DocumentSnapshot documentSnapshot =
+    DocumentSnapshot user =
         await FirebaseFirestore.instance.collection('users').doc(userid).get();
-    return documentSnapshot;
+    return user;
   }
 

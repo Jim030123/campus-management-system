@@ -477,8 +477,13 @@ class _ManagementProfilePage extends State<ManagementProfilePage> {
         child: FutureBuilder(
           future: getdatafromDB(),
           builder: (context, snapshot) {
-            // String name = snapshot.data as String;
-
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator(); // or any loading indicator
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text('Error occurred while loading data'),
+              );
+            } else {}
             List<String> studentdetail = snapshot.data as List<String>;
             String name = studentdetail[0];
             String gender = studentdetail[1];
@@ -583,6 +588,15 @@ class _ManagementProfilePage extends State<ManagementProfilePage> {
                                       FutureBuilder(
                                         future: fulldetail(role),
                                         builder: (context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return CircularProgressIndicator(); // or any loading indicator
+                                          } else if (snapshot.hasError) {
+                                            return Center(
+                                              child: Text(
+                                                  'Error occurred while loading data'),
+                                            );
+                                          } else {}
                                           List<String> roledetail =
                                               snapshot.data as List<String>;
 

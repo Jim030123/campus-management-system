@@ -29,3 +29,13 @@ class ProfileDetailTnC extends StatelessWidget {
         '1. I understand and agree that Southern University College has the permission to use my personal data for the purpose of administrating. \n\n2. I have read, understood and agreed to the Personal Data Protection Act of Southern University College.\n\n3. I declare that the information provided are true and accurate. Southern University College reserves the right to reject the application or terminate my student status with immediate effect if the particulars are found to be not authentic.\n\n4. I agree and allow Southern University College to verify and authenticate my personal documents from any institution which issues this information.');
   }
 }
+
+class RegisterVehicleTnC extends StatelessWidget {
+  const RegisterVehicleTnC({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+       'Eligibility: Vehicle registration is open to all faculty members, staff, students, and visitors with a valid driver\'s license and proper identification. Only registered vehicles are allowed on the SUC campus.\n\nVehicle Documentation: To register a vehicle, the owner must provide valid proof of ownership, vehicle insurance, and vehicle registration documents. All documents must be up-to-date and in the owner\'s name.\n\nParking Permits: A valid parking permit issued by the SUC campus authorities is mandatory for all registered vehicles. Permits must be displayed clearly on the vehicle\'s windshield at all times while on campus.\n\nVisitor Parking: Visitors must obtain a temporary parking permit from the campus security office. The permit must be displayed on the vehicle during the visit.\n\nVehicle Condition: Vehicles must be in roadworthy condition, free from any mechanical defects that could pose a safety risk to others. The campus authorities reserve the right to deny registration to vehicles that do not meet safety standards.\n\nSpeed Limits: All vehicles on the campus must adhere to the posted speed limits. The maximum speed limit is 30 kph (kilometer per hour). Speeding violations may result in disciplinary action.');
+  }
+}

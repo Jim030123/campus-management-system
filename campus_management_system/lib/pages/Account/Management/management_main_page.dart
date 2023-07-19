@@ -37,6 +37,16 @@ class _ManagementMainPageState extends State<ManagementMainPage> {
       body: FutureBuilder(
           future: getdatafromDB(),
           builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator(); // or any loading indicator
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text('Error occurred while loading data'),
+              );
+            } else {
+              List<String> dataList = snapshot.data as List<String>;
+              // rest of your code
+            }
             List<String> dataList = snapshot.data as List<String>;
             String name = dataList[0];
             String email = dataList[1];
