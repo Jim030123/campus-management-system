@@ -62,53 +62,63 @@ class _QRAutoFillFormPageState extends State<QRAutoFillFormPage> {
   Widget buildScannedDataText(BuildContext context) {
     return Positioned(
       bottom: 16.0,
-      child: InkWell(
-        onTap: () {
-          // 1
-          if (widget.selectedbutton == 1) {
-            controller?.pauseCamera();
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ResidentApplicationPageM(id: scannedData),
-              ),
-            ).then((_) {
-              // Resume camera when returning from ScannedDataPage
-              controller?.resumeCamera();
-            });
-          }
+      right: 20,
+      child: Container(
+        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(16)),
+          color: Colors.black,
+        ),
+        child: InkWell(
+          onTap: () {
+            // 1
+            if (widget.selectedbutton == 1) {
+              controller?.pauseCamera();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      ResidentApplicationPageM(id: scannedData),
+                ),
+              ).then((_) {
+                // Resume camera when returning from ScannedDataPage
+                controller?.resumeCamera();
+              });
+            }
 
-          // 2
-          else if (widget.selectedbutton == 2) {
-            controller?.pauseCamera();
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => RegistrationVehicleFormM(id: scannedData),
-              ),
-            ).then((_) {
-              // Resume camera when returning from ScannedDataPage
-              controller?.resumeCamera();
-            });
-          } else if (widget.selectedbutton == 3) {
-            controller?.pauseCamera();
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => RegisterVisitorPassM(id: scannedData),
-              ),
-            ).then((_) {
-              // Resume camera when returning from ScannedDataPage
-              controller?.resumeCamera();
-            });
-          }
-        },
-        child: Text(
-          scannedData,
-          style: TextStyle(
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+            // 2
+            else if (widget.selectedbutton == 2) {
+              controller?.pauseCamera();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      RegistrationVehicleFormM(id: scannedData),
+                ),
+              ).then((_) {
+                // Resume camera when returning from ScannedDataPage
+                controller?.resumeCamera();
+              });
+            } else if (widget.selectedbutton == 3) {
+              controller?.pauseCamera();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RegisterVisitorPassM(id: scannedData),
+                ),
+              ).then((_) {
+                // Resume camera when returning from ScannedDataPage
+                controller?.resumeCamera();
+              });
+            }
+          },
+          child: Text(
+            "UID: " + scannedData,
+            style: TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
         ),
       ),

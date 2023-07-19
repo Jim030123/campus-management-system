@@ -1,18 +1,14 @@
 import 'dart:io';
-import 'dart:ui';
-
 import 'package:camera/camera.dart';
-import 'package:campus_management_system/components/my_alert_dialog.dart';
-import 'package:campus_management_system/components/my_appbar.dart';
-import 'package:campus_management_system/components/my_drawer.dart';
+import 'package:campus_management_system/components/my_divider.dart';
+import 'package:campus_management_system/components/my_textstyle.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
-import 'package:campus_management_system/pages/general/login_page.dart';
 
 import '../../components/my_camera.dart';
 import '../../documentation/term_and_condition.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class RegistrationVehicleForm extends StatefulWidget {
   RegistrationVehicleForm({super.key});
@@ -23,7 +19,6 @@ class RegistrationVehicleForm extends StatefulWidget {
 }
 
 class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
-  @override
   _RegistrationVehicleFormState() {
     _selectedBrandType = _vehicleBrand[0];
   }
@@ -64,7 +59,7 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
 
   String? _selectedBrandType = "";
 
-  bool value = false;
+  XFile? takenPhoto; // Add a variable to store the taken photo
 
   @override
   Widget build(BuildContext context) {
@@ -81,24 +76,30 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
       return [name, email, id];
     }
 
+    // Function to handle the photo taken by the camera
+    void _handlePhotoTaken(XFile photo) {
+      setState(() {
+        takenPhoto = photo;
+      });
+    }
+
     return Scaffold(
-      appBar: MyAppBar(),
+      appBar: AppBar(
+        title: Text('Registration Vehicle Form'),
+      ),
       body: SingleChildScrollView(
         child: FutureBuilder(
           future: getdatafromDB(),
           builder: (context, snapshot) {
             List<String> dataList = snapshot.data as List<String>;
             String name = dataList[0];
-
             String email = dataList[1];
-
             String id = dataList[2];
 
             nameController.text = name;
             emailController.text = email;
             idController.text = id;
 
-            final XFile? picture;
             return Container(
               padding: EdgeInsets.all(16.0),
               child: Column(
@@ -136,7 +137,6 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
                               return null;
                             },
                           ),
-
                           TextFormField(
                             enabled: false,
                             controller: emailController,
@@ -159,7 +159,6 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
                               return null;
                             },
                           ),
-
                           DropdownButtonFormField(
                             decoration: InputDecoration(
                               labelText: "Vehicle Type",
@@ -185,7 +184,7 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
                                 labelText: 'Vehicle Plate Number'),
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return 'Please enter your Vechicle Plate Number';
+                                return 'Please enter your Vehicle Plate Number';
                               }
                               return null;
                             },
@@ -196,23 +195,40 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
                                 labelText: 'Vehicle Model Name'),
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return 'Please enter your Vechicle Model Name';
+                                return 'Please enter your Vehicle Model Name';
                               }
                               return null;
                             },
                           ),
-
                           SizedBox(height: 16.0),
-
+                          MyDivider(),
+                          Align(
+                              alignment: Alignment.center,
+                              child: MyMiddleText(
+                                  text: "Please Take Vehicle Photo")),
+                          MyDivider(),
+                          SizedBox(height: 16.0),
+                          if (takenPhoto != null) // Display the taken photo
+                            Center(
+                              child: Container(
+                                  width: 300,
+                                  child: Image.file(File(takenPhoto!.path))),
+                            ),
                           ElevatedButton(
                             child: Text('Take Photo'),
                             onPressed: () async {
-                              await availableCameras().then((value) =>
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (_) =>
-                                              CameraPage(cameras: value))));
+                              await availableCameras().then((value) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => CameraPage(
+                                      cameras: value,
+                                      onPhotoTaken:
+                                          _handlePhotoTaken, // Pass the callback function
+                                    ),
+                                  ),
+                                );
+                              });
                             },
                           ),
 
@@ -243,11 +259,9 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
                               ),
                             ],
                           ),
-
                           SizedBox(
                             height: 25,
                           ),
-
                           Align(
                             alignment: Alignment.bottomRight,
                             child: ElevatedButton(
@@ -275,25 +289,50 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
     );
   }
 
-  registerVehicle(BuildContext context) async {
+  Future<void> registerVehicle(BuildContext context) async {
     try {
       String auth = FirebaseAuth.instance.currentUser!.uid;
 
-      await FirebaseFirestore.instance
+      final vehicleRef = FirebaseFirestore.instance
           .collection('vehicle')
-          .doc(vehiclenumberController.text)
-          .set({
-        "name": nameController.text,
-        "email": emailController.text,
-        "id": idController.text,
-        "vehicle_number": vehiclenumberController.text,
-        "vehicle_brand": _selectedBrandType as String,
-        "vehicle_model": modelnameController.text,
-        "status": status
-      });
+          .doc(vehiclenumberController.text);
+
+      // Upload the photo to Firebase Storage
+      if (takenPhoto != null) {
+        final ref = firebase_storage.FirebaseStorage.instance
+            .ref()
+            .child('vehicle_photos/${vehicleRef.id}.jpg');
+
+        await ref.putFile(File(takenPhoto!.path));
+
+        final downloadUrl = await ref.getDownloadURL();
+
+        await vehicleRef.set({
+          "name": nameController.text,
+          "email": emailController.text,
+          "student_id": idController.text,
+          "vehicle_number": vehiclenumberController.text,
+          "vehicle_brand": _selectedBrandType as String,
+          "vehicle_model": modelnameController.text,
+          "status": status,
+          "photoUrl": downloadUrl,
+          "id": auth // Save the photo URL in the database
+        });
+      } else {
+        await vehicleRef.set({
+          "name": nameController.text,
+          "email": emailController.text,
+          "id": idController.text,
+          "vehicle_number": vehiclenumberController.text,
+          "vehicle_brand": _selectedBrandType as String,
+          "vehicle_model": modelnameController.text,
+          "status": status,
+        });
+      }
       print(auth);
-    } on FirebaseAuthException catch (e) {}
-    ;
+    } on FirebaseAuthException catch (e) {
+      // Handle the exception
+    }
     // pop the loading circle
   }
 

@@ -209,7 +209,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
                                       }
                                     }
                                   : null,
-                              child: Text('Register'),
+                              child: Text('Submit'),
                             ),
                           ),
                         ],
@@ -239,7 +239,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
         "supporting_evidence": supportingEvidenceController.text,
         "status": status,
         "timestamp": formattedTimeStamp,
-        "favourite": 0
+        "isFavourite": false
       });
     } on FirebaseAuthException catch (e) {
       // Handle the exception if needed
@@ -257,6 +257,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
             TextButton(
               child: Text('OK'),
               onPressed: () {
+                Navigator.pop(context);
                 Navigator.pop(context);
               },
             ),

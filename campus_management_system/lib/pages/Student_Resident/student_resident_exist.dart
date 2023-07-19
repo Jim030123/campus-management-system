@@ -123,7 +123,7 @@ class StudentResidentExist extends StatelessWidget {
                     ),
                     MyLongButton(
                       text: 'Resident Feedback',
-                      routename: '/resident_feedback',
+                      routename: '/feedback_form',
                     ),
                     SizedBox(
                       height: 16,

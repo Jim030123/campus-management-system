@@ -1,3 +1,4 @@
+import 'package:campus_management_system/components/my_divider.dart';
 import 'package:campus_management_system/components/my_textstyle.dart';
 import 'package:campus_management_system/pages/student_resident/room.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -158,19 +159,8 @@ class ApplicationDetail extends StatefulWidget {
 }
 
 class _ApplicationDetailState extends State<ApplicationDetail> {
-  Future<void> fetchUsers() async {
-    QuerySnapshot snapshot = await studentResidentApplicationCollection.get();
-    setState(() {
-      _allApplication = snapshot.docs;
-      _isLoading = false;
-    });
-  }
-
   bool _isLoading = true;
   late List<DocumentSnapshot> _allApplication;
-
-  final CollectionReference studentResidentApplicationCollection =
-      FirebaseFirestore.instance.collection('room_available');
 
   late String status;
 
@@ -187,11 +177,11 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
             children: [
               Align(
                 alignment: Alignment.topLeft,
-                child: Text(
-                  'The Student Resident Profile',
-                  style: TextStyle(fontSize: 25),
+                child: MyLargeText(
+                  text: 'The Vehicle Detail',
                 ),
               ),
+              MyDivider(),
               Container(
                 padding: EdgeInsets.all(25),
                 decoration: BoxDecoration(
@@ -205,6 +195,8 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
                         child: MySmallText(
                             text: "Name: " +
                                 widget.user['name'] +
+                                "\nStudent ID: " +
+                                widget.user['student_id'] +
                                 "\nEmail: " +
                                 widget.user['email'] +
                                 "\nVehicle Brand " +
@@ -214,6 +206,15 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
                                 "\nVehicle Number: " +
                                 widget.user['vehicle_number']),
                       ),
+                      MyDivider(),
+                      Align(
+                        alignment: Alignment.center,
+                        child: MyLargeText(text: "Vehicle Photo"),
+                      ),
+                      MyDivider(),
+                      Container(
+                          width: 300,
+                          child: Image.network(widget.user['photoUrl'])),
                       ElevatedButton(
                           onPressed: () {
                             status = "Approved";
@@ -240,7 +241,6 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
   @override
   void initState() {
     super.initState();
-    fetchUsers();
   }
 
   updateStatusApplication(BuildContext context, String status) async {
