@@ -1,4 +1,5 @@
 import 'package:campus_management_system/components/my_appbar.dart';
+import 'package:campus_management_system/components/my_divider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -82,6 +83,7 @@ class StudentResidentExist extends StatelessWidget {
                           'Student Resident Profile',
                           style: TextStyle(fontSize: 25),
                         )),
+                    MyDivider(),
                     Container(
                       padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(

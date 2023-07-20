@@ -45,19 +45,8 @@ class _StudentProfilePageState extends State<StudentProfilePage> {
       String email = await snapshot.get('email').toString();
       String id = await snapshot.get('id').toString();
       String fulldetail = await snapshot.get('full_detail').toString();
-      String residentstatus = await snapshot.get('resident_status').toString();
-      return [
-        name,
-        gender,
-        dob,
-        nric,
-        email,
-        contactno,
-        role,
-        id,
-        fulldetail,
-        residentstatus
-      ];
+
+      return [name, gender, dob, nric, email, contactno, role, id, fulldetail];
     }
   }
 
@@ -90,7 +79,6 @@ class _StudentProfilePageState extends State<StudentProfilePage> {
             String role = studentdetail[6];
             String id = studentdetail[7];
             String full_detail = studentdetail[8];
-            String residentstatus = studentdetail[9];
 
             return SingleChildScrollView(
               child: Container(
@@ -190,39 +178,6 @@ class _StudentProfilePageState extends State<StudentProfilePage> {
                                       SizedBox(
                                         height: 20,
                                       ),
-                                      FutureBuilder(
-                                        future: residentstudentdetail(),
-                                        builder: (context, snapshot) {
-                                          List<String> residentdetail =
-                                              snapshot.data as List<String>;
-                                          String roomtype = residentdetail[0];
-                                          String status = residentdetail[1];
-
-                                          return Column(
-                                            children: [
-                                              Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: MyMiddleText(
-                                                    text:
-                                                        'Resident information',
-                                                  )),
-                                              MyDivider(),
-                                              Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Column(
-                                                    children: [
-                                                      Text("Room Type: " +
-                                                          roomtype +
-                                                          "\nStatus: " +
-                                                          status)
-                                                    ],
-                                                  ))
-                                            ],
-                                          );
-                                        },
-                                      ),
                                     ],
                                   ),
                                 ),
@@ -240,19 +195,6 @@ class _StudentProfilePageState extends State<StudentProfilePage> {
         ),
       ),
     );
-  }
-
-// probe
-  residentstudentdetail() async {
-    final user = FirebaseAuth.instance.currentUser!.uid;
-    DocumentSnapshot snapshot = await FirebaseFirestore.instance
-        .collection('resident_application') // Replace with your collection name
-        .doc(user) // Use the provided document ID
-        .get();
-
-    String roomtype = snapshot.get('room_type');
-    String status = snapshot.get('status');
-    return [roomtype, status];
   }
 
 // get data

@@ -490,7 +490,7 @@ class _PersonalFormState extends State<PersonalForm> {
         "parent_contact_no": parentcontactnoController.text,
         "parent_email": parentemailController.text,
         "full_detail": fulldetail,
-        "resident_status": 0
+        
       });
 
       if (_selectedNationality == _nationaltype[0]) {
