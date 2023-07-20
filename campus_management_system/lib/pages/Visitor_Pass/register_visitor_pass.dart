@@ -120,6 +120,7 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           TextFormField(
+                            enabled: false,
                             controller: nameController,
                             decoration: InputDecoration(labelText: 'Name'),
                             validator: (value) {
@@ -130,6 +131,7 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
                             },
                           ),
                           TextFormField(
+                            enabled: false,
                             controller: emailController,
                             decoration: InputDecoration(labelText: 'Email'),
                             validator: (value) {
@@ -140,6 +142,7 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
                             },
                           ),
                           TextFormField(
+                            enabled: false,
                             controller: nricController,
                             decoration: InputDecoration(labelText: 'NRIC'),
                             validator: (value) {
@@ -274,17 +277,29 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
   }
 
   VisitorPassApplication(BuildContext context) async {
-    DateTime timestamp = DateTime.now();
+    DateTime registerTime = DateTime.now();
 
     try {
       String auth = FirebaseAuth.instance.currentUser!.uid;
       String formattedDateVisit = DateFormat('yyyy/MM/dd').format(datevisit);
+
+      //expired
+
+      DateTime ExpiredDateTime =
+          DateTime(datevisit.year, datevisit.month, datevisit.day, 23, 59, 59);
+      Timestamp shortTermPassExpired = Timestamp.fromDate(ExpiredDateTime);
+
+
+        DateTime ExpiredDatevisitTime =
+          DateTime(enddatevisit.year, enddatevisit.month, enddatevisit.day, 23, 59, 59);
+      Timestamp longTermPassExpired = Timestamp.fromDate(ExpiredDatevisitTime);
+
       String formattedTimeVisit = DateFormat.Hm().format(
         DateTime(datevisit.year, datevisit.month, datevisit.day,
             _selectedTime.hour, _selectedTime.minute),
       );
       String formattedTimeStamp =
-          DateFormat('yyyy-MM-dd HH:mm:ss').format(timestamp);
+          DateFormat('yyyy-MM-dd HH:mm:ss').format(registerTime);
 
       if (_selectedVisitorPassType == _visitorPassType[0]) {
         await FirebaseFirestore.instance
@@ -299,7 +314,11 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
           "date_visit": formattedDateVisit,
           "status": status,
           "reason": reasonController.text,
+
+          // register time
           "timestamp": formattedTimeStamp,
+          "expired_timestamp": shortTermPassExpired,
+
           "entry_time": null,
           "exit_time": null,
           "visitorid": auth,
@@ -322,7 +341,8 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
           "timestamp": formattedTimeStamp,
           "visitorid": auth,
           "end_date_visit": enddatevisit,
-          "visitor_pass_type": _selectedVisitorPassType as String
+          "visitor_pass_type": _selectedVisitorPassType as String,
+          "expired_timestamp": longTermPassExpired,
         });
       }
     } on FirebaseAuthException catch (e) {

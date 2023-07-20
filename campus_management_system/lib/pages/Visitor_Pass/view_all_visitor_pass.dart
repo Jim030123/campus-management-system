@@ -18,6 +18,7 @@ class _ViewAllVisitorPassState extends State<ViewAllVisitorPass> {
       FirebaseFirestore.instance.collection('visitor_pass_application');
 
   String uid = FirebaseAuth.instance.currentUser!.uid;
+  int now = DateTime.now().millisecondsSinceEpoch;
 
   // Set the filter value here
 
@@ -74,64 +75,84 @@ class _ViewAllVisitorPassState extends State<ViewAllVisitorPass> {
   }
 
   QRTrailer(Map<String, dynamic> filter) {
-    if (filter['status'] == "Approved") {
-      return GestureDetector(
-        child: Text(
-          textAlign: TextAlign.center,
-          "\nView QR Code here",
-          style: TextStyle(decoration: TextDecoration.underline),
-        ),
-        onTap: () {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return Dialog(
-                  child: Container(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    QrImageView(
-                      data: filter['visitorpassid'],
-                      version: QrVersions.auto,
-                      size: 150.0,
-                    ),
-                    Text("Visitor Pass ID:" + filter['visitorpassid']),
-                    MyDivider(),
-                    MyMiddleText(
-                        text: "Date Time: " +
-                            filter['date_visit'] +
-                            "\nReason: " +
-                            filter['reason'])
-                  ],
-                ),
-              ));
-            },
-          );
-        },
-      );
-    } else if (filter['status'] == "Waiting the Management Review") {
+    Timestamp expiredTimestamp = filter['expired_timestamp'];
+
+    int expiredtime = expiredTimestamp.millisecondsSinceEpoch;
+    print(expiredtime);
+    print(now);
+
+    // set status in firebase
+
+    if (now > expiredtime) {
       return Container(
           padding: EdgeInsets.all(16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
-            color: Colors.yellow,
+            color: Colors.blue,
           ),
           child: Text(
-            "Waiting the Management Review",
-          ));
-    } else if (filter['status'] == "Declined") {
-      return Container(
-          padding: EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
-            color: Colors.red,
-          ),
-          child: Text(
-            "Declined",
+            "Expired",
           ));
     } else {
-      return;
+      if (filter['status'] == "Approved") {
+        return GestureDetector(
+          child: Text(
+            textAlign: TextAlign.center,
+            "\nView QR Code here",
+            style: TextStyle(decoration: TextDecoration.underline),
+          ),
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return Dialog(
+                    child: Container(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      QrImageView(
+                        data: filter['visitorpassid'],
+                        version: QrVersions.auto,
+                        size: 150.0,
+                      ),
+                      Text("Visitor Pass ID:" + filter['visitorpassid']),
+                      MyDivider(),
+                      MyMiddleText(
+                          text: "Date Time: " +
+                              filter['date_visit'] +
+                              "\nReason: " +
+                              filter['reason'])
+                    ],
+                  ),
+                ));
+              },
+            );
+          },
+        );
+      } else if (filter['status'] == "Waiting the Management Review") {
+        return Container(
+            padding: EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25),
+              color: Colors.yellow,
+            ),
+            child: Text(
+              "Waiting the Management Review",
+            ));
+      } else if (filter['status'] == "Declined") {
+        return Container(
+            padding: EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25),
+              color: Colors.red,
+            ),
+            child: Text(
+              "Declined",
+            ));
+      } else {
+        return;
+      }
     }
   }
 }

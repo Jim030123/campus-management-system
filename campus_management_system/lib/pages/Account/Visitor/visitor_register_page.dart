@@ -125,8 +125,6 @@ class _VisitorRegisterPageState extends State<VisitorRegisterPage> {
                       MyButton(
                         onTap: () {
                           signUpWithEmail(context);
-                          Navigator.pushReplacementNamed(
-                              context, '/visitor_main');
                         },
                         text: 'Sign Up',
                       ),
@@ -179,7 +177,10 @@ Future<void> signUpWithEmail(BuildContext context) async {
 
     await FirebaseAuth.instance
         .sendPasswordResetEmail(email: _emailController.text);
-  } on FirebaseAuthException catch (e) {}
-  ;
+  } on FirebaseAuthException catch (e) {
+    // Handle the FirebaseAuthException
+  }
+
+  Navigator.pushNamed(context, '');
   // pop the loading circle
 }
