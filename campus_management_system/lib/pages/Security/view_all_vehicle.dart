@@ -32,21 +32,12 @@ class _ViewAllVehicleState extends State<ViewAllVehicle> {
     fetchUsers();
   }
 
-  void _openNewPage(DocumentSnapshot user) {
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (context) => ApplicationDetail(user: user),
-    //   ),
-    // );
-  }
-
   List<String> status = [
     'Waiting the Management Review',
     'Approved',
     'Declined'
   ];
-  late String _selectedSRStatus = status[0];
+  late String _selectedVehicleStatus = status[0];
 
   @override
   Widget build(BuildContext context) {
@@ -64,14 +55,14 @@ class _ViewAllVehicleState extends State<ViewAllVehicle> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text('Filter the Student Application'),
+                    title: Text('Filter the Vehicle Application'),
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         ElevatedButton(
                           onPressed: () {
                             setState(() {
-                              _selectedSRStatus = status[0];
+                              _selectedVehicleStatus = status[0];
                             });
                             Navigator.pop(context);
                           },
@@ -80,7 +71,7 @@ class _ViewAllVehicleState extends State<ViewAllVehicle> {
                         ElevatedButton(
                           onPressed: () {
                             setState(() {
-                              _selectedSRStatus = status[1];
+                              _selectedVehicleStatus = status[1];
                             });
                             Navigator.pop(context); // Close the dialog
                           },
@@ -89,7 +80,7 @@ class _ViewAllVehicleState extends State<ViewAllVehicle> {
                         ElevatedButton(
                           onPressed: () {
                             setState(() {
-                              _selectedSRStatus = status[2];
+                              _selectedVehicleStatus = status[2];
                             });
                             Navigator.pop(context); // Close the dialog
                           },
@@ -112,32 +103,38 @@ class _ViewAllVehicleState extends State<ViewAllVehicle> {
           )
         ],
       ),
-      body: filter(_selectedSRStatus),
+      body: filter(_selectedVehicleStatus),
     );
   }
 
   Widget filter(String selectedStatus) {
-    print(_selectedSRStatus);
+    print(_selectedVehicleStatus);
     return _isLoading
         ? Center(child: CircularProgressIndicator())
         : ListView.builder(
             itemCount: _allApplication.length,
             itemBuilder: (context, index) {
-              DocumentSnapshot user = _allApplication[index];
+              DocumentSnapshot vehicle = _allApplication[index];
               print(_allApplication.length);
 
-              if (user['status'] == selectedStatus) {
+              if (vehicle['status'] == selectedStatus) {
                 return Padding(
                   padding: EdgeInsets.all(16),
                   child: ListTile(
                     tileColor: Colors.grey,
-                    title: Text(user.id),
-                    subtitle: Text(user['name'] + ' ' + user['id']),
+                    leading: Text(vehicle.id),
+                    subtitle: Text("Name: " +
+                        vehicle['name'] +
+                        '\nVehicle brand: ' +
+                        vehicle['vehicle_brand'] +
+                        "\nVehicle Model: " +
+                        vehicle['vehicle_model']),
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ApplicationDetail(user: user),
+                          builder: (context) =>
+                              ApplicationDetail(user: vehicle),
                         ),
                       );
                     },
@@ -249,6 +246,16 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
       print(status);
       await FirebaseFirestore.instance
           .collection('vehicle')
+          .doc(auth)
+          .update({"status": status});
+    } on FirebaseAuthException catch (e) {}
+    ;
+
+    try {
+      String auth = widget.user.id;
+      print(status);
+      await FirebaseFirestore.instance
+          .collection('vehicle_approved')
           .doc(auth)
           .update({"status": status});
     } on FirebaseAuthException catch (e) {}

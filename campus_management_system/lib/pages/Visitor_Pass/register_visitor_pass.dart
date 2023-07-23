@@ -1,3 +1,4 @@
+import 'package:campus_management_system/components/my_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -174,7 +175,9 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
                               });
                             },
                           ),
+                          MyDivider(),
                           visitorType(),
+                          MyDivider(),
                           TextFormField(
                             controller: reasonController,
                             decoration:
@@ -218,6 +221,7 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
                               return null;
                             },
                           ),
+                          SizedBox(height: 16.0),
                           Row(
                             children: [
                               GestureDetector(
@@ -234,11 +238,15 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
                                         });
                                       },
                                     ),
-                                    Text(
-                                      "I have read and agree to Terms of Service and Privacy Policy",
-                                      style: TextStyle(
-                                        color: const Color.fromARGB(
-                                            255, 33, 40, 243),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.7,
+                                      child: Text(
+                                        "I have read and agree to Terms of Service and Privacy Policy",
+                                        style: TextStyle(
+                                          color: const Color.fromARGB(
+                                              255, 33, 40, 243),
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -289,9 +297,8 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
           DateTime(datevisit.year, datevisit.month, datevisit.day, 23, 59, 59);
       Timestamp shortTermPassExpired = Timestamp.fromDate(ExpiredDateTime);
 
-
-        DateTime ExpiredDatevisitTime =
-          DateTime(enddatevisit.year, enddatevisit.month, enddatevisit.day, 23, 59, 59);
+      DateTime ExpiredDatevisitTime = DateTime(
+          enddatevisit.year, enddatevisit.month, enddatevisit.day, 23, 59, 59);
       Timestamp longTermPassExpired = Timestamp.fromDate(ExpiredDatevisitTime);
 
       String formattedTimeVisit = DateFormat.Hm().format(
@@ -319,8 +326,8 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
           "timestamp": formattedTimeStamp,
           "expired_timestamp": shortTermPassExpired,
 
-          "entry_time": null,
-          "exit_time": null,
+          "entry_time": "",
+          "exit_time": "",
           "visitorid": auth,
           "time_visit": formattedTimeVisit,
           "visitor_pass_type": _selectedVisitorPassType as String
@@ -393,37 +400,36 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
 
   visitorType() {
     if (_selectedVisitorPassType == _visitorPassType[0]) {
-      return Column(
-        children: [
-          Container(
-            padding: EdgeInsets.all(16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Text(
-                  'Date Selected: ${datevisit.year}/${datevisit.month}/${datevisit.day}',
-                  style: TextStyle(fontSize: 20),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    DateTime? newDate = await showDatePicker(
-                      context: context,
-                      initialDate: datevisit,
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime(2100),
-                    );
+      return Container(
+        alignment: Alignment.center,
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Text(
+                    'Date Selected: ${datevisit.year}/${datevisit.month}/${datevisit.day}',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      DateTime? newDate = await showDatePicker(
+                        context: context,
+                        initialDate: datevisit,
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime(2100),
+                      );
 
-                    if (newDate == null) return;
-                    setState(() => datevisit = newDate);
-                  },
-                  child: Text('Select Visit Date'),
-                ),
-              ],
+                      if (newDate == null) return;
+                      setState(() => datevisit = newDate);
+                    },
+                    child: Text('Select Visit Date'),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+            Column(
               children: [
                 Text(
                   'Time Selected: ${_selectedTime.format(context)}',
@@ -437,40 +443,40 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
                 ),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       );
     } else if (_selectedVisitorPassType == _visitorPassType[1]) {
-      return Column(
-        children: [
-          Container(
-            padding: EdgeInsets.all(16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Text(
-                  'Start Date: ${datevisit.year}/${datevisit.month}/${datevisit.day}',
-                  style: TextStyle(fontSize: 20),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    DateTime? newDate = await showDatePicker(
-                      context: context,
-                      initialDate: datevisit,
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime(2100),
-                    );
+      return Container(
+        alignment: Alignment.center,
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Text(
+                    'Start Date: ${datevisit.year}/${datevisit.month}/${datevisit.day}',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      DateTime? newDate = await showDatePicker(
+                        context: context,
+                        initialDate: datevisit,
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime(2100),
+                      );
 
-                    if (newDate == null) return;
-                    setState(() => datevisit = newDate);
-                  },
-                  child: Text('Select Visit Start Date'),
-                ),
-              ],
+                      if (newDate == null) return;
+                      setState(() => datevisit = newDate);
+                    },
+                    child: Text('Select Visit Start Date'),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Container(
-            child: Row(
+            Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text(
@@ -493,8 +499,8 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
                 ),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       );
     }
   }

@@ -1,10 +1,10 @@
+import 'package:campus_management_system/components/my_divider.dart';
 import 'package:campus_management_system/components/my_logo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../components/my_button.dart';
-import '../../../components/sample_my_textfield.dart';
 
 final _emailController = TextEditingController();
 final _nameController = TextEditingController();
@@ -22,165 +22,193 @@ class VisitorRegisterPage extends StatefulWidget {
 }
 
 class _VisitorRegisterPageState extends State<VisitorRegisterPage> {
-  void signUserUp() async {
-    // show loading circle
+  final _formKey = GlobalKey<FormState>();
+
+  void showErrorMessage() {
     showDialog(
-        context: context,
-        builder: (context) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        });
-
-    try {
-      // check if password is confirmed
-      if (_passwordController.text == _confirmpasswordController.text) {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: _emailController.text, password: _passwordController.text);
-      } else {
-        showErrorMessage();
-      }
-
-      Navigator.pop(context);
-    } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
-    }
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Password don\'t match!'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final String role = "Visitor";
-
     return Scaffold(
       backgroundColor: Colors.grey[300],
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-              padding: const EdgeInsets.all(25),
-              child: Column(children: [
-                MyLogo(),
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
                 SizedBox(
                   height: 25,
                 ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: ElevatedButton(
+                    child: Text('If you are visitor, register Here '),
+                    onPressed: () {
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/login', (route) => false);
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 25,
+                ),
+                MyLogo(),
+                SizedBox(height: 25),
                 Container(
-                    width: 300,
-                    child: Column(children: [
+                  width: 300,
+                  child: Column(
+                    children: [
                       Text(
                         'Visitor Register Page',
                         style: TextStyle(fontSize: 30),
                       ),
-
-                      const SizedBox(
-                        height: 25,
+                      MyDivider(),
+                      SizedBox(height: 25),
+                      Container(
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextFormField(
+                                controller: _nameController,
+                                decoration: InputDecoration(labelText: 'Name'),
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return 'Please enter a Name!';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 25),
+                              TextFormField(
+                                controller: _contactnumberController,
+                                decoration: InputDecoration(
+                                    labelText: 'Contact Number'),
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return 'Please enter Contact Number!';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              SizedBox(height: 25),
+                              TextFormField(
+                                controller: _emailController,
+                                decoration: InputDecoration(labelText: 'Email'),
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return 'Please enter your Email!';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              SizedBox(height: 25),
+                              // password
+                              TextFormField(
+                                controller: _passwordController,
+                                decoration:
+                                    InputDecoration(labelText: 'Password'),
+                                obscureText: true,
+                                validator: (value) {
+                                  if (value!.length < 6) {
+                                    return 'Please enter at least 6 character Password!';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              SizedBox(height: 25),
+                              // confirm password
+                              TextFormField(
+                                controller: _confirmpasswordController,
+                                decoration: InputDecoration(
+                                    labelText: 'Confirm Password'),
+                                obscureText: true,
+                                validator: (value) {
+                                  if (value!.length < 6) {
+                                    return 'Please enter at least 6 character Password!';
+                                  }
+                                  if (value != _passwordController.text) {
+                                    return 'Passwords do not match!';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              SizedBox(height: 100),
+                              MyButton(
+                                onTap: () {
+                                  signUpWithEmail(context);
+                                },
+                                text: 'Sign Up',
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-
-                      SampleTextField(
-                        controller: _nameController,
-                        hintText: 'Name',
-                        obsecureText: false,
-                      ),
-
-                      const SizedBox(
-                        height: 25,
-                      ),
-
-                      SampleTextField(
-                        controller: _contactnumberController,
-                        hintText: 'Phone',
-                        obsecureText: false,
-                      ),
-
-                      SizedBox(
-                        height: 25,
-                      ),
-                      SampleTextField(
-                        controller: _emailController,
-                        hintText: 'Email',
-                        obsecureText: false,
-                      ),
-
-                      const SizedBox(
-                        height: 25,
-                      ),
-                      // password
-                      SampleTextField(
-                        controller: _passwordController,
-                        hintText: 'Password',
-                        obsecureText: true,
-                      ),
-
-                      const SizedBox(
-                        height: 25,
-                      ),
-
-                      // confirm password
-                      SampleTextField(
-                        controller: _confirmpasswordController,
-                        hintText: 'Confirm Password',
-                        obsecureText: true,
-                      ),
-                      const SizedBox(
-                        height: 25,
-                      ),
-                      MyButton(
-                        onTap: () {
-                          signUpWithEmail(context);
-                        },
-                        text: 'Sign Up',
-                      ),
-                    ]))
-              ])),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 
-  void wrongPasswordMessage() {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return const AlertDialog(
-            title: Text('Incorrect Password'),
-          );
+  Future<void> signUpWithEmail(BuildContext context) async {
+    if (_passwordController.text == _confirmpasswordController.text) {
+      try {
+        UserCredential userCredential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _emailController.text,
+          password: _passwordController.text,
+        );
+
+        String uid = userCredential.user!.uid;
+
+        await FirebaseFirestore.instance.collection('users').doc(uid).set({
+          "name": _nameController.text,
+          "contact_no": _contactnumberController.text,
+          "email": _emailController.text,
+          "roles": role,
+          "full_detail": fullDetail,
         });
+      } on FirebaseAuthException catch (e) {}
+      popoutdialog();
+
+      Navigator.pushNamedAndRemoveUntil(context, '', (route) => false);
+    } else {
+      showErrorMessage();
+    }
   }
 
-  void showErrorMessage() {
+  popoutdialog() {
     showDialog(
-        context: context,
-        builder: (context) {
-          return const AlertDialog(
-            title: Text('Password don\'t match!'),
-          );
-        });
-  }
-  // pop the loading circle
-}
-
-Future<void> signUpWithEmail(BuildContext context) async {
-  try {
-    UserCredential userCredential =
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-      email: _emailController.text,
-      password: _passwordController.text,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Submit the Visitor Register'),
+          content: Text('You should be redirected automatically in 3 second'),
+        );
+      },
     );
-
-    String uid = userCredential.user!.uid;
-
-    await FirebaseFirestore.instance.collection('users').doc(uid).set({
-      "name": _nameController.text,
-      "contact_no": _contactnumberController.text,
-      "email": _emailController.text,
-      "roles": role,
-      "full_detail": fullDetail
-    });
-
-    await FirebaseAuth.instance
-        .sendPasswordResetEmail(email: _emailController.text);
-  } on FirebaseAuthException catch (e) {
-    // Handle the FirebaseAuthException
   }
-
-  Navigator.pushNamed(context, '');
-  // pop the loading circle
 }

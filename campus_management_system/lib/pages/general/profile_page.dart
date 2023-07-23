@@ -66,131 +66,142 @@ class _StudentProfilePageState extends State<StudentProfilePage> {
               return Center(
                 child: Text('Error fetching data'), // Display error message
               );
-            }
+            } else {
+              List<String> studentdetail = snapshot.data as List<String>;
+              String name = studentdetail[0];
+              String gender = studentdetail[1];
+              String dob = studentdetail[2];
+              String nric = studentdetail[3];
+              String email = studentdetail[4];
+              String contactno = studentdetail[5];
 
-            List<String> studentdetail = snapshot.data as List<String>;
-            String name = studentdetail[0];
-            String gender = studentdetail[1];
-            String dob = studentdetail[2];
-            String nric = studentdetail[3];
-            String email = studentdetail[4];
-            String contactno = studentdetail[5];
+              String role = studentdetail[6];
+              String id = studentdetail[7];
+              String full_detail = studentdetail[8];
 
-            String role = studentdetail[6];
-            String id = studentdetail[7];
-            String full_detail = studentdetail[8];
-
-            return SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.all(16.0),
-                color: Colors.white,
-                child: Column(children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "Personal Profile",
-                      style: TextStyle(fontSize: 30),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  Container(
-                    alignment: Alignment.topLeft,
-                    child: Container(
-                      padding: EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25),
-                        color: Colors.grey,
+              return SingleChildScrollView(
+                child: Container(
+                  padding: EdgeInsets.all(16.0),
+                  color: Colors.white,
+                  child: Column(children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "Personal Profile",
+                        style: TextStyle(fontSize: 30),
                       ),
-                      alignment: Alignment.center,
-                      child: Column(
-                        children: [
-                          QrImageView(
-                            backgroundColor: Colors.white,
-                            data: user,
-                            version: QrVersions.auto,
-                            size: 150.0,
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text("user ID: " + user),
-                          SizedBox(
-                            height: 25,
-                          ),
-                          Container(
-                            child: Row(
-                              children: [
-                                Container(
-                                  constraints: BoxConstraints(
-                                    maxWidth: MediaQuery.of(context)
-                                            .size
-                                            .width *
-                                        0.8, // Set a maximum width for the program text
-                                  ),
-                                  // color: Colors.blue,
-                                  alignment: Alignment.topLeft,
-                                  padding: EdgeInsets.symmetric(horizontal: 20),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: MyMiddleText(
-                                            text: 'Basic information',
-                                          )),
-                                      MyDivider(),
-                                      Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          'Name: ' +
-                                              name +
-                                              "\nGender: " +
-                                              gender +
-                                              '\nDate of Birth: ' +
-                                              dob +
-                                              "\nNRIC: " +
-                                              nric +
-                                              "\nEmail: " +
-                                              email +
-                                              "\nContact No: " +
-                                              contactno +
-                                              "\nRole: " +
-                                              role +
-                                              "\nID: " +
-                                              id,
-                                          style: TextStyle(fontSize: 18),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      FutureBuilder(
-                                        future: fulldetail(role),
-                                        builder: (context, snapshot) {
-                                          List<String> roledetail =
-                                              snapshot.data as List<String>;
-
-                                          return roleinfo(role, roledetail);
-                                        },
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                    ),
+                    SizedBox(
+                      height: 25,
+                    ),
+                    Container(
+                      alignment: Alignment.topLeft,
+                      child: Container(
+                        padding: EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                          color: Colors.grey,
+                        ),
+                        alignment: Alignment.center,
+                        child: Column(
+                          children: [
+                            QrImageView(
+                              backgroundColor: Colors.white,
+                              data: user,
+                              version: QrVersions.auto,
+                              size: 150.0,
                             ),
-                          ),
-                        ],
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text("user ID: " + user),
+                            SizedBox(
+                              height: 25,
+                            ),
+                            Container(
+                              child: Row(
+                                children: [
+                                  Container(
+                                    constraints: BoxConstraints(
+                                      maxWidth: MediaQuery.of(context)
+                                              .size
+                                              .width *
+                                          0.8, // Set a maximum width for the program text
+                                    ),
+                                    // color: Colors.blue,
+                                    alignment: Alignment.topLeft,
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 20),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: MyMiddleText(
+                                              text: 'Basic information',
+                                            )),
+                                        MyDivider(),
+                                        Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            'Name: ' +
+                                                name +
+                                                "\nGender: " +
+                                                gender +
+                                                '\nDate of Birth: ' +
+                                                dob +
+                                                "\nNRIC: " +
+                                                nric +
+                                                "\nEmail: " +
+                                                email +
+                                                "\nContact No: " +
+                                                contactno +
+                                                "\nRole: " +
+                                                role +
+                                                "\nID: " +
+                                                id,
+                                            style: TextStyle(fontSize: 18),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        FutureBuilder(
+                                          future: fulldetail(role),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.waiting) {
+                                              return CircularProgressIndicator(); // or any loading indicator
+                                            } else if (snapshot.hasError) {
+                                              return Center(
+                                                child: Text(
+                                                    'Error occurred while loading data'),
+                                              );
+                                            } else {
+                                              List<String> roledetail =
+                                                  snapshot.data as List<String>;
+                                              return roleinfo(role, roledetail);
+                                            }
+                                          },
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ]),
-              ),
-            );
+                  ]),
+                ),
+              );
+            }
           },
         ),
       ),
@@ -304,58 +315,66 @@ class VistitorProfilePage extends StatelessWidget {
         body: FutureBuilder(
           future: findUserById(userid),
           builder: (context, snapshot) {
-            DocumentSnapshot visitorData = snapshot.data!;
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator(); // or any loading indicator
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text('Error occurred while loading data'),
+              );
+            } else {
+              DocumentSnapshot visitorData = snapshot.data!;
 
-            return Container(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  Align(
-                      alignment: Alignment.topLeft,
-                      child: MyLargeText(text: "Visitor Personal Detail")),
-                  MyDivider(),
-                  Container(
-                    padding: EdgeInsets.all(25),
-                    width: MediaQuery.of(context).size.width * 0.7,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25),
-                        color: Colors.grey),
-                    child: Column(children: [
-                      QrImageView(
-                        backgroundColor: Colors.white,
-                        data: userid,
-                        version: QrVersions.auto,
-                        size: 150.0,
-                      ),
-                      Text("UserID :" + userid),
-                      SizedBox(
-                        height: 25,
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: MySmallText(
-                            text: "Name: " +
-                                visitorData["name"] +
-                                "\nNRIC: " +
-                                visitorData["nric"] +
-                                "\nGender: " +
-                                visitorData["gender"] +
-                                "\nEmail: " +
-                                visitorData["email"] +
-                                "\nContact No: " +
-                                visitorData["contact_no"] +
-                                "\nHome Address: " +
-                                visitorData["home_address"] +
-                                "\nState: " +
-                                visitorData["state"] +
-                                "\nPostcode: " +
-                                visitorData["postcode"]),
-                      )
-                    ]),
-                  ),
-                ],
-              ),
-            );
+              return Container(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    Align(
+                        alignment: Alignment.topLeft,
+                        child: MyLargeText(text: "Visitor Personal Detail")),
+                    MyDivider(),
+                    Container(
+                      padding: EdgeInsets.all(25),
+                      width: MediaQuery.of(context).size.width * 0.7,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                          color: Colors.grey),
+                      child: Column(children: [
+                        QrImageView(
+                          backgroundColor: Colors.white,
+                          data: userid,
+                          version: QrVersions.auto,
+                          size: 150.0,
+                        ),
+                        Text("UserID :" + userid),
+                        SizedBox(
+                          height: 25,
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: MySmallText(
+                              text: "Name: " +
+                                  visitorData["name"] +
+                                  "\nNRIC: " +
+                                  visitorData["nric"] +
+                                  "\nGender: " +
+                                  visitorData["gender"] +
+                                  "\nEmail: " +
+                                  visitorData["email"] +
+                                  "\nContact No: " +
+                                  visitorData["contact_no"] +
+                                  "\nHome Address: " +
+                                  visitorData["home_address"] +
+                                  "\nState: " +
+                                  visitorData["state"] +
+                                  "\nPostcode: " +
+                                  visitorData["postcode"]),
+                        )
+                      ]),
+                    ),
+                  ],
+                ),
+              );
+            }
           },
         ));
   }
@@ -425,142 +444,145 @@ class _ManagementProfilePage extends State<ManagementProfilePage> {
               return Center(
                 child: Text('Error occurred while loading data'),
               );
-            } else {}
-            List<String> studentdetail = snapshot.data as List<String>;
-            String name = studentdetail[0];
-            String gender = studentdetail[1];
-            String dob = studentdetail[2];
-            String nric = studentdetail[3];
-            String email = studentdetail[4];
-            String contactno = studentdetail[5];
+            } else {
+              List<String> studentdetail = snapshot.data as List<String>;
+              String name = studentdetail[0];
+              String gender = studentdetail[1];
+              String dob = studentdetail[2];
+              String nric = studentdetail[3];
+              String email = studentdetail[4];
+              String contactno = studentdetail[5];
 
-            String role = studentdetail[6];
-            String position = studentdetail[7];
-            String id = studentdetail[8];
-            String full_detail = studentdetail[9];
+              String role = studentdetail[6];
+              String position = studentdetail[7];
+              String id = studentdetail[8];
+              String full_detail = studentdetail[9];
 
-            return SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.all(16.0),
-                color: Colors.white,
-                child: Column(children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "Personal Profile",
-                      style: TextStyle(fontSize: 30),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  Container(
-                    alignment: Alignment.topLeft,
-                    child: Container(
-                      padding: EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25),
-                        color: Colors.grey,
+              return SingleChildScrollView(
+                child: Container(
+                  padding: EdgeInsets.all(16.0),
+                  color: Colors.white,
+                  child: Column(children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "Personal Profile",
+                        style: TextStyle(fontSize: 30),
                       ),
-                      alignment: Alignment.center,
-                      child: Column(
-                        children: [
-                          QrImageView(
-                            backgroundColor: Colors.white,
-                            data: user,
-                            version: QrVersions.auto,
-                            size: 150.0,
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text("user ID: " + user),
-                          SizedBox(
-                            height: 25,
-                          ),
-                          Container(
-                            child: Row(
-                              children: [
-                                Container(
-                                  constraints: BoxConstraints(
-                                    maxWidth: MediaQuery.of(context)
-                                            .size
-                                            .width *
-                                        0.8, // Set a maximum width for the program text
-                                  ),
-                                  // color: Colors.blue,
-                                  alignment: Alignment.topLeft,
-                                  padding: EdgeInsets.symmetric(horizontal: 20),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: MyMiddleText(
-                                            text: 'Basic information',
-                                          )),
-                                      MyDivider(),
-                                      Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          'Name: ' +
-                                              name +
-                                              "\nGender: " +
-                                              gender +
-                                              '\nDate of Birth: ' +
-                                              dob +
-                                              "\nNRIC: " +
-                                              nric +
-                                              "\nEmail: " +
-                                              email +
-                                              "\nContact No: " +
-                                              contactno +
-                                              "\nRole: " +
-                                              role +
-                                              "\nPosition: " +
-                                              position +
-                                              "\nID: " +
-                                              id,
-                                          style: TextStyle(fontSize: 18),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      FutureBuilder(
-                                        future: fulldetail(role),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.connectionState ==
-                                              ConnectionState.waiting) {
-                                            return CircularProgressIndicator(); // or any loading indicator
-                                          } else if (snapshot.hasError) {
-                                            return Center(
-                                              child: Text(
-                                                  'Error occurred while loading data'),
-                                            );
-                                          } else {}
-                                          List<String> roledetail =
-                                              snapshot.data as List<String>;
-
-                                          return roleinfo(role, roledetail);
-                                        },
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                    ),
+                    SizedBox(
+                      height: 25,
+                    ),
+                    Container(
+                      alignment: Alignment.topLeft,
+                      child: Container(
+                        padding: EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                          color: Colors.grey,
+                        ),
+                        alignment: Alignment.center,
+                        child: Column(
+                          children: [
+                            QrImageView(
+                              backgroundColor: Colors.white,
+                              data: user,
+                              version: QrVersions.auto,
+                              size: 150.0,
                             ),
-                          ),
-                        ],
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text("user ID: " + user),
+                            SizedBox(
+                              height: 25,
+                            ),
+                            Container(
+                              child: Row(
+                                children: [
+                                  Container(
+                                    constraints: BoxConstraints(
+                                      maxWidth: MediaQuery.of(context)
+                                              .size
+                                              .width *
+                                          0.8, // Set a maximum width for the program text
+                                    ),
+                                    // color: Colors.blue,
+                                    alignment: Alignment.topLeft,
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 20),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: MyMiddleText(
+                                              text: 'Basic information',
+                                            )),
+                                        MyDivider(),
+                                        Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            'Name: ' +
+                                                name +
+                                                "\nGender: " +
+                                                gender +
+                                                '\nDate of Birth: ' +
+                                                dob +
+                                                "\nNRIC: " +
+                                                nric +
+                                                "\nEmail: " +
+                                                email +
+                                                "\nContact No: " +
+                                                contactno +
+                                                "\nRole: " +
+                                                role +
+                                                "\nPosition: " +
+                                                position +
+                                                "\nID: " +
+                                                id,
+                                            style: TextStyle(fontSize: 18),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        FutureBuilder(
+                                          future: fulldetail(role),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.waiting) {
+                                              return CircularProgressIndicator(); // or any loading indicator
+                                            } else if (snapshot.hasError) {
+                                              return Center(
+                                                child: Text(
+                                                    'Error occurred while loading data'),
+                                              );
+                                            } else {}
+                                            List<String> roledetail =
+                                                snapshot.data as List<String>;
+
+                                            return roleinfo(role, roledetail);
+                                          },
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ]),
-              ),
-            );
+                  ]),
+                ),
+              );
+            }
           },
         ),
       ),

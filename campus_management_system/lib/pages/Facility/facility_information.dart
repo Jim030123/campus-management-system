@@ -35,16 +35,16 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                     runSpacing: 25,
                     spacing: 25,
                     children: [
-                      Image.asset(
-                        'lib/images/basketball.jpg',
-                        width: 300,
-                      ),
                       Container(
                         padding: EdgeInsets.all(15),
                         width: 300,
                         color: Colors.white,
                         child: Column(
                           children: [
+                            Image.asset(
+                              'lib/images/basketball.jpg',
+                              width: 300,
+                            ),
                             Text(
                               'Basketball Court',
                               style: TextStyle(fontSize: 25),
@@ -54,7 +54,7 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                               height: 5,
                             ),
                             Text(
-                              'Location: Sport field \n Opening Hour : 8AM - 6PM\n Number of Court : 2',
+                              'Location: Sport field \nOpening Hour : 8AM - 6PM\nNumber of Court : 2',
                               style: TextStyle(fontSize: 15),
                             ),
                             SizedBox(
@@ -84,17 +84,16 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                       Container(
                           child: Column(
                         children: [
-                          Image.asset(
-                            'lib/images/tennis.jpg',
-                            width: 300,
-                          ),
                           Container(
                             padding: EdgeInsets.all(15),
                             width: 300,
-                            height: 200,
                             color: Colors.white,
                             child: Column(
                               children: [
+                                Image.asset(
+                                  'lib/images/tennis.jpg',
+                                  width: 300,
+                                ),
                                 Text(
                                   'Tennis Court',
                                   style: TextStyle(fontSize: 25),
@@ -104,12 +103,25 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                                   height: 5,
                                 ),
                                 Text(
-                                  'Location: Sport Field \n Opening Hour : 8AM - 6PM\n Number of Court : 3',
+                                  'Location: Sport Field \nOpening Hour : 8AM - 6PM\nNumber of Court : 3',
                                   style: TextStyle(fontSize: 15),
                                 ),
                                 SizedBox(
                                   height: 10,
                                 ),
+                                Align(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.pushNamed(
+                                          context, '/check_facility_available');
+                                    },
+                                    child: Text("Booking Now",
+                                        style: TextStyle(
+                                          color: Colors.blue,
+                                        )),
+                                  ),
+                                  alignment: Alignment.bottomRight,
+                                )
                               ],
                             ),
                           ),
@@ -137,17 +149,16 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                     spacing: 25,
                     runSpacing: 25,
                     children: [
-                      Image.asset(
-                        'lib/images/badminton.png',
-                        width: 300,
-                      ),
                       Container(
                         padding: EdgeInsets.all(15),
                         width: 300,
-                        height: 200,
                         color: Colors.white,
                         child: Column(
                           children: [
+                            Image.asset(
+                              'lib/images/badminton.png',
+                              width: 300,
+                            ),
                             Text(
                               'Badminton Court',
                               style: TextStyle(fontSize: 25),
@@ -163,6 +174,19 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                             SizedBox(
                               height: 10,
                             ),
+                            Align(
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                      context, '/check_facility_available');
+                                },
+                                child: Text("Booking Now",
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                    )),
+                              ),
+                              alignment: Alignment.bottomRight,
+                            )
                           ],
                         ),
                       ),
@@ -171,16 +195,16 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                       Container(
                           child: Column(
                         children: [
-                          Image.asset(
-                            'lib/images/gymcenter.png',
-                            width: 300,
-                          ),
                           Container(
                             padding: EdgeInsets.all(15),
                             width: 300,
                             color: Colors.white,
                             child: Column(
                               children: [
+                                Image.asset(
+                                  'lib/images/gymcenter.png',
+                                  width: 300,
+                                ),
                                 Text(
                                   'Gym Center',
                                   style: TextStyle(fontSize: 25),
@@ -190,13 +214,26 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                                   height: 5,
                                 ),
                                 Text(
-                                  'Location: International Education Building (IEB)\n Opening Hour : 8AM - 6PM\nFacility:\n- Cardio Area \n- Cycling studio\n- Strength area\n- Locker ',
+                                  'Location: International Education Building (IEB)\nOpening Hour : 8AM - 6PM\nFacility:\n- Cardio Area \n- Cycling studio\n- Strength area\n- Locker ',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(fontSize: 15),
                                 ),
                                 SizedBox(
                                   height: 10,
                                 ),
+                                Align(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.pushNamed(
+                                          context, '/check_facility_available');
+                                    },
+                                    child: Text("Booking Now",
+                                        style: TextStyle(
+                                          color: Colors.blue,
+                                        )),
+                                  ),
+                                  alignment: Alignment.bottomRight,
+                                )
                               ],
                             ),
                           ),

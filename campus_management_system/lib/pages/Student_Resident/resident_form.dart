@@ -103,6 +103,13 @@ class _ResidentApplicationPageState extends State<ResidentApplicationPage> {
             parentemailController.text = parentemail;
             relationshipController.text = relationship;
 
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator(); // Display circular progress indicator while data is loading
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text('Error fetching data'), // Display error message
+              );
+            }
             return Container(
               padding: EdgeInsets.all(16.0),
               child: Column(

@@ -52,7 +52,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  
+
   runApp(MainApp());
 }
 
@@ -90,7 +90,7 @@ class MainApp extends StatelessWidget {
 
         // Student
         // Info
-        '/payment_info':(context) =>PaymentInfoPage(), 
+        '/payment_info': (context) => PaymentInfoPage(),
 
         // Student Resident
         '/resident_menu': (context) => StudentResidentMenuPage(),
@@ -145,7 +145,6 @@ class MainApp extends StatelessWidget {
         '/visitor_profile_page': (context) => VistitorProfilePage(),
         '/view_all_visitor_pass': (context) => ViewAllVisitorPass(),
         '/visitor_pass_scanner': (context) => VisitorPassScanner(),
-
       },
 
       initialRoute: '/',

@@ -45,138 +45,138 @@ class _ManagementMainPageState extends State<ManagementMainPage> {
               );
             } else {
               List<String> dataList = snapshot.data as List<String>;
-              // rest of your code
-            }
-            List<String> dataList = snapshot.data as List<String>;
-            String name = dataList[0];
-            String email = dataList[1];
-            String id = dataList[2];
-            String fulldetail = dataList[3];
 
-            if (fulldetail == "0") {
-              Future.delayed(Duration(seconds: 3), () {
-                Navigator.pushReplacementNamed(
-                    context, '/redirect_personal_form');
-              });
-            }
+            
+              String name = dataList[0];
+              String email = dataList[1];
+              String id = dataList[2];
+              String fulldetail = dataList[3];
 
-            return SingleChildScrollView(
-              child: Center(
-                child: Container(
-                  // width: 1000,
-                  height: 1200,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      MyLogo(),
-                      Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.black12,
-                          // border: Border.all(
-                          //   color: Colors.black,
-                          // ),
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                        ),
-                        child: Column(children: [
-                          Text(
-                            "Management Staff Information",
-                            style: TextStyle(fontSize: 30),
+              if (fulldetail == "0") {
+                Future.delayed(Duration(seconds: 3), () {
+                  Navigator.pushReplacementNamed(
+                      context, '/redirect_personal_form');
+                });
+              }
+
+              return SingleChildScrollView(
+                child: Center(
+                  child: Container(
+                    // width: 1000,
+                    height: 1200,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        MyLogo(),
+                        Container(
+                          padding: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.black12,
+                            // border: Border.all(
+                            //   color: Colors.black,
+                            // ),
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
                           ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 25),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Column(
-                                    children: [
-                                      Text(
-                                        "Name: " +
-                                            name +
-                                            "\nBatch: " +
-                                            email +
-                                            "\nStudent ID: " +
-                                            id,
-                                        style: TextStyle(fontSize: 15),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      QrImageView(
-                                        data: user.uid,
-                                        version: QrVersions.auto,
-                                        size: 100.0,
-                                      ),
-                                      Text(
-                                        "user ID: \n" + user.uid,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(fontSize: 9),
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
+                          child: Column(children: [
+                            Text(
+                              "Management Staff Information",
+                              style: TextStyle(fontSize: 30),
                             ),
-                          )
-                        ]),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          MyMenuTile(
-                              text: 'Account Management',
-                              iconnumber: 0xf7c5,
-                              routename: '/account_management_menu'),
-                          MyMenuTile(
-                              text: 'Student Resident Management',
-                              iconnumber: 0xf0110,
-                              routename: '/student_resident_management_menu'),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          MyMenuTile(
-                              text: 'Feedback Recieved',
-                              iconnumber: 0xe260,
-                              routename: '/feedback_received'),
-                          MyMenuTile(
-                              text: 'Facility Management',
-                              iconnumber: 0xe260,
-                              routename: '/facility_management'),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          MyMenuTile(
-                              text: 'Auto fill Form',
-                              iconnumber: 0xf60d,
-                              routename: '/auto_fill_form_menu'),
-                          MyMenuTile(
-                              text: 'Visitor Pass Management',
-                              iconnumber: 0xef2e,
-                              routename: '/visitor_pass_management')
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          MyMenuTile(
-                              text: 'Security Management',
-                              iconnumber: 0xef2e,
-                              routename: '/security_management_menu')
-                        ],
-                      ),
-                    ],
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 25),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Text(
+                                          "Name: " +
+                                              name +
+                                              "\nBatch: " +
+                                              email +
+                                              "\nStudent ID: " +
+                                              id,
+                                          style: TextStyle(fontSize: 15),
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        QrImageView(
+                                          data: user.uid,
+                                          version: QrVersions.auto,
+                                          size: 100.0,
+                                        ),
+                                        Text(
+                                          "user ID: \n" + user.uid,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(fontSize: 9),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                          ]),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            MyMenuTile(
+                                text: 'Account Management',
+                                iconnumber: 0xf7c5,
+                                routename: '/account_management_menu'),
+                            MyMenuTile(
+                                text: 'Student Resident Management',
+                                iconnumber: 0xf0110,
+                                routename: '/student_resident_management_menu'),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            MyMenuTile(
+                                text: 'Feedback Recieved',
+                                iconnumber: 0xe260,
+                                routename: '/feedback_received'),
+                            MyMenuTile(
+                                text: 'Facility Management',
+                                iconnumber: 0xe260,
+                                routename: '/facility_management'),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            MyMenuTile(
+                                text: 'Auto fill Form',
+                                iconnumber: 0xf60d,
+                                routename: '/auto_fill_form_menu'),
+                            MyMenuTile(
+                                text: 'Visitor Pass Management',
+                                iconnumber: 0xef2e,
+                                routename: '/visitor_pass_management')
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            MyMenuTile(
+                                text: 'Security Management',
+                                iconnumber: 0xef2e,
+                                routename: '/security_management_menu')
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            );
+              );
+            }
           }),
       bottomNavigationBar: Container(
         // color: Colors.green,

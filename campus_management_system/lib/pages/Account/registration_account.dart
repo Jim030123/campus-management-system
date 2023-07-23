@@ -269,14 +269,12 @@ class _RegistrationAccountState extends State<RegistrationAccount> {
         "email": emailController.text,
         "id": idController.text,
         "full_detail": fullDetail,
-     
       });
 
       if (_selectedRole == _roles[0]) {
         await FirebaseFirestore.instance.collection('users').doc(uid).update({
           "roles": _selectedRole as String,
           "program": _selectedProgram as String,
-        
         });
       } else if (_selectedRole == _roles[1]) {
         await FirebaseFirestore.instance.collection('users').doc(uid).update({

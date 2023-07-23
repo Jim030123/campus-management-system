@@ -1,3 +1,4 @@
+import 'package:campus_management_system/pages/Account/Visitor/visitor_register_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -53,31 +54,42 @@ class _RedirectLoginPageState extends State<RedirectLoginPage> {
             decoration: BoxDecoration(
                 color: Colors.grey,
                 borderRadius: BorderRadius.all(Radius.circular(25))),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                    textAlign: TextAlign.center,
-                    'You are login as a ' +
-                        'please wait' +
-                        ' \nRedirecting to the Login Page...',
-                    style: TextStyle(fontSize: 30)),
-                SizedBox(
-                  height: 25,
-                ),
-                Text(
-                  'You should be redirected automatically in 3 second if not please press Login Button',
-                  style: TextStyle(fontSize: 15),
-                ),
-                SizedBox(
-                  height: 25,
-                ),
-                ElevatedButton(
-                    onPressed: () async {
-                      getRoleFieldValue(user).toString();
-                    },
-                    child: Text('Login Page'))
-              ],
+            child: FutureBuilder(
+              future: getRoleFieldValue(user),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator(); // or any loading indicator
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Error occurred while loading data'),
+                  );
+                } else {
+                  String role = snapshot.data as String;
+
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                          textAlign: TextAlign.center,
+                          'You are login as ' +
+                              role +
+                              ' please wait' +
+                              ' \nRedirecting to the Login Page...',
+                          style: TextStyle(fontSize: 30)),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      Text(
+                        'You should be redirected automatically in 3 second if not please press Login Button',
+                        style: TextStyle(fontSize: 15),
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                    ],
+                  );
+                }
+              },
             )),
       ),
     );
@@ -129,6 +141,8 @@ class RedirectProfileForm extends StatelessWidget {
 
 class RedirectVisitorProfileForm extends StatelessWidget {
   const RedirectVisitorProfileForm({super.key});
+
+  // DocumentChange
 
   @override
   Widget build(BuildContext context) {

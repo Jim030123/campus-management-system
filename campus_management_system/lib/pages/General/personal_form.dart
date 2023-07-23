@@ -490,7 +490,6 @@ class _PersonalFormState extends State<PersonalForm> {
         "parent_contact_no": parentcontactnoController.text,
         "parent_email": parentemailController.text,
         "full_detail": fulldetail,
-        
       });
 
       if (_selectedNationality == _nationaltype[0]) {
@@ -581,192 +580,201 @@ class _VisitorPersonalFormState extends State<VisitorPersonalForm> {
       body: FutureBuilder<DocumentSnapshot>(
         future: findUserById(user),
         builder: (context, snapshot) {
-          DocumentSnapshot documentSnapshot = snapshot.data!;
-          nameController.text = documentSnapshot['name'];
-          contactnoController.text = documentSnapshot['contact_no'];
-          emailController.text = documentSnapshot['email'];
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator(); // or any loading indicator
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Error occurred while loading data'),
+            );
+          } else {
+            DocumentSnapshot documentSnapshot = snapshot.data!;
+            nameController.text = documentSnapshot['name'];
+            contactnoController.text = documentSnapshot['contact_no'];
+            emailController.text = documentSnapshot['email'];
 
-          return SingleChildScrollView(
-            child: Container(
-                padding: EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                    Align(
-                        alignment: Alignment.bottomLeft,
-                        child: MyLargeText(text: 'Visitor Personal Form')),
-                    MyDivider(),
-                    Container(
-                      padding: EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                          color: Colors.grey,
-                          borderRadius: BorderRadius.circular(25)),
-                      child: Column(
-                        children: [
-                          // Text(documentSnapshot['roles']),
+            return SingleChildScrollView(
+              child: Container(
+                  padding: EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      Align(
+                          alignment: Alignment.bottomLeft,
+                          child: MyLargeText(text: 'Visitor Personal Detail')),
+                      MyDivider(),
+                      Container(
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius: BorderRadius.circular(25)),
+                        child: Column(
+                          children: [
+                            // Text(documentSnapshot['roles']),
 
-                          Form(
-                            key: _formKey,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                MyMiddleText(text: "Basic Information"),
-                                MyDivider(),
-                                TextFormField(
-                                  enabled: false,
-                                  controller: nameController,
-                                  decoration:
-                                      InputDecoration(labelText: 'Name'),
-                                  validator: (value) {
-                                    return null;
-                                  },
-                                ),
-                                TextFormField(
-                                  enabled: false,
-                                  controller: contactnoController,
-                                  decoration:
-                                      InputDecoration(labelText: 'Contact No'),
-                                  validator: (value) {
-                                    return null;
-                                  },
-                                ),
-                                TextFormField(
-                                  enabled: false,
-                                  controller: emailController,
-                                  decoration:
-                                      InputDecoration(labelText: 'Email'),
-                                  validator: (value) {
-                                    return null;
-                                  },
-                                ),
-                                SizedBox(
-                                  height: 25,
-                                ),
-                                MyMiddleText(text: "Detail Information"),
-                                MyDivider(),
-                                DropdownButtonFormField(
-                                  decoration: InputDecoration(
-                                      labelText: "Gender",
-                                      prefixIcon: Icon(
-                                          Icons.supervisor_account_rounded),
-                                      border: UnderlineInputBorder()),
-                                  value: _selectedGender,
-                                  items: _gender
-                                      .map((e) => DropdownMenuItem(
-                                            child: Text(e),
-                                            value: e,
-                                          ))
-                                      .toList(),
-                                  onChanged: (val) {
-                                    setState(() {
-                                      _selectedGender = val as String;
-                                    });
-                                  },
-                                ),
-                                TextFormField(
-                                  controller: nricController,
-                                  decoration: InputDecoration(
-                                    labelText: 'NRIC',
+                            Form(
+                              key: _formKey,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  MyMiddleText(text: "Basic Information"),
+                                  MyDivider(),
+                                  TextFormField(
+                                    enabled: false,
+                                    controller: nameController,
+                                    decoration:
+                                        InputDecoration(labelText: 'Name'),
+                                    validator: (value) {
+                                      return null;
+                                    },
                                   ),
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return 'Please enter your home address';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                TextFormField(
-                                  controller: homeaddressController,
-                                  decoration: InputDecoration(
-                                    labelText: 'Home Address',
+                                  TextFormField(
+                                    enabled: false,
+                                    controller: contactnoController,
+                                    decoration: InputDecoration(
+                                        labelText: 'Contact No'),
+                                    validator: (value) {
+                                      return null;
+                                    },
                                   ),
-                                  validator: (value) {
-                                    return null;
-                                  },
-                                ),
-                                DropdownButtonFormField(
-                                  decoration: InputDecoration(
-                                    labelText: "State",
-                                    border: UnderlineInputBorder(),
+                                  TextFormField(
+                                    enabled: false,
+                                    controller: emailController,
+                                    decoration:
+                                        InputDecoration(labelText: 'Email'),
+                                    validator: (value) {
+                                      return null;
+                                    },
                                   ),
-                                  value: _selectedState,
-                                  items: _state
-                                      .map((e) => DropdownMenuItem(
-                                            child: Text(e),
-                                            value: e,
-                                          ))
-                                      .toList(),
-                                  onChanged: (val) {
-                                    setState(() {
-                                      _selectedState = val as String;
-                                    });
-                                  },
-                                ),
-                                TextFormField(
-                                  controller: postcodeController,
-                                  decoration:
-                                      InputDecoration(labelText: 'Postcode'),
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return 'Please enter your postcode';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                Row(
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        _showAlertDialog();
-                                      },
-                                      child: Row(
-                                        children: [
-                                          Checkbox(
-                                            value: checkboxValue,
-                                            onChanged: (bool? value) {
-                                              setState(() {
-                                                checkboxValue = value ?? false;
-                                              });
-                                            },
-                                          ),
-                                          Container(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.7,
-                                              child: Text(
-                                                  'I agree all Term & Condition'))
-                                        ],
-                                      ),
+                                  SizedBox(
+                                    height: 25,
+                                  ),
+                                  MyMiddleText(text: "Detail Information"),
+                                  MyDivider(),
+                                  DropdownButtonFormField(
+                                    decoration: InputDecoration(
+                                        labelText: "Gender",
+                                        prefixIcon: Icon(
+                                            Icons.supervisor_account_rounded),
+                                        border: UnderlineInputBorder()),
+                                    value: _selectedGender,
+                                    items: _gender
+                                        .map((e) => DropdownMenuItem(
+                                              child: Text(e),
+                                              value: e,
+                                            ))
+                                        .toList(),
+                                    onChanged: (val) {
+                                      setState(() {
+                                        _selectedGender = val as String;
+                                      });
+                                    },
+                                  ),
+                                  TextFormField(
+                                    controller: nricController,
+                                    decoration: InputDecoration(
+                                      labelText: 'NRIC',
                                     ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 25,
-                                ),
-                                Align(
-                                  alignment: Alignment.bottomRight,
-                                  child: ElevatedButton(
-                                    onPressed: checkboxValue
-                                        ? () {
-                                            if (_formKey.currentState!
-                                                .validate()) {
-                                              updatePersonalInfo(context);
-                                              confirmDialog();
-                                            }
-                                          }
-                                        : null,
-                                    child: Text('Update'),
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return 'Please enter your home address';
+                                      }
+                                      return null;
+                                    },
                                   ),
-                                ),
-                              ],
+                                  TextFormField(
+                                    controller: homeaddressController,
+                                    decoration: InputDecoration(
+                                      labelText: 'Home Address',
+                                    ),
+                                    validator: (value) {
+                                      return null;
+                                    },
+                                  ),
+                                  DropdownButtonFormField(
+                                    decoration: InputDecoration(
+                                      labelText: "State",
+                                      border: UnderlineInputBorder(),
+                                    ),
+                                    value: _selectedState,
+                                    items: _state
+                                        .map((e) => DropdownMenuItem(
+                                              child: Text(e),
+                                              value: e,
+                                            ))
+                                        .toList(),
+                                    onChanged: (val) {
+                                      setState(() {
+                                        _selectedState = val as String;
+                                      });
+                                    },
+                                  ),
+                                  TextFormField(
+                                    controller: postcodeController,
+                                    decoration:
+                                        InputDecoration(labelText: 'Postcode'),
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return 'Please enter your postcode';
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                  Row(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          _showAlertDialog();
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Checkbox(
+                                              value: checkboxValue,
+                                              onChanged: (bool? value) {
+                                                setState(() {
+                                                  checkboxValue =
+                                                      value ?? false;
+                                                });
+                                              },
+                                            ),
+                                            Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.7,
+                                                child: Text(
+                                                    'I agree all Term & Condition'))
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 25,
+                                  ),
+                                  Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: ElevatedButton(
+                                      onPressed: checkboxValue
+                                          ? () {
+                                              if (_formKey.currentState!
+                                                  .validate()) {
+                                                updatePersonalInfo(context);
+                                                confirmDialog();
+                                              }
+                                            }
+                                          : null,
+                                      child: Text('Update'),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                )),
-          );
+                          ],
+                        ),
+                      )
+                    ],
+                  )),
+            );
+          }
         },
       ),
     );
@@ -798,7 +806,7 @@ class _VisitorPersonalFormState extends State<VisitorPersonalForm> {
         builder: (ctx) => AlertDialog(
               title: const Text("Confirmation"),
               content: const Text(
-                  "I already confirm all my detail insert correctly "),
+                  "I already confirm all my personal detail fill correctly."),
               actions: [
                 TextButton(
                   onPressed: () {

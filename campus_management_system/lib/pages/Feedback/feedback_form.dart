@@ -69,156 +69,166 @@ class _FeedbackFormState extends State<FeedbackForm> {
         child: FutureBuilder(
           future: getdatafromDB(),
           builder: (context, snapshot) {
-            List<String> dataList = snapshot.data as List<String>;
-            String name = dataList[0];
-            String email = dataList[1];
-            String id = dataList[2];
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator(); // or any loading indicator
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text('Error occurred while loading data'),
+              );
+            } else {
+              List<String> dataList = snapshot.data as List<String>;
+              String name = dataList[0];
+              String email = dataList[1];
+              String id = dataList[2];
 
-            nameController.text = name;
-            emailController.text = email;
-            idController.text = id;
+              nameController.text = name;
+              emailController.text = email;
+              idController.text = id;
 
-            return Container(
-              padding: EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Feedback',
-                      style: TextStyle(fontSize: 30),
-                    ),
-                  ),
-                  Divider(
-                    color: Colors.black,
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25),
-                      color: Colors.grey,
-                    ),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextFormField(
-                            controller: nameController,
-                            decoration: InputDecoration(labelText: 'Name'),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter your name';
-                              }
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-                            controller: emailController,
-                            decoration: InputDecoration(labelText: 'Email'),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter your Email';
-                              }
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-                            controller: idController,
-                            decoration: InputDecoration(labelText: 'ID'),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter your Email';
-                              }
-                              return null;
-                            },
-                          ),
-                          DropdownButtonFormField(
-                            decoration: InputDecoration(
-                              labelText: "Role",
-                              prefixIcon: Icon(Icons.verified_user),
-                              border: UnderlineInputBorder(),
-                            ),
-                            value: _selectedFeedbackType,
-                            items: _type
-                                .map((e) => DropdownMenuItem(
-                                      child: Text(e),
-                                      value: e,
-                                    ))
-                                .toList(),
-                            onChanged: (val) {
-                              setState(() {
-                                _selectedFeedbackType = val as String;
-                              });
-                            },
-                          ),
-                          TextFormField(
-                            controller: describeFeedbackController,
-                            decoration: InputDecoration(
-                                labelText: 'Describe of feedback'),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter your describe of feedback';
-                              }
-                              return null;
-                            },
-                          ),
-                          SizedBox(height: 16.0),
-                          TextFormField(
-                            controller: supportingEvidenceController,
-                            decoration: InputDecoration(
-                              labelText: 'Supporting Evidence (if applicable):',
-                            ),
-                            validator: (value) {
-                              return null;
-                            },
-                          ),
-                          Row(
-                            children: [
-                              Checkbox(
-                                value: checkboxValue,
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    checkboxValue = value ?? false;
-                                  });
-                                },
-                              ),
-                              Container(
-                                width: MediaQuery.of(context).size.width * 0.7,
-                                child: Text(
-                                  'By submitting this form, you acknowledge that the information provided is accurate to the best of your knowledge',
-                                  style: TextStyle(
-                                    color:
-                                        const Color.fromARGB(255, 33, 40, 243),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 25,
-                          ),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: ElevatedButton(
-                              onPressed: checkboxValue
-                                  ? () {
-                                      if (_formKey.currentState!.validate()) {
-                                        studentResidentApplication(context);
-                                        _confirmDialog();
-                                      }
-                                    }
-                                  : null,
-                              child: Text('Submit'),
-                            ),
-                          ),
-                        ],
+              return Container(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Feedback',
+                        style: TextStyle(fontSize: 30),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            );
+                    Divider(
+                      color: Colors.black,
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
+                        color: Colors.grey,
+                      ),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextFormField(
+                              controller: nameController,
+                              decoration: InputDecoration(labelText: 'Name'),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Please enter your name';
+                                }
+                                return null;
+                              },
+                            ),
+                            TextFormField(
+                              controller: emailController,
+                              decoration: InputDecoration(labelText: 'Email'),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Please enter your Email';
+                                }
+                                return null;
+                              },
+                            ),
+                            TextFormField(
+                              controller: idController,
+                              decoration: InputDecoration(labelText: 'ID'),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Please enter your ID';
+                                }
+                                return null;
+                              },
+                            ),
+                            DropdownButtonFormField(
+                              decoration: InputDecoration(
+                                labelText: "Role",
+                                prefixIcon: Icon(Icons.verified_user),
+                                border: UnderlineInputBorder(),
+                              ),
+                              value: _selectedFeedbackType,
+                              items: _type
+                                  .map((e) => DropdownMenuItem(
+                                        child: Text(e),
+                                        value: e,
+                                      ))
+                                  .toList(),
+                              onChanged: (val) {
+                                setState(() {
+                                  _selectedFeedbackType = val as String;
+                                });
+                              },
+                            ),
+                            TextFormField(
+                              controller: describeFeedbackController,
+                              decoration: InputDecoration(
+                                  labelText: 'Describe of feedback'),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Please enter your describe of feedback';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 16.0),
+                            TextFormField(
+                              controller: supportingEvidenceController,
+                              decoration: InputDecoration(
+                                labelText:
+                                    'Supporting Evidence (if applicable):',
+                              ),
+                              validator: (value) {
+                                return null;
+                              },
+                            ),
+                            Row(
+                              children: [
+                                Checkbox(
+                                  value: checkboxValue,
+                                  onChanged: (bool? value) {
+                                    setState(() {
+                                      checkboxValue = value ?? false;
+                                    });
+                                  },
+                                ),
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.7,
+                                  child: Text(
+                                    'By submitting this form, you acknowledge that the information provided is accurate to the best of your knowledge',
+                                    style: TextStyle(
+                                      color: const Color.fromARGB(
+                                          255, 33, 40, 243),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 25,
+                            ),
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: ElevatedButton(
+                                onPressed: checkboxValue
+                                    ? () {
+                                        if (_formKey.currentState!.validate()) {
+                                          studentResidentApplication(context);
+                                          _confirmDialog();
+                                        }
+                                      }
+                                    : null,
+                                child: Text('Submit'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
           },
         ),
       ),

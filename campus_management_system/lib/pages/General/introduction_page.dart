@@ -33,13 +33,15 @@ class IntroductionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IntroductionScreen(
-      pages: listViewModel,
-      done: const Text('Let\'s GO'),
-      onDone: () {
-        Navigator.pushNamed(context, '/auth');
-      },
-      showNextButton: false,
+    return SafeArea(
+      child: IntroductionScreen(
+        pages: listViewModel,
+        done: const Text('Let\'s GO'),
+        onDone: () {
+          Navigator.pushNamed(context, '/auth');
+        },
+        showNextButton: false,
+      ),
     );
   }
 }

@@ -30,144 +30,154 @@ class _VisitorMainPageState extends State<VisitorMainPage> {
                 context, '/redirect_visitor_personal_form');
           });
         }
-        return Scaffold(
-          body: Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              // column child
 
-              children: [
-                SizedBox(
-                  height: 70.0,
-                ),
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator(); // or any loading indicator
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Text('Error occurred while loading data'),
+          );
+        } else {
+          return Scaffold(
+            body: Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                // column child
 
-                SizedBox(
-                  height: 50.0,
-                ),
-                // Allign center
-                MyLogo(),
+                children: [
+                  SizedBox(
+                    height: 70.0,
+                  ),
 
-                SizedBox(
-                  height: 25.0,
-                ),
+                  SizedBox(
+                    height: 50.0,
+                  ),
+                  // Allign center
+                  MyLogo(),
 
-                Container(
-                  // color: Colors.red,
-                  width: 300,
-                  height: 400,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      MyButton(
-                        onTap: () {
-                          Navigator.pushNamed(
-                              context, '/register_visitor_pass');
-                        },
-                        text: 'Register Visitor Pass',
-                      ),
-                      MyButton(
+                  SizedBox(
+                    height: 25.0,
+                  ),
+
+                  Container(
+                    // color: Colors.red,
+                    width: 300,
+                    height: 400,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        MyButton(
                           onTap: () {
                             Navigator.pushNamed(
-                                context, '/view_all_visitor_pass');
+                                context, '/register_visitor_pass');
                           },
-                          text: 'View All Visitor Pass'),
-                    ],
-                  ),
-                )
-              ],
+                          text: 'Register Visitor Pass',
+                        ),
+                        MyButton(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                  context, '/view_all_visitor_pass');
+                            },
+                            text: 'View All Visitor Pass'),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-          bottomNavigationBar: Container(
-            // color: Colors.green,
-            height: 50,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(200),
-                  topRight: Radius.circular(200)),
-              color: Colors.black54,
-            ),
-            // color: Colors.green,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 70),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                      icon: const Icon(
-                        Icons.account_circle_rounded,
-                        size: 30,
-                      ),
-                      tooltip: 'User Profile',
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/visitor_profile_page');
-                      }),
-                  IconButton(
-                      icon: const Icon(
-                        Icons.logout,
-                        size: 30,
-                      ),
-                      tooltip: 'Log Out',
-                      onPressed: () {
-                        setState(() {
+            bottomNavigationBar: Container(
+              // color: Colors.green,
+              height: 50,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(200),
+                    topRight: Radius.circular(200)),
+                color: Colors.black54,
+              ),
+              // color: Colors.green,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 70),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                        icon: const Icon(
+                          Icons.account_circle_rounded,
+                          size: 30,
+                        ),
+                        tooltip: 'User Profile',
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/visitor_profile_page');
+                        }),
+                    IconButton(
+                        icon: const Icon(
+                          Icons.logout,
+                          size: 30,
+                        ),
+                        tooltip: 'Log Out',
+                        onPressed: () {
                           setState(() {
-                            _visible = !_visible;
+                            setState(() {
+                              _visible = !_visible;
 
-                            if (_visible = true) {
-                              showDialog(
-                                context: context,
-                                builder: (ctx) => AlertDialog(
-                                  title: const Text(
-                                      "Are You Sure Want to Log Out"),
-                                  content: const Text(
-                                      "If you are Log Out need to sign in again"),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(ctx).pop();
-                                      },
-                                      child: Row(
-                                        children: [
-                                          GestureDetector(
-                                            child: Container(
+                              if (_visible = true) {
+                                showDialog(
+                                  context: context,
+                                  builder: (ctx) => AlertDialog(
+                                    title: const Text(
+                                        "Are You Sure Want to Log Out"),
+                                    content: const Text(
+                                        "If you are Log Out need to sign in again"),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(ctx).pop();
+                                        },
+                                        child: Row(
+                                          children: [
+                                            GestureDetector(
+                                              child: Container(
+                                                color: Colors.green,
+                                                padding:
+                                                    const EdgeInsets.all(14),
+                                                child: const Text(
+                                                  "Yes",
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                ),
+                                              ),
+                                              onTap: () {
+                                                handleLogout();
+                                              },
+                                            ),
+                                            SizedBox(
+                                              width: 20,
+                                            ),
+                                            Container(
                                               color: Colors.green,
                                               padding: const EdgeInsets.all(14),
                                               child: const Text(
-                                                "Yes",
+                                                "Cancel",
                                                 style: TextStyle(
                                                     color: Colors.white),
                                               ),
                                             ),
-                                            onTap: () {
-                                              handleLogout();
-                                            },
-                                          ),
-                                          SizedBox(
-                                            width: 20,
-                                          ),
-                                          Container(
-                                            color: Colors.green,
-                                            padding: const EdgeInsets.all(14),
-                                            child: const Text(
-                                              "Cancel",
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }
+                                    ],
+                                  ),
+                                );
+                              }
+                            });
                           });
-                        });
-                      })
-                ],
+                        })
+                  ],
+                ),
               ),
             ),
-          ),
-        );
+          );
+        }
       },
     );
   }
