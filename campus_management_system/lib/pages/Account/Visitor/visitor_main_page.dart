@@ -22,15 +22,6 @@ class _VisitorMainPageState extends State<VisitorMainPage> {
     return FutureBuilder(
       future: findUserById(userid),
       builder: (context, snapshot) {
-        DocumentSnapshot documentSnapshot = snapshot.data!;
-
-        if (documentSnapshot['full_detail'] == "0") {
-          Future.delayed(Duration(seconds: 3), () {
-            Navigator.pushReplacementNamed(
-                context, '/redirect_visitor_personal_form');
-          });
-        }
-
         if (snapshot.connectionState == ConnectionState.waiting) {
           return CircularProgressIndicator(); // or any loading indicator
         } else if (snapshot.hasError) {
@@ -38,6 +29,15 @@ class _VisitorMainPageState extends State<VisitorMainPage> {
             child: Text('Error occurred while loading data'),
           );
         } else {
+          DocumentSnapshot documentSnapshot = snapshot.data!;
+
+          if (documentSnapshot['full_detail'] == "0") {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.pushReplacementNamed(
+                  context, '/redirect_visitor_personal_form');
+            });
+          }
+
           return Scaffold(
             body: Container(
               child: Column(

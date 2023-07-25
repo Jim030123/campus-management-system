@@ -70,7 +70,17 @@ class _FeedbackFormState extends State<FeedbackForm> {
           future: getdatafromDB(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator(); // or any loading indicator
+              List<String> dataList = snapshot.data as List<String>;
+              String name = dataList[0];
+              String email = dataList[1];
+              String id = dataList[2];
+
+              nameController.text = name;
+              emailController.text = email;
+              idController.text = id;
+              return CircularProgressIndicator();
+
+              // or any loading indicator
             } else if (snapshot.hasError) {
               return Center(
                 child: Text('Error occurred while loading data'),
@@ -170,7 +180,6 @@ class _FeedbackFormState extends State<FeedbackForm> {
                                 return null;
                               },
                             ),
-                            SizedBox(height: 16.0),
                             TextFormField(
                               controller: supportingEvidenceController,
                               decoration: InputDecoration(
@@ -195,10 +204,9 @@ class _FeedbackFormState extends State<FeedbackForm> {
                                   width:
                                       MediaQuery.of(context).size.width * 0.7,
                                   child: Text(
-                                    'By submitting this form, you acknowledge that the information provided is accurate to the best of your knowledge',
+                                    'I have read and agree to Terms of Service and Privacy Policy',
                                     style: TextStyle(
-                                      color: const Color.fromARGB(
-                                          255, 33, 40, 243),
+                                      color: Color.fromARGB(255, 35, 109, 193),
                                     ),
                                   ),
                                 ),
@@ -237,13 +245,13 @@ class _FeedbackFormState extends State<FeedbackForm> {
 
   studentResidentApplication(BuildContext context) async {
     try {
-      // String auth = FirebaseAuth.instance.currentUser!.uid;
+      String auth = FirebaseAuth.instance.currentUser!.uid;
       String formattedTimeStamp = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
 
       await FirebaseFirestore.instance.collection('feedback').doc().set({
         "name": nameController.text,
         "email": emailController.text,
-        "id": idController.text,
+        "id": auth,
         "feedback_type": _selectedFeedbackType,
         "describe_feedback": describeFeedbackController.text,
         "supporting_evidence": supportingEvidenceController.text,

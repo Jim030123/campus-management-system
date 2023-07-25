@@ -46,7 +46,6 @@ class _ManagementMainPageState extends State<ManagementMainPage> {
             } else {
               List<String> dataList = snapshot.data as List<String>;
 
-            
               String name = dataList[0];
               String email = dataList[1];
               String id = dataList[2];
@@ -167,7 +166,7 @@ class _ManagementMainPageState extends State<ManagementMainPage> {
                           children: [
                             MyMenuTile(
                                 text: 'Security Management',
-                                iconnumber: 0xef2e,
+                                iconnumber: 0xf013e,
                                 routename: '/security_management_menu')
                           ],
                         ),

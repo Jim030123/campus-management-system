@@ -1,43 +1,30 @@
-import 'package:campus_management_system/components/my_divider.dart';
-import 'package:campus_management_system/components/my_textstyle.dart';
-import 'package:campus_management_system/pages/student_resident/room.dart';
+import 'package:campus_management_system/components/my_appbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../components/my_divider.dart';
+import '../../components/my_textstyle.dart';
+
 class ViewAllVehicle extends StatefulWidget {
-  const ViewAllVehicle({Key? key}) : super(key: key);
+  ViewAllVehicle({super.key});
 
   @override
-  _ViewAllVehicleState createState() => _ViewAllVehicleState();
+  State<ViewAllVehicle> createState() => _ViewAllVehicleState();
 }
 
 class _ViewAllVehicleState extends State<ViewAllVehicle> {
-  bool _isLoading = true;
-  late List<DocumentSnapshot> _allApplication;
-  final CollectionReference vehicleApplicationCollection =
+  final CollectionReference VehicleRegisteredCollection =
       FirebaseFirestore.instance.collection('vehicle');
 
-  Future<void> fetchUsers() async {
-    QuerySnapshot snapshot = await vehicleApplicationCollection.get();
-    setState(() {
-      _allApplication = snapshot.docs;
-      _isLoading = false;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    fetchUsers();
-  }
+  String uid = FirebaseAuth.instance.currentUser!.uid;
 
   List<String> status = [
     'Waiting the Management Review',
     'Approved',
     'Declined'
   ];
-  late String _selectedVehicleStatus = status[0];
+  late String _selectedSRStatus = status[0];
 
   @override
   Widget build(BuildContext context) {
@@ -55,14 +42,14 @@ class _ViewAllVehicleState extends State<ViewAllVehicle> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text('Filter the Vehicle Application'),
+                    title: Text('Filter the Student Application'),
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         ElevatedButton(
                           onPressed: () {
                             setState(() {
-                              _selectedVehicleStatus = status[0];
+                              _selectedSRStatus = status[0];
                             });
                             Navigator.pop(context);
                           },
@@ -71,7 +58,7 @@ class _ViewAllVehicleState extends State<ViewAllVehicle> {
                         ElevatedButton(
                           onPressed: () {
                             setState(() {
-                              _selectedVehicleStatus = status[1];
+                              _selectedSRStatus = status[1];
                             });
                             Navigator.pop(context); // Close the dialog
                           },
@@ -80,7 +67,7 @@ class _ViewAllVehicleState extends State<ViewAllVehicle> {
                         ElevatedButton(
                           onPressed: () {
                             setState(() {
-                              _selectedVehicleStatus = status[2];
+                              _selectedSRStatus = status[2];
                             });
                             Navigator.pop(context); // Close the dialog
                           },
@@ -103,46 +90,58 @@ class _ViewAllVehicleState extends State<ViewAllVehicle> {
           )
         ],
       ),
-      body: filter(_selectedVehicleStatus),
+      body: Container(
+        padding: EdgeInsets.all(1),
+        child: StreamBuilder<QuerySnapshot>(
+          stream: VehicleRegisteredCollection.where('status',
+                  isEqualTo: _selectedSRStatus)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else {
+              final _allCarRegistered = snapshot.data!.docs;
+
+              return ListView.builder(
+                itemCount: _allCarRegistered.length,
+                itemBuilder: (context, index) {
+                  DocumentSnapshot vehicle = _allCarRegistered[index];
+
+                  return Container(
+                    padding: EdgeInsets.all(8),
+                    child: ListTile(
+                      tileColor: Colors.grey,
+                      title: Text(vehicle.id),
+                      leading: Image.network(vehicle['photoUrl']),
+                      subtitle: Text(
+                        "Vehicle Brand: " +
+                            vehicle['vehicle_brand'] +
+                            "\nVehicle Model: " +
+                            vehicle['vehicle_model'] +
+                            "\nVehicle Number: " +
+                            vehicle['vehicle_number'],
+                      ),
+                      trailing: Text(vehicle['status']),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ApplicationDetail(user: vehicle),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              );
+            }
+          },
+        ),
+      ),
     );
-  }
-
-  Widget filter(String selectedStatus) {
-    print(_selectedVehicleStatus);
-    return _isLoading
-        ? Center(child: CircularProgressIndicator())
-        : ListView.builder(
-            itemCount: _allApplication.length,
-            itemBuilder: (context, index) {
-              DocumentSnapshot vehicle = _allApplication[index];
-              print(_allApplication.length);
-
-              if (vehicle['status'] == selectedStatus) {
-                return Padding(
-                  padding: EdgeInsets.all(16),
-                  child: ListTile(
-                    tileColor: Colors.grey,
-                    leading: Text(vehicle.id),
-                    subtitle: Text("Name: " +
-                        vehicle['name'] +
-                        '\nVehicle brand: ' +
-                        vehicle['vehicle_brand'] +
-                        "\nVehicle Model: " +
-                        vehicle['vehicle_model']),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              ApplicationDetail(user: vehicle),
-                        ),
-                      );
-                    },
-                  ),
-                );
-              }
-            },
-          );
   }
 }
 
@@ -189,19 +188,19 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
                     children: [
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: MySmallText(
-                            text: "Name: " +
-                                widget.user['name'] +
-                                "\nStudent ID: " +
-                                widget.user['student_id'] +
-                                "\nEmail: " +
-                                widget.user['email'] +
-                                "\nVehicle Brand " +
-                                widget.user['vehicle_brand'] +
-                                "\nVehicle Model: " +
-                                widget.user['vehicle_model'] +
-                                "\nVehicle Number: " +
-                                widget.user['vehicle_number']),
+                        child: MySmallText(text: "Name: " + widget.user['name']+
+                            "\nID: " +
+                            widget.user['user_id'] 
+                            // "\nEmail: " +
+                            // widget.user['email'] +
+                            // "\nVehicle Brand " +
+                            // widget.user['vehicle_brand'] +
+                            // "\nVehicle Model: " +
+                            // widget.user['vehicle_model'] +
+                            // "\nVehicle Number: " +
+                            // widget.user['vehicle_number']
+
+                            ),
                       ),
                       MyDivider(),
                       Align(
@@ -246,16 +245,6 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
       print(status);
       await FirebaseFirestore.instance
           .collection('vehicle')
-          .doc(auth)
-          .update({"status": status});
-    } on FirebaseAuthException catch (e) {}
-    ;
-
-    try {
-      String auth = widget.user.id;
-      print(status);
-      await FirebaseFirestore.instance
-          .collection('vehicle_approved')
           .doc(auth)
           .update({"status": status});
     } on FirebaseAuthException catch (e) {}

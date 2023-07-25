@@ -258,8 +258,8 @@ class _ResidentApplicationPageState extends State<ResidentApplicationPage> {
                                       child: Text(
                                         "I have read and agree to Terms of Service and Privacy Policy",
                                         style: TextStyle(
-                                          color: const Color.fromARGB(
-                                              255, 33, 40, 243),
+                                          color:
+                                              Color.fromARGB(255, 35, 109, 193),
                                         ),
                                       ),
                                     ),
@@ -309,7 +309,7 @@ class _ResidentApplicationPageState extends State<ResidentApplicationPage> {
         "name": nameController.text,
         "email": emailController.text,
         "gender": genderController.text,
-        "student_id": studentidController.text,
+        "user_id": studentidController.text,
         "parent_name": parentnameController.text,
         "relationship": relationshipController.text,
         "parent_contact_no": parentcontactnoController.text,

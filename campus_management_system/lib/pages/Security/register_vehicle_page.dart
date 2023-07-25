@@ -20,7 +20,8 @@ class RegistrationVehicleForm extends StatefulWidget {
 
 class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
   _RegistrationVehicleFormState() {
-    _selectedBrandType = _vehicleBrand[0];
+    _selectedVehicleBrand = _vehicleBrand[0];
+    _selectedVehicleType = _vehicleType[0];
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -57,7 +58,11 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
     'Isuzu'
   ];
 
-  String? _selectedBrandType = "";
+  final _vehicleType = ['Motorcycle', 'Car', 'Bus'];
+
+  String? _selectedVehicleBrand = "";
+
+  String? _selectedVehicleType = "";
 
   XFile? takenPhoto; // Add a variable to store the taken photo
 
@@ -91,198 +96,230 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
         child: FutureBuilder(
           future: getdatafromDB(),
           builder: (context, snapshot) {
-            List<String> dataList = snapshot.data as List<String>;
-            String name = dataList[0];
-            String email = dataList[1];
-            String id = dataList[2];
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator(); // or any loading indicator
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text('Error occurred while loading data'),
+              );
+            } else {
+              List<String> dataList = snapshot.data as List<String>;
+              String name = dataList[0];
+              String email = dataList[1];
+              String id = dataList[2];
 
-            nameController.text = name;
-            emailController.text = email;
-            idController.text = id;
+              nameController.text = name;
+              emailController.text = email;
+              idController.text = id;
 
-            return Container(
-              padding: EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Register New Car',
-                      style: TextStyle(fontSize: 30),
-                    ),
-                  ),
-                  Divider(
-                    color: Colors.black,
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25),
-                      color: Colors.grey,
-                    ),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // name
-                          TextFormField(
-                            enabled: false,
-                            controller: nameController,
-                            decoration: InputDecoration(labelText: 'Name'),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter your name';
-                              }
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-                            enabled: false,
-                            controller: emailController,
-                            decoration: InputDecoration(labelText: 'Email'),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter your Email';
-                              }
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-                            enabled: false,
-                            controller: idController,
-                            decoration: InputDecoration(labelText: 'ID'),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter your Email';
-                              }
-                              return null;
-                            },
-                          ),
-                          DropdownButtonFormField(
-                            decoration: InputDecoration(
-                              labelText: "Vehicle Type",
-                              prefixIcon: Icon(Icons.verified_user),
-                              border: UnderlineInputBorder(),
-                            ),
-                            value: _selectedBrandType,
-                            items: _vehicleBrand
-                                .map((e) => DropdownMenuItem(
-                                      child: Text(e),
-                                      value: e,
-                                    ))
-                                .toList(),
-                            onChanged: (val) {
-                              setState(() {
-                                _selectedBrandType = val as String;
-                              });
-                            },
-                          ),
-                          TextFormField(
-                            controller: vehiclenumberController,
-                            decoration: InputDecoration(
-                                labelText: 'Vehicle Plate Number'),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter your Vehicle Plate Number';
-                              }
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-                            controller: modelnameController,
-                            decoration: InputDecoration(
-                                labelText: 'Vehicle Model Name'),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter your Vehicle Model Name';
-                              }
-                              return null;
-                            },
-                          ),
-                          SizedBox(height: 16.0),
-                          MyDivider(),
-                          Align(
-                              alignment: Alignment.center,
-                              child: MyMiddleText(
-                                  text: "Please Take Vehicle Photo")),
-                          MyDivider(),
-                          SizedBox(height: 16.0),
-                          if (takenPhoto != null) // Display the taken photo
-                            Center(
-                              child: Container(
-                                  width: 300,
-                                  child: Image.file(File(takenPhoto!.path))),
-                            ),
-                          ElevatedButton(
-                            child: Text('Take Photo'),
-                            onPressed: () async {
-                              await availableCameras().then((value) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => CameraPage(
-                                      cameras: value,
-                                      onPhotoTaken:
-                                          _handlePhotoTaken, // Pass the callback function
-                                    ),
-                                  ),
-                                );
-                              });
-                            },
-                          ),
-
-                          Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  _showAlertDialog();
-                                },
-                                child: Row(
-                                  children: [
-                                    Checkbox(
-                                      value: checkboxValue,
-                                      onChanged: (bool? value) {
-                                        setState(() {
-                                          checkboxValue = value ?? false;
-                                        });
-                                      },
-                                    ),
-                                    Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.7,
-                                        child: Text(
-                                            'I agree all Term & Condition'))
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 25,
-                          ),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: ElevatedButton(
-                              onPressed: checkboxValue
-                                  ? () {
-                                      if (_formKey.currentState!.validate()) {
-                                        registerVehicle(context);
-                                        _confirmDialog();
-                                      }
-                                    }
-                                  : null,
-                              child: Text('Register'),
-                            ),
-                          ),
-                        ],
+              return Container(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Register New Car',
+                        style: TextStyle(fontSize: 30),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            );
+                    Divider(
+                      color: Colors.black,
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
+                        color: Colors.grey,
+                      ),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // name
+                            TextFormField(
+                              enabled: false,
+                              controller: nameController,
+                              decoration: InputDecoration(labelText: 'Name'),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Please enter your name';
+                                }
+                                return null;
+                              },
+                            ),
+                            TextFormField(
+                              enabled: false,
+                              controller: emailController,
+                              decoration: InputDecoration(labelText: 'Email'),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Please enter your Email';
+                                }
+                                return null;
+                              },
+                            ),
+                            TextFormField(
+                              enabled: false,
+                              controller: idController,
+                              decoration: InputDecoration(labelText: 'ID'),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Please enter your Email';
+                                }
+                                return null;
+                              },
+                            ),
+
+                            DropdownButtonFormField(
+                              decoration: InputDecoration(
+                                labelText: "Vehicle Type",
+                                prefixIcon: Icon(Icons.agriculture),
+                                border: UnderlineInputBorder(),
+                              ),
+                              value: _selectedVehicleType,
+                              items: _vehicleType
+                                  .map((e) => DropdownMenuItem(
+                                        child: Text(e),
+                                        value: e,
+                                      ))
+                                  .toList(),
+                              onChanged: (val) {
+                                setState(() {
+                                  _selectedVehicleType = val as String;
+                                });
+                              },
+                            ),
+                            DropdownButtonFormField(
+                              decoration: InputDecoration(
+                                labelText: "Vehicle Brand",
+                                prefixIcon: Icon(Icons.place),
+                                border: UnderlineInputBorder(),
+                              ),
+                              value: _selectedVehicleBrand,
+                              items: _vehicleBrand
+                                  .map((e) => DropdownMenuItem(
+                                        child: Text(e),
+                                        value: e,
+                                      ))
+                                  .toList(),
+                              onChanged: (val) {
+                                setState(() {
+                                  _selectedVehicleBrand = val as String;
+                                });
+                              },
+                            ),
+                            TextFormField(
+                              controller: vehiclenumberController,
+                              decoration: InputDecoration(
+                                  labelText: 'Vehicle Plate Number'),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Please enter your Vehicle Plate Number';
+                                }
+                                return null;
+                              },
+                            ),
+                            TextFormField(
+                              controller: modelnameController,
+                              decoration: InputDecoration(
+                                  labelText: 'Vehicle Model Name'),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Please enter your Vehicle Model Name';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 16.0),
+                            MyDivider(),
+                            Align(
+                                alignment: Alignment.center,
+                                child: MyMiddleText(
+                                    text: "Please Take Vehicle Photo")),
+                            MyDivider(),
+                            SizedBox(height: 16.0),
+                            if (takenPhoto != null) // Display the taken photo
+                              Center(
+                                child: Container(
+                                    width: 300,
+                                    child: Image.file(File(takenPhoto!.path))),
+                              ),
+                            ElevatedButton(
+                              child: Text('Take Photo'),
+                              onPressed: () async {
+                                await availableCameras().then((value) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => CameraPage(
+                                        cameras: value,
+                                        onPhotoTaken:
+                                            _handlePhotoTaken, // Pass the callback function
+                                      ),
+                                    ),
+                                  );
+                                });
+                              },
+                            ),
+
+                            Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    _showAlertDialog();
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Checkbox(
+                                        value: checkboxValue,
+                                        onChanged: (bool? value) {
+                                          setState(() {
+                                            checkboxValue = value ?? false;
+                                          });
+                                        },
+                                      ),
+                                      Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.7,
+                                          child: Text(
+                                              'I agree all Term & Condition',
+                                              style: TextStyle(
+                                                  color: Color.fromARGB(
+                                                      255, 35, 109, 193))))
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 25,
+                            ),
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: ElevatedButton(
+                                onPressed: checkboxValue
+                                    ? () {
+                                        if (_formKey.currentState!.validate()) {
+                                          registerVehicle(context);
+                                          _confirmDialog();
+                                        }
+                                      }
+                                    : null,
+                                child: Text('Register'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
           },
         ),
       ),
@@ -310,9 +347,10 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
         await vehicleRef.set({
           "name": nameController.text,
           "email": emailController.text,
-          "student_id": idController.text,
+          "user_id": idController.text,
           "vehicle_number": vehiclenumberController.text,
-          "vehicle_brand": _selectedBrandType as String,
+          "vehicle_type": _selectedVehicleType as String,
+          "vehicle_brand": _selectedVehicleBrand as String,
           "vehicle_model": modelnameController.text,
           "status": status,
           "photoUrl": downloadUrl,
@@ -323,8 +361,9 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
           "name": nameController.text,
           "email": emailController.text,
           "id": idController.text,
+          "vehicle_type": _selectedVehicleType as String,
           "vehicle_number": vehiclenumberController.text,
-          "vehicle_brand": _selectedBrandType as String,
+          "vehicle_brand": _selectedVehicleBrand as String,
           "vehicle_model": modelnameController.text,
           "status": status,
         });
@@ -349,6 +388,7 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
             TextButton(
               child: Text('OK'),
               onPressed: () {
+                Navigator.pop(context);
                 Navigator.pop(context);
               },
             ),

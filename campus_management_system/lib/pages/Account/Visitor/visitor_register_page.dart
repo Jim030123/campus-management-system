@@ -59,7 +59,7 @@ class _VisitorRegisterPageState extends State<VisitorRegisterPage> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: ElevatedButton(
-                    child: Text('If you are visitor, register Here '),
+                    child: Text('If you have account, login Here '),
                     onPressed: () {
                       Navigator.pushNamedAndRemoveUntil(
                           context, '/login', (route) => false);
@@ -154,7 +154,10 @@ class _VisitorRegisterPageState extends State<VisitorRegisterPage> {
                               SizedBox(height: 100),
                               MyButton(
                                 onTap: () {
-                                  signUpWithEmail(context);
+                                  if (_formKey.currentState!.validate()) {
+                                    signUpWithEmail(context);
+                                    popoutdialog();
+                                  }
                                 },
                                 text: 'Sign Up',
                               ),
@@ -192,7 +195,7 @@ class _VisitorRegisterPageState extends State<VisitorRegisterPage> {
           "full_detail": fullDetail,
         });
       } on FirebaseAuthException catch (e) {}
-      popoutdialog();
+      
 
       Navigator.pushNamedAndRemoveUntil(context, '', (route) => false);
     } else {
@@ -205,7 +208,7 @@ class _VisitorRegisterPageState extends State<VisitorRegisterPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Submit the Visitor Register'),
+          title: Text('Register your visitor account...'),
           content: Text('You should be redirected automatically in 3 second'),
         );
       },

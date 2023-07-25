@@ -230,7 +230,6 @@ class _RegistrationAccountState extends State<RegistrationAccount> {
                             _checkTextLength();
 
                             if (_formKey.currentState!.validate()) {
-                              signUpWithEmail(context);
                               _confirmDialog();
 
                               // createUserDocument();
@@ -284,7 +283,6 @@ class _RegistrationAccountState extends State<RegistrationAccount> {
       } else if (_selectedRole == _roles[2]) {
         await FirebaseFirestore.instance.collection('users').doc(uid).update({
           "roles": _selectedRole as String,
-          "vistitor_type": _selectedVisitorType as String
         });
       }
 
@@ -312,6 +310,7 @@ class _RegistrationAccountState extends State<RegistrationAccount> {
             TextButton(
               child: Text('OK'),
               onPressed: () {
+                signUpWithEmail(context);
                 Navigator.pop(context);
               },
             ),

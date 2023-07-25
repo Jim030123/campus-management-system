@@ -68,7 +68,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
-                      child: Text('If you are visitor, register Here '),
+                      child: Text('If you are visitor, Register Here '),
                       onPressed: () {
                         Navigator.pushNamedAndRemoveUntil(
                             context, '/visitor_register', (route) => false);

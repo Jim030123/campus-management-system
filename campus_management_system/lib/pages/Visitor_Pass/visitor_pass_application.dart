@@ -1,3 +1,4 @@
+import 'package:campus_management_system/components/my_divider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,12 @@ class VisitorPassApplicationPage extends StatefulWidget {
       _VisitorPassApplicationPageState();
 }
 
-List<String> status = ['Waiting the Management Review', 'Approved', 'Declined'];
+List<String> status = [
+  'Waiting the Management Review',
+  'Approved',
+  'Declined',
+  'Expired'
+];
 late String _selectedVPStatus = status[0];
 
 class _VisitorPassApplicationPageState
@@ -39,7 +45,7 @@ class _VisitorPassApplicationPageState
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ApplicationDetail(user: user),
+        builder: (context) => VPApplicationDetail(user: user),
       ),
     );
   }
@@ -91,6 +97,15 @@ class _VisitorPassApplicationPageState
                           },
                           child: Text(status[2]),
                         ),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _selectedVPStatus = status[3];
+                            });
+                            Navigator.pop(context); // Close the dialog
+                          },
+                          child: Text(status[3]),
+                        ),
                       ],
                     ),
                     actions: [
@@ -113,7 +128,7 @@ class _VisitorPassApplicationPageState
   }
 
   Widget filter(String selectedStatus) {
-    print(_selectedVPStatus);
+    print(selectedStatus);
     return _isLoading
         ? Center(child: CircularProgressIndicator())
         : ListView.builder(
@@ -133,28 +148,30 @@ class _VisitorPassApplicationPageState
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ApplicationDetail(user: user),
+                          builder: (context) => VPApplicationDetail(user: user),
                         ),
                       );
                     },
                   ),
                 );
+              } else {
+                Text("Hellp");
               }
             },
           );
   }
 }
 
-class ApplicationDetail extends StatefulWidget {
+class VPApplicationDetail extends StatefulWidget {
   final DocumentSnapshot user;
 
-  const ApplicationDetail({required this.user, Key? key}) : super(key: key);
+  const VPApplicationDetail({required this.user, Key? key}) : super(key: key);
 
   @override
-  State<ApplicationDetail> createState() => _ApplicationDetailState();
+  State<VPApplicationDetail> createState() => _VPApplicationDetailState();
 }
 
-class _ApplicationDetailState extends State<ApplicationDetail> {
+class _VPApplicationDetailState extends State<VPApplicationDetail> {
   Future<void> fetchUsers() async {
     QuerySnapshot snapshot = await visitorPassApplicationCollection.get();
     setState(() {
@@ -167,8 +184,8 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
   late List<DocumentSnapshot> _allApplication;
   final TextEditingController declinereasonController = TextEditingController();
   final CollectionReference visitorPassApplicationCollection =
-      FirebaseFirestore.instance.collection('visitor_pass_available');
-  var uuid = Uuid();
+      FirebaseFirestore.instance.collection('visitor_pass_application');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -187,6 +204,7 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
                   style: TextStyle(fontSize: 25),
                 ),
               ),
+              MyDivider(),
               Container(
                 decoration: BoxDecoration(
                     color: Colors.grey,
@@ -196,29 +214,12 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
                   child: Center(
                     child: Column(
                       children: [
-                        Text(
-                          "Name: " +
-                              widget.user['name'] +
-                              "\nNRIC: " +
-                              widget.user['nric'] +
-                              "\nDate Visit: " +
-                              widget.user['date_visit'] +
-                              "\nTime Visit: " +
-                              widget.user['time_visit'] +
-                              "\nVehicle Type: " +
-                              "\nReason: " +
-                              widget.user['reason'] +
-                              "\nVehicle Type: " +
-                              widget.user['vehicle_type'] +
-                              "\nVehicle Plate Number: " +
-                              widget.user['vehicle_plate_number'],
-                          style: TextStyle(fontSize: 20),
-                        ),
+                        visitortype(),
                         ElevatedButton(
                             onPressed: () {
                               ApproveVisitorPass(context);
                             },
-                            child: Text('Approve')),
+                            child: Text('Approved')),
                         TextFormField(
                           controller: declinereasonController,
                           decoration:
@@ -228,7 +229,7 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
                             onPressed: () {
                               DeclineVisitorPass(context);
                             },
-                            child: Text('Decline')),
+                            child: Text('Declined')),
                       ],
                     ),
                   ),
@@ -254,7 +255,9 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
       await FirebaseFirestore.instance
           .collection('visitor_pass_application')
           .doc(widget.user.id)
-          .update({"status": status, "visitorpassid": uuid.v1().toString()});
+          .update({
+        "status": status,
+      });
     } on FirebaseAuthException catch (e) {}
     ;
 
@@ -278,5 +281,52 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
     } on FirebaseAuthException catch (e) {}
     ;
     // pop the loading circle
+  }
+
+  visitortype() {
+    if (widget.user['visitor_pass_type'] == "Long Term") {
+      return Text(
+        "Visitor Pass type: " +
+            widget.user['visitor_pass_type'] +
+            "\nName: " +
+            widget.user['name'] +
+            "\nNRIC: " +
+            widget.user['nric'] +
+            "\nDate Visit: " +
+            widget.user['start_date_visit'] +
+            "\nTime Visit: " +
+            widget.user['end_date_visit'] +
+            "\nVehicle Type: " +
+            "\nReason: " +
+            widget.user['reason'] +
+            "\nVehicle Type: " +
+            widget.user['vehicle_type'] +
+            "\nVehicle Plate Number: " +
+            widget.user['vehicle_plate_number'],
+        style: TextStyle(fontSize: 20),
+      );
+    } else if (widget.user['visitor_pass_type'] == "Short Term") {
+      return Text(
+        "Name: " +
+            widget.user['name'] +
+            "\nNRIC: " +
+            widget.user['nric'] +
+            "\nDate Visit: " +
+            widget.user['date_visit'] +
+            "\nTime Visit: " +
+            widget.user['time_visit'] +
+            "\nReason: " +
+            widget.user['reason'] +
+            "\nVehicle Brand: " +
+            widget.user['vehicle_brand'] +
+            "\nVehicle Type: " +
+            widget.user['vehicle_type'] +
+            "\nVehicle Model: " +
+            widget.user['vehicle_model'] +
+            "\nVehicle Plate Number: " +
+            widget.user['vehicle_plate_number'],
+        style: TextStyle(fontSize: 20),
+      );
+    }
   }
 }

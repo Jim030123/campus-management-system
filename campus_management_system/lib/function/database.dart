@@ -10,3 +10,30 @@ Future<DocumentSnapshot> findUserById(String userid) async {
     return user;
   }
 
+  class MyDatabase {
+     final _vehicleBrand = [
+    'Perodua',
+    'Proton',
+    'Honda',
+    'Toyota',
+    'BMW',
+    'Audi',
+    'Lexus',
+    'Mazda',
+    'Mercedes-Benz',
+    'Nissan',
+    'Suzuki',
+    'Volvo',
+    'Ford',
+    'Subaru',
+    'Porsche',
+    'Mitsubishi',
+    'Infiniti',
+    'Hyundai',
+    'Chevrolet',
+    'Isuzu'
+  ];
+
+  }
+
+   

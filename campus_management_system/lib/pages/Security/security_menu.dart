@@ -36,13 +36,6 @@ class SecurityMenuPage extends StatelessWidget {
               text: 'Show Vechicle Registered',
               routename: '/show_registered_car',
             ),
-            SizedBox(
-              height: 25,
-            ),
-            MyLongButton(
-              text: 'Entry Record (Comming Soon)',
-              routename: '',
-            ),
           ]),
         ),
       ),

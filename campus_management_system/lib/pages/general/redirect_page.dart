@@ -80,7 +80,7 @@ class _RedirectLoginPageState extends State<RedirectLoginPage> {
                         height: 25,
                       ),
                       Text(
-                        'You should be redirected automatically in 3 second if not please press Login Button',
+                        'You should be redirected automatically in 3 second',
                         style: TextStyle(fontSize: 15),
                       ),
                       SizedBox(
@@ -121,7 +121,7 @@ class RedirectProfileForm extends StatelessWidget {
                   height: 25,
                 ),
                 Text(
-                  'You should be redirected automatically in 3 second if not please press Go Button',
+                  'Please press Go Button to fill Personal Form',
                   style: TextStyle(fontSize: 15),
                 ),
                 SizedBox(

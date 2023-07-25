@@ -1,5 +1,6 @@
 import 'package:campus_management_system/components/my_appbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class FeedbackSubmitted extends StatefulWidget {
@@ -10,52 +11,64 @@ class FeedbackSubmitted extends StatefulWidget {
 }
 
 class _FeedbackSubmittedState extends State<FeedbackSubmitted> {
-  bool _isLoading = true;
-
-  late List<DocumentSnapshot> _allFeedback;
+  late Stream<QuerySnapshot> _feedbackStream;
+  String uid = FirebaseAuth.instance.currentUser!.uid;
 
   final CollectionReference studentResidentApplicationCollection =
       FirebaseFirestore.instance.collection('feedback');
 
   void initState() {
     super.initState();
-    fetchUsers();
-  }
-
-  Future<void> fetchUsers() async {
-    QuerySnapshot snapshot = await studentResidentApplicationCollection.get();
-    setState(() {
-      _allFeedback = snapshot.docs;
-      _isLoading = false;
-    });
+    _feedbackStream = studentResidentApplicationCollection.snapshots();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: MyAppBar(),
-        body: Container(
-          padding: EdgeInsets.all(1),
-          child: _isLoading
-              ? Center(child: CircularProgressIndicator())
-              : ListView.builder(
-                  itemCount: _allFeedback.length,
-                  itemBuilder: (context, index) {
-                    DocumentSnapshot feedback = _allFeedback[index];
-                   
+      appBar: MyAppBar(),
+      body: Container(
+        padding: EdgeInsets.all(1),
+        child: StreamBuilder<QuerySnapshot>(
+          stream: studentResidentApplicationCollection
+              .where('id', isEqualTo: uid)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
 
-                    return Container(
-                        padding: EdgeInsets.all(8),
-                        child: ListTile(
-                            tileColor: Colors.grey,
-                            title: Text(feedback['feedback_type']),
-                            subtitle: Text("descibe_feedback: " +
-                                feedback['supporting_evidence'] +
-                                "\nSubmit by: " +
-                                feedback['name']),
-                            trailing: Text(feedback['timestamp'])));
-                  },
-                ),
-        ));
+            if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            }
+
+            // If there's no data, display a message accordingly
+            if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
+              return Center(child: Text('No feedback available'));
+            }
+
+            // Data is available, so display the ListView
+            return ListView.builder(
+              itemCount: snapshot.data!.docs.length,
+              itemBuilder: (context, index) {
+                DocumentSnapshot feedback = snapshot.data!.docs[index];
+
+                return Container(
+                  padding: EdgeInsets.all(8),
+                  child: ListTile(
+                    tileColor: Colors.grey,
+                    title: Text(feedback['feedback_type']),
+                    subtitle: Text("descibe_feedback: " +
+                        feedback['supporting_evidence'] +
+                        "\nSubmit by: " +
+                        feedback['name']),
+                    trailing: Text(feedback['timestamp']),
+                  ),
+                );
+              },
+            );
+          },
+        ),
+      ),
+    );
   }
 }
