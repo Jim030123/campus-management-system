@@ -122,6 +122,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
                           children: [
                             TextFormField(
                               controller: nameController,
+                              enabled: false,
                               decoration: InputDecoration(labelText: 'Name'),
                               validator: (value) {
                                 if (value!.isEmpty) {
@@ -132,6 +133,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
                             ),
                             TextFormField(
                               controller: emailController,
+                              enabled: false,
                               decoration: InputDecoration(labelText: 'Email'),
                               validator: (value) {
                                 if (value!.isEmpty) {
@@ -142,6 +144,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
                             ),
                             TextFormField(
                               controller: idController,
+                              enabled: false,
                               decoration: InputDecoration(labelText: 'ID'),
                               validator: (value) {
                                 if (value!.isEmpty) {

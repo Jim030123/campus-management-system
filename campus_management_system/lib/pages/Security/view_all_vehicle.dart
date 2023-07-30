@@ -34,7 +34,7 @@ class _ViewAllVehicleState extends State<ViewAllVehicle> {
         actions: <Widget>[
           IconButton(
             icon: Icon(
-              Icons.filter_none_outlined,
+              Icons.filter_list,
               color: Colors.white,
             ),
             onPressed: () {
@@ -121,7 +121,8 @@ class _ViewAllVehicleState extends State<ViewAllVehicle> {
                             "\nVehicle Model: " +
                             vehicle['vehicle_model'] +
                             "\nVehicle Number: " +
-                            vehicle['vehicle_number'],
+                            vehicle['vehicle_number'] +
+                            declineReason(vehicle),
                       ),
                       trailing: Text(vehicle['status']),
                       onTap: () {
@@ -143,6 +144,14 @@ class _ViewAllVehicleState extends State<ViewAllVehicle> {
       ),
     );
   }
+
+  declineReason(DocumentSnapshot vehicle) {
+    if (vehicle["status"] == "Declined") {
+      return "\nDeclined Reason: " + vehicle["decline_reason"];
+    } else {
+      return "";
+    }
+  }
 }
 
 class ApplicationDetail extends StatefulWidget {
@@ -159,6 +168,9 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
   late List<DocumentSnapshot> _allApplication;
 
   late String status;
+
+  TextEditingController declinereasonController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -188,19 +200,20 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
                     children: [
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: MySmallText(text: "Name: " + widget.user['name']+
-                            "\nID: " +
-                            widget.user['user_id'] 
-                            // "\nEmail: " +
-                            // widget.user['email'] +
-                            // "\nVehicle Brand " +
-                            // widget.user['vehicle_brand'] +
-                            // "\nVehicle Model: " +
-                            // widget.user['vehicle_model'] +
-                            // "\nVehicle Number: " +
-                            // widget.user['vehicle_number']
-
-                            ),
+                        child: MySmallText(
+                            text: "Name: " +
+                                widget.user['name'] +
+                                "\nUser ID: " +
+                                widget.user['user_id'] +
+                                // "\nEmail: " +
+                                "\nVehicle Type " +
+                                widget.user['vehicle_type'] +
+                                "\nVehicle Brand " +
+                                widget.user['vehicle_brand'] +
+                                "\nVehicle Model: " +
+                                widget.user['vehicle_model'] +
+                                "\nVehicle Number: " +
+                                widget.user['vehicle_number']),
                       ),
                       MyDivider(),
                       Align(
@@ -217,12 +230,35 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
                             updateStatusApplication(context, status);
                           },
                           child: Text('Approved')),
-                      ElevatedButton(
-                          onPressed: () {
-                            status = "Decline";
-                            updateStatusApplication(context, status);
-                          },
-                          child: Text('Declined'))
+                      Form(
+                        key:
+                            _formKey, // Create a GlobalKey<FormState> to access the form's state
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              controller: declinereasonController,
+                              decoration:
+                                  InputDecoration(labelText: 'Decline Reason'),
+                              // Add a validator to check if the text field is filled or not
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter a reason for declining.';
+                                }
+                                return null;
+                              },
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                // Call the validate method to check if the TextFormField is filled or not
+                                if (_formKey.currentState!.validate()) {
+                                  DeclineVehicle(context);
+                                }
+                              },
+                              child: Text('Declined'),
+                            ),
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -247,6 +283,22 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
           .collection('vehicle')
           .doc(auth)
           .update({"status": status});
+    } on FirebaseAuthException catch (e) {}
+    ;
+    // pop the loading circle
+  }
+
+  DeclineVehicle(BuildContext context) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('vehicle')
+          .doc(widget.user.id)
+          .update({
+        "decline_reason": declinereasonController.text,
+        "status": "Declined",
+      });
+
+      Navigator.popUntil(context, ModalRoute.withName('/management_main'));
     } on FirebaseAuthException catch (e) {}
     ;
     // pop the loading circle

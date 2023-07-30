@@ -1,3 +1,4 @@
+import 'package:campus_management_system/pages/Account/Management/dashboard.dart';
 import 'package:campus_management_system/pages/Account/Management/management_main_page.dart';
 import 'package:campus_management_system/pages/Account/Visitor/visitor_login.dart';
 import 'package:campus_management_system/pages/Account/Visitor/visitor_register_page.dart';
@@ -92,6 +93,8 @@ class MainApp extends StatelessWidget {
         // Info
         '/payment_info': (context) => PaymentInfoPage(),
 
+// DashBoard
+        '/dashboard': (context) => DashBoard(),
         // Student Resident
         '/resident_menu': (context) => StudentResidentMenuPage(),
         '/resident_student': (context) => StudentResidentExist(),
@@ -124,7 +127,7 @@ class MainApp extends StatelessWidget {
         // Management
         '/management_profile': (context) => ManagementProfilePage(),
         '/account_management_menu': (context) => AccountManagementMenuPage(),
-        '/registeration': (context) => RegistrationAccount(),
+        '/registration': (context) => RegistrationAccount(),
         '/view_all_account': (context) => ViewAllAccountPage(),
         '/student_resident_application': (context) =>
             StudentResidentApplicationPage(),

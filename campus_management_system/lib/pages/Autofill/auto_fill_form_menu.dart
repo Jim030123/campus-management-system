@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'qr_auto_fill_.dart';
@@ -42,7 +41,7 @@ class AutoFillFormMenu extends StatelessWidget {
                       QRAutoFillFormPage(selectedbutton: selectedbutton)),
             );
           },
-          child: Text('Add Vehicle Car', style: TextStyle(fontSize: 20)),
+          child: Text('Add Vehicle', style: TextStyle(fontSize: 20)),
         ),
         ElevatedButton(
           onPressed: () {

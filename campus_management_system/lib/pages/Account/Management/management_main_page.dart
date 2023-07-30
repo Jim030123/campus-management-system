@@ -130,9 +130,9 @@ class _ManagementMainPageState extends State<ManagementMainPage> {
                                 iconnumber: 0xf7c5,
                                 routename: '/account_management_menu'),
                             MyMenuTile(
-                                text: 'Student Resident Management',
-                                iconnumber: 0xf0110,
-                                routename: '/student_resident_management_menu'),
+                                text: 'Dashboard',
+                                iconnumber: 0xe1b1,
+                                routename: '/dashboard'),
                           ],
                         ),
                         Row(
@@ -142,10 +142,10 @@ class _ManagementMainPageState extends State<ManagementMainPage> {
                                 text: 'Feedback Recieved',
                                 iconnumber: 0xe260,
                                 routename: '/feedback_received'),
-                            MyMenuTile(
-                                text: 'Facility Management',
-                                iconnumber: 0xe260,
-                                routename: '/facility_management'),
+                            // MyMenuTile(
+                            //     text: 'Facility Management',
+                            //     iconnumber: 0xe260,
+                            //     routename: '/facility_management'),
                           ],
                         ),
                         Row(
@@ -167,7 +167,11 @@ class _ManagementMainPageState extends State<ManagementMainPage> {
                             MyMenuTile(
                                 text: 'Security Management',
                                 iconnumber: 0xf013e,
-                                routename: '/security_management_menu')
+                                routename: '/security_management_menu'),
+                            MyMenuTile(
+                                text: 'Student Resident Management',
+                                iconnumber: 0xf0110,
+                                routename: '/student_resident_management_menu'),
                           ],
                         ),
                       ],

@@ -1,8 +1,11 @@
 import 'package:campus_management_system/components/my_divider.dart';
+import 'package:campus_management_system/pages/Account/Student/student_main_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
+
+import '../../components/my_textstyle.dart';
 
 class VisitorPassApplicationPage extends StatefulWidget {
   VisitorPassApplicationPage({super.key});
@@ -11,14 +14,6 @@ class VisitorPassApplicationPage extends StatefulWidget {
   _VisitorPassApplicationPageState createState() =>
       _VisitorPassApplicationPageState();
 }
-
-List<String> status = [
-  'Waiting the Management Review',
-  'Approved',
-  'Declined',
-  'Expired'
-];
-late String _selectedVPStatus = status[0];
 
 class _VisitorPassApplicationPageState
     extends State<VisitorPassApplicationPage> {
@@ -50,6 +45,14 @@ class _VisitorPassApplicationPageState
     );
   }
 
+  List<String> status = [
+    'Waiting the Management Review',
+    'Approved',
+    'Declined',
+    'Expired'
+  ];
+  late String _selectedVPStatus = status[0];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +61,7 @@ class _VisitorPassApplicationPageState
         actions: <Widget>[
           IconButton(
             icon: Icon(
-              Icons.filter_none_outlined,
+              Icons.filter_list,
               color: Colors.white,
             ),
             onPressed: () {
@@ -123,42 +126,81 @@ class _VisitorPassApplicationPageState
           )
         ],
       ),
-      body: filter(_selectedVPStatus),
+      body: Container(
+        padding: EdgeInsets.all(1),
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.all(16),
+              child: Align(
+                  alignment: FractionalOffset.topLeft,
+                  child: MyMiddleText(
+                      text: 'Visitor Pass Application: ' + _selectedVPStatus)),
+            ),
+            MyDivider(),
+            Expanded(
+              child: StreamBuilder<QuerySnapshot>(
+                stream: visitorPassApplicationCollection
+                    .where('status', isEqualTo: _selectedVPStatus)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (snapshot.data == null ||
+                      snapshot.data!.size == 0) {
+                    return Center(child: Text('No have data'));
+                  } else {
+                    final _allVPRegistered = snapshot.data!.docs;
+
+                    return ListView.builder(
+                      itemCount: _allVPRegistered.length,
+                      itemBuilder: (context, index) {
+                        DocumentSnapshot VP = _allVPRegistered[index];
+
+                        print(_allVPRegistered.length);
+
+                        return Container(
+                          padding: EdgeInsets.all(8),
+                          child: ListTile(
+                            tileColor: Colors.grey,
+                            title: Text(
+                                VP['name'] + " (Reason: " + VP['reason'] + ")"),
+                            subtitle: Text(
+                              "Visitor Pass Type: " +
+                                  VP['visitor_pass_type'] +
+                                  "\nVehicle Brand: " +
+                                  VP['vehicle_type'] +
+                                  "\nVehicle Brand: " +
+                                  VP['vehicle_brand'] +
+                                  "\nVehicle Model: " +
+                                  VP['vehicle_model'] +
+                                  "\nVehicle Number: " +
+                                  VP['vehicle_number'],
+                            ),
+                            trailing: Text(VP['status']),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      VPApplicationDetail(user: VP),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
     );
-  }
-
-  Widget filter(String selectedStatus) {
-    print(selectedStatus);
-    return _isLoading
-        ? Center(child: CircularProgressIndicator())
-        : ListView.builder(
-            itemCount: _allApplication.length,
-            itemBuilder: (context, index) {
-              DocumentSnapshot user = _allApplication[index];
-
-              if (user['status'] == selectedStatus) {
-                return Padding(
-                  padding: EdgeInsets.all(16),
-                  child: ListTile(
-                    tileColor: Colors.grey,
-                    title: Text(user['name'] ?? 'No Email'),
-                    subtitle: Text(user['reason']),
-                    trailing: Text(user['timestamp']),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => VPApplicationDetail(user: user),
-                        ),
-                      );
-                    },
-                  ),
-                );
-              } else {
-                Text("Hellp");
-              }
-            },
-          );
   }
 }
 
@@ -175,13 +217,15 @@ class _VPApplicationDetailState extends State<VPApplicationDetail> {
   Future<void> fetchUsers() async {
     QuerySnapshot snapshot = await visitorPassApplicationCollection.get();
     setState(() {
-      _allApplication = snapshot.docs;
+      _allVPApplication = snapshot.docs;
       _isLoading = false;
     });
   }
 
+  final _formKey = GlobalKey<FormState>();
+
   bool _isLoading = true;
-  late List<DocumentSnapshot> _allApplication;
+  late List<DocumentSnapshot> _allVPApplication;
   final TextEditingController declinereasonController = TextEditingController();
   final CollectionReference visitorPassApplicationCollection =
       FirebaseFirestore.instance.collection('visitor_pass_application');
@@ -200,7 +244,7 @@ class _VPApplicationDetailState extends State<VPApplicationDetail> {
               const Align(
                 alignment: Alignment.topLeft,
                 child: Text(
-                  'The Visitor Profile',
+                  'The Visitor Pass Detail',
                   style: TextStyle(fontSize: 25),
                 ),
               ),
@@ -215,21 +259,43 @@ class _VPApplicationDetailState extends State<VPApplicationDetail> {
                     child: Column(
                       children: [
                         visitortype(),
+                        SizedBox(
+                          height: 25,
+                        ),
                         ElevatedButton(
                             onPressed: () {
                               ApproveVisitorPass(context);
                             },
                             child: Text('Approved')),
-                        TextFormField(
-                          controller: declinereasonController,
-                          decoration:
-                              InputDecoration(labelText: 'Decline Reason'),
-                        ),
-                        ElevatedButton(
-                            onPressed: () {
-                              DeclineVisitorPass(context);
-                            },
-                            child: Text('Declined')),
+                        Form(
+                          key:
+                              _formKey, // Create a GlobalKey<FormState> to access the form's state
+                          child: Column(
+                            children: [
+                              TextFormField(
+                                controller: declinereasonController,
+                                decoration: InputDecoration(
+                                    labelText: 'Decline Reason'),
+                                // Add a validator to check if the text field is filled or not
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter a reason for declining.';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  // Call the validate method to check if the TextFormField is filled or not
+                                  if (_formKey.currentState!.validate()) {
+                                    DeclineVisitorPass(context);
+                                  }
+                                },
+                                child: Text('Declined'),
+                              ),
+                            ],
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -250,13 +316,18 @@ class _VPApplicationDetailState extends State<VPApplicationDetail> {
 
   ApproveVisitorPass(BuildContext context) async {
     try {
-      String status = "Approved";
-
       await FirebaseFirestore.instance
           .collection('visitor_pass_application')
           .doc(widget.user.id)
           .update({
-        "status": status,
+        "status": "Approved",
+      });
+
+      await FirebaseFirestore.instance
+          .collection('vehicle')
+          .doc(widget.user['vehicle_number'])
+          .update({
+        "status": "Approved",
       });
     } on FirebaseAuthException catch (e) {}
     ;
@@ -267,14 +338,19 @@ class _VPApplicationDetailState extends State<VPApplicationDetail> {
 
   DeclineVisitorPass(BuildContext context) async {
     try {
-      String status = "Declined";
-
       await FirebaseFirestore.instance
           .collection('visitor_pass_application')
           .doc(widget.user.id)
           .update({
-        "status": status,
+        "status": "Declined",
         "decline_reason": declinereasonController.text
+      });
+
+      await FirebaseFirestore.instance
+          .collection('vehicle')
+          .doc(widget.user['vehicle_number'])
+          .update({
+        "status": "Declined",
       });
 
       Navigator.popUntil(context, ModalRoute.withName('/management_main'));
@@ -285,47 +361,53 @@ class _VPApplicationDetailState extends State<VPApplicationDetail> {
 
   visitortype() {
     if (widget.user['visitor_pass_type'] == "Long Term") {
-      return Text(
-        "Visitor Pass type: " +
-            widget.user['visitor_pass_type'] +
-            "\nName: " +
-            widget.user['name'] +
-            "\nNRIC: " +
-            widget.user['nric'] +
-            "\nDate Visit: " +
-            widget.user['start_date_visit'] +
-            "\nTime Visit: " +
-            widget.user['end_date_visit'] +
-            "\nVehicle Type: " +
-            "\nReason: " +
-            widget.user['reason'] +
-            "\nVehicle Type: " +
-            widget.user['vehicle_type'] +
-            "\nVehicle Plate Number: " +
-            widget.user['vehicle_plate_number'],
-        style: TextStyle(fontSize: 20),
+      return Align(
+        alignment: Alignment.topLeft,
+        child: Text(
+          "Visitor Pass type: " +
+              widget.user['visitor_pass_type'] +
+              "\nName: " +
+              widget.user['name'] +
+              "\nNRIC: " +
+              widget.user['nric'] +
+              "\nDate Visit: " +
+              widget.user['start_date_visit'] +
+              "\nTime Visit: " +
+              widget.user['end_date_visit'] +
+              "\nVehicle Type: " +
+              "\nReason: " +
+              widget.user['reason'] +
+              "\nVehicle Type: " +
+              widget.user['vehicle_type'] +
+              "\nVehicle Plate Number: " +
+              widget.user['vehicle_number'],
+          style: TextStyle(fontSize: 20),
+        ),
       );
     } else if (widget.user['visitor_pass_type'] == "Short Term") {
-      return Text(
-        "Name: " +
-            widget.user['name'] +
-            "\nNRIC: " +
-            widget.user['nric'] +
-            "\nDate Visit: " +
-            widget.user['date_visit'] +
-            "\nTime Visit: " +
-            widget.user['time_visit'] +
-            "\nReason: " +
-            widget.user['reason'] +
-            "\nVehicle Brand: " +
-            widget.user['vehicle_brand'] +
-            "\nVehicle Type: " +
-            widget.user['vehicle_type'] +
-            "\nVehicle Model: " +
-            widget.user['vehicle_model'] +
-            "\nVehicle Plate Number: " +
-            widget.user['vehicle_plate_number'],
-        style: TextStyle(fontSize: 20),
+      return Align(
+        alignment: Alignment.topLeft,
+        child: Text(
+          "Name: " +
+              widget.user['name'] +
+              "\nNRIC: " +
+              widget.user['nric'] +
+              "\nDate Visit: " +
+              widget.user['date_visit'] +
+              "\nTime Visit: " +
+              widget.user['time_visit'] +
+              "\nReason: " +
+              widget.user['reason'] +
+              "\nVehicle Brand: " +
+              widget.user['vehicle_brand'] +
+              "\nVehicle Type: " +
+              widget.user['vehicle_type'] +
+              "\nVehicle Model: " +
+              widget.user['vehicle_model'] +
+              "\nVehicle Plate Number: " +
+              widget.user['vehicle_number'],
+          style: TextStyle(fontSize: 20),
+        ),
       );
     }
   }

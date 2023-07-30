@@ -152,22 +152,15 @@ class _StudentMainPageState extends State<StudentMainPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            MyMenuTile(
-                                text: 'Facility',
-                                iconnumber: 0xf01c8,
-                                routename: '/facility_menu'),
+                            // MyMenuTile(
+                            //     text: 'Facility',
+                            //     iconnumber: 0xf01c8,
+                            //     routename: '/facility_menu'),
                             MyMenuTile(
                                 text: 'Feedback',
                                 iconnumber: 0xf73b,
                                 routename: '/feedback_menu'),
                           ],
-                        ),
-                        SizedBox(
-                          width: 25,
-                        ),
-                        Divider(
-                          height: 2.0,
-                          color: Colors.black,
                         ),
                         SizedBox(
                           width: 25,
@@ -182,7 +175,7 @@ class _StudentMainPageState extends State<StudentMainPage> {
                 ),
               ),
               bottomNavigationBar: Container(
-                // color: Colors.green,
+            
                 height: 50,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(

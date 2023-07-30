@@ -426,7 +426,7 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
       if (_selectedVisitorPassType == _visitorPassType[0]) {
         await FirebaseFirestore.instance
             .collection('visitor_pass_application')
-            .doc()
+            .doc(visitorPassID)
             .set({
           "name": nameController.text,
           "email": emailController.text,
@@ -447,7 +447,7 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
           "visitor_pass_type": _selectedVisitorPassType as String,
 
           "visitor_pass_id": visitorPassID,
-          "vehicle_number": vehicleNumberController.text,
+          "vehicle_number": vehicleNumberController.text.toUpperCase(),
           "vehicle_model": vehiclemodelController.text,
           "vehicle_brand": _selectedVehicleBrand as String,
           "vehicle_type": _selectedVehicleType as String
@@ -455,7 +455,7 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
       } else if (_selectedVisitorPassType == _visitorPassType[1]) {
         await FirebaseFirestore.instance
             .collection('visitor_pass_application')
-            .doc()
+            .doc(visitorPassID)
             .set({
           "name": nameController.text,
           "email": emailController.text,
@@ -469,7 +469,7 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
           "visitor_pass_type": _selectedVisitorPassType as String,
           "expired_timestamp": longTermPassExpired,
           "visitor_pass_id": visitorPassID,
-          "vehicle_number": vehicleNumberController.text,
+          "vehicle_number": vehicleNumberController.text.toUpperCase(),
           "vehicle_model": vehiclemodelController.text,
           "vehicle_brand": _selectedVehicleBrand as String,
           "vehicle_type": _selectedVehicleType as String
@@ -488,9 +488,12 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
 
           final downloadUrl = await ref.getDownloadURL();
 
-          await FirebaseFirestore.instance.collection('vehicle').doc().set({
+          await FirebaseFirestore.instance
+              .collection('vehicle')
+              .doc(vehicleNumberController.text)
+              .set({
             "name": nameController.text,
-            "vehicle_number": vehicleNumberController.text,
+            "vehicle_number": vehicleNumberController.text.toUpperCase(),
             "vehicle_model": vehiclemodelController.text,
             "vehicle_brand": _selectedVehicleBrand as String,
             "vehicle_type": _selectedVehicleType as String,
@@ -509,17 +512,19 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Terms of Service and Privacy Policy'),
-          content: VisitorPassTnC(),
-          actions: [
-            TextButton(
-              child: Text('Close'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
+        return SingleChildScrollView(
+          child: AlertDialog(
+            title: Text('Terms of Service and Privacy Policy'),
+            content: VisitorPassTnC(),
+            actions: [
+              TextButton(
+                child: Text('Close'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
         );
       },
     );

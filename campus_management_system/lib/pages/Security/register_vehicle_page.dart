@@ -166,7 +166,7 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
                               decoration: InputDecoration(labelText: 'ID'),
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return 'Please enter your Email';
+                                  return 'Please enter your ID';
                                 }
                                 return null;
                               },
@@ -332,7 +332,7 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
 
       final vehicleRef = FirebaseFirestore.instance
           .collection('vehicle')
-          .doc(vehiclenumberController.text);
+          .doc(vehiclenumberController.text.toUpperCase());
 
       // Upload the photo to Firebase Storage
       if (takenPhoto != null) {
@@ -348,7 +348,7 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
           "name": nameController.text,
           "email": emailController.text,
           "user_id": idController.text,
-          "vehicle_number": vehiclenumberController.text,
+          "vehicle_number": vehiclenumberController.text.toUpperCase(),
           "vehicle_type": _selectedVehicleType as String,
           "vehicle_brand": _selectedVehicleBrand as String,
           "vehicle_model": modelnameController.text,
@@ -362,7 +362,7 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
           "email": emailController.text,
           "id": idController.text,
           "vehicle_type": _selectedVehicleType as String,
-          "vehicle_number": vehiclenumberController.text,
+          "vehicle_number": vehiclenumberController.text.toUpperCase(),
           "vehicle_brand": _selectedVehicleBrand as String,
           "vehicle_model": modelnameController.text,
           "status": status,

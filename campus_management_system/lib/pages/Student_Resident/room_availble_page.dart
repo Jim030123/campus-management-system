@@ -56,7 +56,7 @@ class _RoomAvailableState extends State<RoomAvailable> {
         actions: <Widget>[
           IconButton(
             icon: Icon(
-              Icons.filter_none_outlined,
+              Icons.filter_list,
               color: Colors.white,
             ),
             onPressed: () {

@@ -45,14 +45,14 @@ class AccountManagementMenuPage extends StatelessWidget {
             onTap: () {
               FirebaseAuth.instance.signOut();
               Navigator.pushNamedAndRemoveUntil(
-                  context, '/registeration', (route) => false);
+                  context, '/registration', (route) => false);
             },
           ),
           SizedBox(
             height: 25,
           ),
           MyLongButton(
-            text: 'View All account',
+            text: 'View All Account',
             routename: '/view_all_account',
           ),
         ]),

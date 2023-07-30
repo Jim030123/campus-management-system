@@ -91,15 +91,13 @@ class _ViewAllVisitorPassState extends State<ViewAllVisitorPass> {
                     .where('visitorid', isEqualTo: uid)
                     .snapshots(),
                 builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  }
-
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  }
-
-                  if (snapshot.hasData) {
+                    return CircularProgressIndicator(); // or any loading indicator
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Text('Error occurred while loading data'),
+                    );
+                  } else {
                     final emails = snapshot.data!.docs;
 
                     print(emails.length);
@@ -127,8 +125,6 @@ class _ViewAllVisitorPassState extends State<ViewAllVisitorPass> {
                       },
                     );
                   }
-
-                  return Text('No emails found.');
                 },
               ),
             ),
@@ -154,12 +150,7 @@ class _ViewAllVisitorPassState extends State<ViewAllVisitorPass> {
     if (now > expiredtime) {
       // update status in firebase
 
-      updateVPstatus(Map<String, dynamic> filter) async {
-        await FirebaseFirestore.instance
-            .collection('visitor_pass_application')
-            .doc()
-            .update({"status": "Expired"});
-      }
+      updateVPstatus(filter);
 
       return Icon(
         Icons.error_outline,
@@ -193,14 +184,7 @@ class _ViewAllVisitorPassState extends State<ViewAllVisitorPass> {
                             "\n" +
                             filter['visitor_pass_id']),
                         MyDivider(),
-                        MyMiddleText(
-                          text: "Date Time: " +
-                              filter['date_visit'] +
-                              "\nEntry Time: " +
-                              filter['entry_time'] +
-                              "\nExit Time: " +
-                              filter['exit_time'],
-                        ),
+                        visitorType(filter),
                         SizedBox(
                           height: 25,
                         ),
@@ -238,6 +222,39 @@ class _ViewAllVisitorPassState extends State<ViewAllVisitorPass> {
       return "\nDeclined Reason: " + filter["decline_reason"];
     } else {
       return "";
+    }
+  }
+
+  updateVPstatus(Map<String, dynamic> filter) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('visitor_pass_application')
+          .doc(filter["visitor_pass_id"].toString())
+          .update({"status": "Expired"});
+
+      await FirebaseFirestore.instance
+          .collection('vehicle')
+          .doc(filter["vehicle_number"])
+          .update({"status": "Expired"});
+    } catch (e) {}
+  }
+
+  visitorType(Map<String, dynamic> filter) {
+    if (filter["visitor_pass_type"] == "Short Term") {
+      return (
+        text: "Date Time: " +
+            filter['date_visit'] +
+            "\nEntry Time: " +
+            filter['entry_time'] +
+            "\nExit Time: " +
+            filter['exit_time'],
+      );
+    } else if (filter["visitor_pass_type"] == "Long Term") {
+      return MyMiddleText(
+          text: "Start Date: " +
+              filter['start_date_visit'] +
+              "\nEnd Date: " +
+              filter['end_date_visit']);
     }
   }
 }

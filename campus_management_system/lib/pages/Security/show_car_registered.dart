@@ -25,6 +25,8 @@ class ShowRegisteredCarPage extends StatelessWidget {
               return Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
+              return Center(child: Text('No data available'));
             } else {
               final _allCarRegistered = snapshot.data!.docs;
 
@@ -45,7 +47,8 @@ class ShowRegisteredCarPage extends StatelessWidget {
                             "\nVehicle Model: " +
                             vehicle['vehicle_model'] +
                             "\nVehicle Number: " +
-                            vehicle['vehicle_number'],
+                            vehicle['vehicle_number'] +
+                            declineReason(vehicle),
                       ),
                       trailing: Text(vehicle['status']),
                     ),
@@ -57,5 +60,13 @@ class ShowRegisteredCarPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  declineReason(DocumentSnapshot vehicle) {
+    if (vehicle["status"] == "Declined") {
+      return "\nDeclined Reason: " + vehicle["decline_reason"];
+    } else {
+      return "";
+    }
   }
 }
