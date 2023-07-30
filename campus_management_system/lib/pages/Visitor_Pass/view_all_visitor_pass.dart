@@ -241,14 +241,11 @@ class _ViewAllVisitorPassState extends State<ViewAllVisitorPass> {
 
   visitorType(Map<String, dynamic> filter) {
     if (filter["visitor_pass_type"] == "Short Term") {
-      return (
-        text: "Date Time: " +
-            filter['date_visit'] +
-            "\nEntry Time: " +
-            filter['entry_time'] +
-            "\nExit Time: " +
-            filter['exit_time'],
-      );
+      return MyMiddleText(
+          text: "Date: " +
+              filter['date_visit'] +
+              "\nVisit Time: " +
+              filter['time_visit']);
     } else if (filter["visitor_pass_type"] == "Long Term") {
       return MyMiddleText(
           text: "Start Date: " +

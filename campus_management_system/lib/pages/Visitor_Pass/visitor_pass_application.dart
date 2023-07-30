@@ -229,9 +229,11 @@ class _VPApplicationDetailState extends State<VPApplicationDetail> {
   final TextEditingController declinereasonController = TextEditingController();
   final CollectionReference visitorPassApplicationCollection =
       FirebaseFirestore.instance.collection('visitor_pass_application');
+  late String status;
 
   @override
   Widget build(BuildContext context) {
+    status = widget.user['status'].toString();
     return Scaffold(
       appBar: AppBar(
         title: Text('Approve page'),
@@ -263,10 +265,14 @@ class _VPApplicationDetailState extends State<VPApplicationDetail> {
                           height: 25,
                         ),
                         ElevatedButton(
-                            onPressed: () {
-                              ApproveVisitorPass(context);
-                            },
-                            child: Text('Approved')),
+                          onPressed: status == "Approved"
+                              ? null // If status is "Approved", set onPressed to null to disable the button
+                              : () {
+                                  status = "Approved";
+                                  ApproveVisitorPass(context);
+                                },
+                          child: Text('Approved'),
+                        ),
                         Form(
                           key:
                               _formKey, // Create a GlobalKey<FormState> to access the form's state
@@ -285,12 +291,14 @@ class _VPApplicationDetailState extends State<VPApplicationDetail> {
                                 },
                               ),
                               ElevatedButton(
-                                onPressed: () {
-                                  // Call the validate method to check if the TextFormField is filled or not
-                                  if (_formKey.currentState!.validate()) {
-                                    DeclineVisitorPass(context);
-                                  }
-                                },
+                                onPressed: status == "Declined"
+                                    ? null // Disable the button if the status is "Declined"
+                                    : () {
+                                        // Call the validate method to check if the TextFormField is filled or not
+                                        if (_formKey.currentState!.validate()) {
+                                          DeclineVisitorPass(context);
+                                        }
+                                      },
                                 child: Text('Declined'),
                               ),
                             ],

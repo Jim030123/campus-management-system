@@ -15,7 +15,7 @@ class SecurityManagementMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(),
-      drawer: MyStudentDrawer(),
+      drawer: MyManagementDrawer(),
       body: Container(
         color: Colors.white,
         child: Center(
@@ -39,10 +39,10 @@ class SecurityManagementMenu extends StatelessWidget {
             SizedBox(
               height: 25,
             ),
-            // MyLongButton(
-            //   text: 'Entry Record (Comming Soon)',
-            //   routename: '',
-            // ),
+            MyLongButton(
+              text: 'Vehicle Entry Record',
+              routename: '/log_book',
+            ),
           ]),
         ),
       ),

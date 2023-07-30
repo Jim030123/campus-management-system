@@ -40,6 +40,7 @@ import 'package:campus_management_system/pages/Account/view_all_account.dart';
 import 'package:campus_management_system/pages/Visitor_Pass/register_visitor_pass.dart';
 import 'package:campus_management_system/pages/Account/Visitor/visitor_main_page.dart';
 import 'package:campus_management_system/pages/Visitor_Pass/visitor_pass_management.dart';
+import 'package:campus_management_system/pages/Security/logbook.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'documentation/info_page.dart';
@@ -148,6 +149,7 @@ class MainApp extends StatelessWidget {
         '/visitor_profile_page': (context) => VistitorProfilePage(),
         '/view_all_visitor_pass': (context) => ViewAllVisitorPass(),
         '/visitor_pass_scanner': (context) => VisitorPassScanner(),
+        '/log_book': (context) => LogbooksScreen()
       },
 
       initialRoute: '/',

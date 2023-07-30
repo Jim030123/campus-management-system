@@ -19,7 +19,7 @@ class _VisitorPassManagementMenuState extends State<VisitorPassManagementMenu> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(),
-      drawer: MyStudentDrawer(),
+      drawer: MyManagementDrawer(),
       body: Container(
         color: Colors.white,
         child: Column(children: [

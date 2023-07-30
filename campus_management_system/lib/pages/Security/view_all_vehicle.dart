@@ -24,7 +24,7 @@ class _ViewAllVehicleState extends State<ViewAllVehicle> {
     'Approved',
     'Declined'
   ];
-  late String _selectedSRStatus = status[0];
+  late String _selectedVehicleStatus = status[0];
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class _ViewAllVehicleState extends State<ViewAllVehicle> {
         actions: <Widget>[
           IconButton(
             icon: Icon(
-              Icons.filter_list,
+              Icons.filter_alt,
               color: Colors.white,
             ),
             onPressed: () {
@@ -49,7 +49,7 @@ class _ViewAllVehicleState extends State<ViewAllVehicle> {
                         ElevatedButton(
                           onPressed: () {
                             setState(() {
-                              _selectedSRStatus = status[0];
+                              _selectedVehicleStatus = status[0];
                             });
                             Navigator.pop(context);
                           },
@@ -58,7 +58,7 @@ class _ViewAllVehicleState extends State<ViewAllVehicle> {
                         ElevatedButton(
                           onPressed: () {
                             setState(() {
-                              _selectedSRStatus = status[1];
+                              _selectedVehicleStatus = status[1];
                             });
                             Navigator.pop(context); // Close the dialog
                           },
@@ -67,7 +67,7 @@ class _ViewAllVehicleState extends State<ViewAllVehicle> {
                         ElevatedButton(
                           onPressed: () {
                             setState(() {
-                              _selectedSRStatus = status[2];
+                              _selectedVehicleStatus = status[2];
                             });
                             Navigator.pop(context); // Close the dialog
                           },
@@ -91,52 +91,68 @@ class _ViewAllVehicleState extends State<ViewAllVehicle> {
         ],
       ),
       body: Container(
-        padding: EdgeInsets.all(1),
+        padding: EdgeInsets.all(16),
         child: StreamBuilder<QuerySnapshot>(
           stream: VehicleRegisteredCollection.where('status',
-                  isEqualTo: _selectedSRStatus)
+                  isEqualTo: _selectedVehicleStatus)
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
+              return Center(child: Text('No vechicle data available'));
             } else {
               final _allCarRegistered = snapshot.data!.docs;
 
-              return ListView.builder(
-                itemCount: _allCarRegistered.length,
-                itemBuilder: (context, index) {
-                  DocumentSnapshot vehicle = _allCarRegistered[index];
+              return Column(
+                children: [
+                  Container(
+                    child: Align(
+                        alignment: FractionalOffset.topLeft,
+                        child: MyMiddleText(
+                            text: 'Vehicle Application: ' +
+                                _selectedVehicleStatus)),
+                  ),
+                  MyDivider(),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: _allCarRegistered.length,
+                      itemBuilder: (context, index) {
+                        DocumentSnapshot vehicle = _allCarRegistered[index];
 
-                  return Container(
-                    padding: EdgeInsets.all(8),
-                    child: ListTile(
-                      tileColor: Colors.grey,
-                      title: Text(vehicle.id),
-                      leading: Image.network(vehicle['photoUrl']),
-                      subtitle: Text(
-                        "Vehicle Brand: " +
-                            vehicle['vehicle_brand'] +
-                            "\nVehicle Model: " +
-                            vehicle['vehicle_model'] +
-                            "\nVehicle Number: " +
-                            vehicle['vehicle_number'] +
-                            declineReason(vehicle),
-                      ),
-                      trailing: Text(vehicle['status']),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                ApplicationDetail(user: vehicle),
+                        return Container(
+                          padding: EdgeInsets.all(8),
+                          child: ListTile(
+                            tileColor: Colors.grey,
+                            title: Text(vehicle.id),
+                            leading: Image.network(vehicle['photoUrl']),
+                            subtitle: Text(
+                              "Vehicle Brand: " +
+                                  vehicle['vehicle_brand'] +
+                                  "\nVehicle Model: " +
+                                  vehicle['vehicle_model'] +
+                                  "\nVehicle Number: " +
+                                  vehicle['vehicle_number'] +
+                                  declineReason(vehicle),
+                            ),
+                            trailing: Text(vehicle['status']),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      VehicleApplicationDetail(user: vehicle),
+                                ),
+                              );
+                            },
                           ),
                         );
                       },
                     ),
-                  );
-                },
+                  ),
+                ],
               );
             }
           },
@@ -154,16 +170,18 @@ class _ViewAllVehicleState extends State<ViewAllVehicle> {
   }
 }
 
-class ApplicationDetail extends StatefulWidget {
+class VehicleApplicationDetail extends StatefulWidget {
   final DocumentSnapshot user;
 
-  const ApplicationDetail({required this.user, Key? key}) : super(key: key);
+  const VehicleApplicationDetail({required this.user, Key? key})
+      : super(key: key);
 
   @override
-  State<ApplicationDetail> createState() => _ApplicationDetailState();
+  State<VehicleApplicationDetail> createState() =>
+      _VehicleApplicationDetailState();
 }
 
-class _ApplicationDetailState extends State<ApplicationDetail> {
+class _VehicleApplicationDetailState extends State<VehicleApplicationDetail> {
   bool _isLoading = true;
   late List<DocumentSnapshot> _allApplication;
 
@@ -174,6 +192,7 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
 
   @override
   Widget build(BuildContext context) {
+    status = widget.user['status'].toString();
     return Scaffold(
       appBar: AppBar(
         title: Text('Approve page'),
@@ -224,12 +243,18 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
                       Container(
                           width: 300,
                           child: Image.network(widget.user['photoUrl'])),
+                      SizedBox(
+                        height: 25,
+                      ),
                       ElevatedButton(
-                          onPressed: () {
-                            status = "Approved";
-                            updateStatusApplication(context, status);
-                          },
-                          child: Text('Approved')),
+                        onPressed: status == "Approved"
+                            ? null // If status is "Approved", set onPressed to null to disable the button
+                            : () {
+                                status = "Approved";
+                                updateStatusApplication(context, status);
+                              },
+                        child: Text('Approved'),
+                      ),
                       Form(
                         key:
                             _formKey, // Create a GlobalKey<FormState> to access the form's state
@@ -248,12 +273,14 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
                               },
                             ),
                             ElevatedButton(
-                              onPressed: () {
-                                // Call the validate method to check if the TextFormField is filled or not
-                                if (_formKey.currentState!.validate()) {
-                                  DeclineVehicle(context);
-                                }
-                              },
+                              onPressed: status == "Declined"
+                                  ? null // Disable the button if the status is "Declined"
+                                  : () {
+                                      // Call the validate method to check if the TextFormField is filled or not
+                                      if (_formKey.currentState!.validate()) {
+                                        DeclineVehicle(context);
+                                      }
+                                    },
                               child: Text('Declined'),
                             ),
                           ],
