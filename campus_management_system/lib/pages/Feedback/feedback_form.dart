@@ -70,14 +70,6 @@ class _FeedbackFormState extends State<FeedbackForm> {
           future: getdatafromDB(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              List<String> dataList = snapshot.data as List<String>;
-              String name = dataList[0];
-              String email = dataList[1];
-              String id = dataList[2];
-
-              nameController.text = name;
-              emailController.text = email;
-              idController.text = id;
               return CircularProgressIndicator();
 
               // or any loading indicator

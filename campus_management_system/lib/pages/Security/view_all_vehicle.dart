@@ -224,7 +224,7 @@ class _VehicleApplicationDetailState extends State<VehicleApplicationDetail> {
                                 widget.user['name'] +
                                 "\nUser ID: " +
                                 widget.user['user_id'] +
-                                // "\nEmail: " +
+                               
                                 "\nVehicle Type " +
                                 widget.user['vehicle_type'] +
                                 "\nVehicle Brand " +
@@ -252,6 +252,8 @@ class _VehicleApplicationDetailState extends State<VehicleApplicationDetail> {
                             : () {
                                 status = "Approved";
                                 updateStatusApplication(context, status);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
                               },
                         child: Text('Approved'),
                       ),
@@ -279,6 +281,8 @@ class _VehicleApplicationDetailState extends State<VehicleApplicationDetail> {
                                       // Call the validate method to check if the TextFormField is filled or not
                                       if (_formKey.currentState!.validate()) {
                                         DeclineVehicle(context);
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
                                       }
                                     },
                               child: Text('Declined'),

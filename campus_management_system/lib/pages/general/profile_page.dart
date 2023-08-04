@@ -61,7 +61,10 @@ class _StudentProfilePageState extends State<StudentProfilePage> {
           builder: (context, snapshot) {
             // String name = snapshot.data as String;
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator(); // Display circular progress indicator while data is loading
+              return Center(
+                  child: Center(
+                      child:
+                          CircularProgressIndicator())); // Display circular progress indicator while data is loading
             } else if (snapshot.hasError) {
               return Center(
                 child: Text('Error fetching data'), // Display error message

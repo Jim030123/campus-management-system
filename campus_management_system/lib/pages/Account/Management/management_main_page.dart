@@ -146,15 +146,6 @@ class _ManagementMainPageState extends State<ManagementMainPage> {
                             //     text: 'Facility Management',
                             //     iconnumber: 0xe260,
                             //     routename: '/facility_management'),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            MyMenuTile(
-                                text: 'Auto fill Form',
-                                iconnumber: 0xf60d,
-                                routename: '/auto_fill_form_menu'),
                             MyMenuTile(
                                 text: 'Visitor Pass Management',
                                 iconnumber: 0xef2e,
@@ -172,6 +163,15 @@ class _ManagementMainPageState extends State<ManagementMainPage> {
                                 text: 'Student Resident Management',
                                 iconnumber: 0xf0110,
                                 routename: '/student_resident_management_menu'),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            MyMenuTile(
+                                text: 'Auto fill Form',
+                                iconnumber: 0xf60d,
+                                routename: '/auto_fill_form_menu'),
                           ],
                         ),
                       ],

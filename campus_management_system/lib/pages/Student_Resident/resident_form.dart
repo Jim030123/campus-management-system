@@ -331,14 +331,15 @@ class _ResidentApplicationPageState extends State<ResidentApplicationPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Submit your student resident form'),
+          title: Text('Submit your student resident application'),
           content: Text(
-            'This will also sent the student resident form to management',
+            'This will also sent the student resident application to management review',
           ),
           actions: [
             TextButton(
               child: Text('OK'),
               onPressed: () {
+                Navigator.pop(context);
                 Navigator.pop(context);
               },
             ),

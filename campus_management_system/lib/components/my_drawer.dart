@@ -12,7 +12,7 @@ class MyStudentDrawer extends StatelessWidget {
       child: StreamBuilder<DateTime>(
         stream: _dateTimeStream(),
         initialData: DateTime.now(),
-        builder: (context, snapshot) { 
+        builder: (context, snapshot) {
           String formattedDate = DateFormat('\n kk:mm:ss \n EEE d MMM')
               .format(snapshot.data ?? DateTime.now());
 
@@ -38,7 +38,7 @@ class MyStudentDrawer extends StatelessWidget {
                   color: Colors.black,
                 ),
                 MyDrawerListtile(
-                    pagename: 'Main Page', routename: '/main', icon: 0xe328),
+                    pagename: 'Main Page', routename: '/student_main_page', icon: 0xe328),
                 MyDrawerListtile(
                     pagename: 'Profile', routename: '/profile', icon: 0xf522),
                 MyDrawerListtile(

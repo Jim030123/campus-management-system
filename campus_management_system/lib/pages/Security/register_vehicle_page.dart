@@ -360,7 +360,7 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
         await vehicleRef.set({
           "name": nameController.text,
           "email": emailController.text,
-          "id": idController.text,
+          "user_id": idController.text,
           "vehicle_type": _selectedVehicleType as String,
           "vehicle_number": vehiclenumberController.text.toUpperCase(),
           "vehicle_brand": _selectedVehicleBrand as String,

@@ -39,7 +39,9 @@ class _StudentMainPageState extends State<StudentMainPage> {
         future: getdatafromDB(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator(); // Display circular progress indicator while data is loading
+            return Dialog(child: CircularProgressIndicator());
+
+            // Display circular progress indicator while data is loading
           } else if (snapshot.hasError) {
             return Center(
               child: Text('Error fetching data'), // Display error message
@@ -73,9 +75,6 @@ class _StudentMainPageState extends State<StudentMainPage> {
                           padding: EdgeInsets.all(8),
                           decoration: BoxDecoration(
                             color: Colors.black12,
-                            // border: Border.all(
-                            //   color: Colors.black,
-                            // ),
                             borderRadius: BorderRadius.all(Radius.circular(20)),
                           ),
                           child: Column(children: [
@@ -175,7 +174,6 @@ class _StudentMainPageState extends State<StudentMainPage> {
                 ),
               ),
               bottomNavigationBar: Container(
-            
                 height: 50,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
@@ -206,60 +204,57 @@ class _StudentMainPageState extends State<StudentMainPage> {
                           tooltip: 'Log Out',
                           onPressed: () {
                             setState(() {
-                              setState(() {
-                                _visible = !_visible;
+                              _visible = !_visible;
 
-                                if (_visible = true) {
-                                  showDialog(
-                                    context: context,
-                                    builder: (ctx) => AlertDialog(
-                                      title: const Text(
-                                          "Are You Sure Want to Log Out"),
-                                      content: const Text(
-                                          "If you are Log Out need to sign in again"),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(ctx).pop();
-                                          },
-                                          child: Row(
-                                            children: [
-                                              GestureDetector(
-                                                child: Container(
-                                                  color: Colors.green,
-                                                  padding:
-                                                      const EdgeInsets.all(14),
-                                                  child: const Text(
-                                                    "Yes",
-                                                    style: TextStyle(
-                                                        color: Colors.white),
-                                                  ),
-                                                ),
-                                                onTap: () {
-                                                  handleLogout();
-                                                },
-                                              ),
-                                              SizedBox(
-                                                width: 20,
-                                              ),
-                                              Container(
+                              if (_visible = true) {
+                                showDialog(
+                                  context: context,
+                                  builder: (ctx) => AlertDialog(
+                                    title: const Text(
+                                        "Are You Sure Want to Log Out"),
+                                    content: const Text(
+                                        "If you sure to log out need to sign in again"),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(ctx).pop();
+                                        },
+                                        child: Row(
+                                          children: [
+                                            GestureDetector(
+                                              child: Container(
                                                 color: Colors.green,
                                                 padding:
                                                     const EdgeInsets.all(14),
                                                 child: const Text(
-                                                  "Cancel",
+                                                  "Yes",
                                                   style: TextStyle(
                                                       color: Colors.white),
                                                 ),
                                               ),
-                                            ],
-                                          ),
+                                              onTap: () {
+                                                handleLogout();
+                                              },
+                                            ),
+                                            SizedBox(
+                                              width: 20,
+                                            ),
+                                            Container(
+                                              color: Colors.green,
+                                              padding: const EdgeInsets.all(14),
+                                              child: const Text(
+                                                "Cancel",
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                  );
-                                }
-                              });
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
                             });
                           })
                     ],
@@ -268,7 +263,6 @@ class _StudentMainPageState extends State<StudentMainPage> {
               ),
             );
           }
-          ;
         });
   }
 

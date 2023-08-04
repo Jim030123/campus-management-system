@@ -34,10 +34,10 @@ class _VisitorPassManagementMenuState extends State<VisitorPassManagementMenu> {
           SizedBox(
             height: 25,
           ),
-          MyLongButton(
-            text: 'Visitor Pass Scanner',
-            routename: '/visitor_pass_scanner',
-          ),
+          // MyLongButton(
+          //   text: 'Visitor Pass Scanner',
+          //   routename: '/visitor_pass_scanner',
+          // ),
           SizedBox(
             height: 25,
           ),

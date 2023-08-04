@@ -270,6 +270,8 @@ class _VPApplicationDetailState extends State<VPApplicationDetail> {
                               : () {
                                   status = "Approved";
                                   ApproveVisitorPass(context);
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
                                 },
                           child: Text('Approved'),
                         ),
@@ -297,6 +299,8 @@ class _VPApplicationDetailState extends State<VPApplicationDetail> {
                                         // Call the validate method to check if the TextFormField is filled or not
                                         if (_formKey.currentState!.validate()) {
                                           DeclineVisitorPass(context);
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
                                         }
                                       },
                                 child: Text('Declined'),
@@ -340,7 +344,6 @@ class _VPApplicationDetailState extends State<VPApplicationDetail> {
     } on FirebaseAuthException catch (e) {}
     ;
 
-    Navigator.popUntil(context, ModalRoute.withName('/management_main'));
     // pop the loading circle
   }
 
@@ -360,8 +363,6 @@ class _VPApplicationDetailState extends State<VPApplicationDetail> {
           .update({
         "status": "Declined",
       });
-
-      Navigator.popUntil(context, ModalRoute.withName('/management_main'));
     } on FirebaseAuthException catch (e) {}
     ;
     // pop the loading circle

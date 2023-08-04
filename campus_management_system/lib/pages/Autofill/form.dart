@@ -10,8 +10,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:campus_management_system/pages/general/login_page.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:uuid/uuid.dart';
 
 import '../../components/my_camera.dart';
+import '../../components/my_divider.dart';
+import '../../components/my_textstyle.dart';
 import '../../documentation/term_and_condition.dart';
 
 class RegistrationVehicleFormM extends StatefulWidget {
@@ -25,8 +29,10 @@ class RegistrationVehicleFormM extends StatefulWidget {
 }
 
 class _RegistrationVehicleFormMState extends State<RegistrationVehicleFormM> {
-  @override
-  _RegistrationVehicleFormMState() {}
+  _RegistrationVehicleFormMState() {
+    _selectedVehicleBrand = _vehicleBrand[0];
+    _selectedVehicleType = _vehicleType[0];
+  }
 
   final _formKey = GlobalKey<FormState>();
 
@@ -35,16 +41,45 @@ class _RegistrationVehicleFormMState extends State<RegistrationVehicleFormM> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController idController = TextEditingController();
-  final String status = "Approved";
+  final String status = "Waiting the Management Review";
 
   bool checkboxValue = false;
 
-  bool value = false;
+  final _vehicleBrand = [
+    'Perodua',
+    'Proton',
+    'Honda',
+    'Toyota',
+    'BMW',
+    'Audi',
+    'Lexus',
+    'Mazda',
+    'Mercedes-Benz',
+    'Nissan',
+    'Suzuki',
+    'Volvo',
+    'Ford',
+    'Subaru',
+    'Porsche',
+    'Mitsubishi',
+    'Infiniti',
+    'Hyundai',
+    'Chevrolet',
+    'Isuzu'
+  ];
+
+  final _vehicleType = ['Motorcycle', 'Car', 'Bus'];
+
+  String? _selectedVehicleBrand = "";
+
+  String? _selectedVehicleType = "";
+
+  XFile? takenPhoto; // Add a variable to store the taken photo
 
   @override
   Widget build(BuildContext context) {
     getdatafromDB() async {
-      final user = widget.id;
+      final user = FirebaseAuth.instance.currentUser!.uid;
       DocumentSnapshot snapshot = await FirebaseFirestore.instance
           .collection('users') // Replace with your collection name
           .doc(user) // Use the provided document ID
@@ -56,190 +91,298 @@ class _RegistrationVehicleFormMState extends State<RegistrationVehicleFormM> {
       return [name, email, id];
     }
 
+    // Function to handle the photo taken by the camera
+    void _handlePhotoTaken(XFile photo) {
+      setState(() {
+        takenPhoto = photo;
+      });
+    }
+
     return Scaffold(
-      appBar: MyAppBar(),
+      appBar: AppBar(
+        title: Text('Registration Vehicle Form'),
+      ),
       body: SingleChildScrollView(
         child: FutureBuilder(
           future: getdatafromDB(),
           builder: (context, snapshot) {
-            List<String> dataList = snapshot.data as List<String>;
-            String name = dataList[0];
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator(); // or any loading indicator
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text('Error occurred while loading data'),
+              );
+            } else {
+              List<String> dataList = snapshot.data as List<String>;
+              String name = dataList[0];
+              String email = dataList[1];
 
-            String email = dataList[1];
+              String id = dataList[2];
 
-            String id = dataList[2];
+              nameController.text = name;
+              emailController.text = email;
+              idController.text = id;
 
-            nameController.text = name;
-            emailController.text = email;
-            idController.text = id;
-
-            final XFile? picture;
-            return Container(
-              padding: EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Register New Car',
-                      style: TextStyle(fontSize: 30),
-                    ),
-                  ),
-                  Divider(
-                    color: Colors.black,
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25),
-                      color: Colors.grey,
-                    ),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // name
-                          TextFormField(
-                            // readOnly: true,
-                            controller: nameController,
-                            decoration: InputDecoration(labelText: 'Name'),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter your name';
-                              }
-                              return null;
-                            },
-                          ),
-
-                          TextFormField(
-                            // readOnly: true,
-                            controller: emailController,
-                            decoration: InputDecoration(labelText: 'Email'),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter your Email';
-                              }
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-                            // readOnly: true,
-                            controller: idController,
-                            decoration: InputDecoration(labelText: 'ID'),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter your Email';
-                              }
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-                            controller: vehiclenumberController,
-                            decoration: InputDecoration(
-                                labelText: 'Vehicle Plate Number'),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter your Vechicle Plate Number';
-                              }
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-                            controller: modelnameController,
-                            decoration: InputDecoration(
-                                labelText: 'Vehicle Model Name'),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter your Vechicle Model Name';
-                              }
-                              return null;
-                            },
-                          ),
-
-                          SizedBox(height: 16.0),
-
-                          // ElevatedButton(
-                          //   child: Text('Take Photo'),
-                          //   onPressed: () async {
-                          //     await availableCameras().then((value) =>
-                          //         Navigator.push(
-                          //             context,
-                          //             MaterialPageRoute(
-                          //                 builder: (_) =>
-                          //                     CameraPage(cameras: value))));
-                          //   },
-                          // ),
-
-                          Row(
-                            children: [
-                              Checkbox(
-                                value: checkboxValue,
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    checkboxValue = value ?? false;
-                                  });
-                                },
-                              ),
-                              Container(
-                                width: MediaQuery.of(context).size.width * 0.7,
-                                child: Text(
-                                    "I have read and agree to Terms of Service and Privacy Policy"),
-                              )
-                            ],
-                          ),
-
-                          SizedBox(
-                            height: 25,
-                          ),
-
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: ElevatedButton(
-                              onPressed: checkboxValue
-                                  ? () {
-                                      if (_formKey.currentState!.validate()) {
-                                        registerVehicle(context);
-                                        _confirmDialog();
-                                      }
-                                    }
-                                  : null,
-                              child: Text('Register'),
-                            ),
-                          ),
-                        ],
+              return Container(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Register New Car',
+                        style: TextStyle(fontSize: 30),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            );
+                    Divider(
+                      color: Colors.black,
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
+                        color: Colors.grey,
+                      ),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // name
+                            TextFormField(
+                              enabled: false,
+                              controller: nameController,
+                              decoration: InputDecoration(labelText: 'Name'),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Please enter your name';
+                                }
+                                return null;
+                              },
+                            ),
+                            TextFormField(
+                              enabled: false,
+                              controller: emailController,
+                              decoration: InputDecoration(labelText: 'Email'),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Please enter your Email';
+                                }
+                                return null;
+                              },
+                            ),
+                            TextFormField(
+                              enabled: false,
+                              controller: idController,
+                              decoration: InputDecoration(labelText: 'ID'),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Please enter your ID';
+                                }
+                                return null;
+                              },
+                            ),
+
+                            DropdownButtonFormField(
+                              decoration: InputDecoration(
+                                labelText: "Vehicle Type",
+                                prefixIcon: Icon(Icons.agriculture),
+                                border: UnderlineInputBorder(),
+                              ),
+                              value: _selectedVehicleType,
+                              items: _vehicleType
+                                  .map((e) => DropdownMenuItem(
+                                        child: Text(e),
+                                        value: e,
+                                      ))
+                                  .toList(),
+                              onChanged: (val) {
+                                setState(() {
+                                  _selectedVehicleType = val as String;
+                                });
+                              },
+                            ),
+                            DropdownButtonFormField(
+                              decoration: InputDecoration(
+                                labelText: "Vehicle Brand",
+                                prefixIcon: Icon(Icons.place),
+                                border: UnderlineInputBorder(),
+                              ),
+                              value: _selectedVehicleBrand,
+                              items: _vehicleBrand
+                                  .map((e) => DropdownMenuItem(
+                                        child: Text(e),
+                                        value: e,
+                                      ))
+                                  .toList(),
+                              onChanged: (val) {
+                                setState(() {
+                                  _selectedVehicleBrand = val as String;
+                                });
+                              },
+                            ),
+                            TextFormField(
+                              controller: vehiclenumberController,
+                              decoration: InputDecoration(
+                                  labelText: 'Vehicle Plate Number'),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Please enter your Vehicle Plate Number';
+                                }
+                                return null;
+                              },
+                            ),
+                            TextFormField(
+                              controller: modelnameController,
+                              decoration: InputDecoration(
+                                  labelText: 'Vehicle Model Name'),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Please enter your Vehicle Model Name';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 16.0),
+                            MyDivider(),
+                            Align(
+                                alignment: Alignment.center,
+                                child: MyMiddleText(
+                                    text: "Please Take Vehicle Photo")),
+                            MyDivider(),
+                            SizedBox(height: 16.0),
+                            if (takenPhoto != null) // Display the taken photo
+                              Center(
+                                child: Container(
+                                    width: 300,
+                                    child: Image.file(File(takenPhoto!.path))),
+                              ),
+                            ElevatedButton(
+                              child: Text('Take Photo'),
+                              onPressed: () async {
+                                await availableCameras().then((value) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => CameraPage(
+                                        cameras: value,
+                                        onPhotoTaken:
+                                            _handlePhotoTaken, // Pass the callback function
+                                      ),
+                                    ),
+                                  );
+                                });
+                              },
+                            ),
+
+                            Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    _showAlertDialog();
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Checkbox(
+                                        value: checkboxValue,
+                                        onChanged: (bool? value) {
+                                          setState(() {
+                                            checkboxValue = value ?? false;
+                                          });
+                                        },
+                                      ),
+                                      Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.7,
+                                          child: Text(
+                                              'I agree all Term & Condition',
+                                              style: TextStyle(
+                                                  color: Color.fromARGB(
+                                                      255, 35, 109, 193))))
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 25,
+                            ),
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: ElevatedButton(
+                                onPressed: checkboxValue
+                                    ? () {
+                                        if (_formKey.currentState!.validate()) {
+                                          registerVehicle(context);
+                                          _confirmDialog();
+                                        }
+                                      }
+                                    : null,
+                                child: Text('Register'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
           },
         ),
       ),
     );
   }
 
-  registerVehicle(BuildContext context) async {
+  Future<void> registerVehicle(BuildContext context) async {
     try {
       String auth = FirebaseAuth.instance.currentUser!.uid;
 
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(auth)
+      final vehicleRef = FirebaseFirestore.instance
           .collection('vehicle')
-          .doc(vehiclenumberController.text)
-          .set({
-        "name": nameController.text,
-        "email": emailController.text,
-        "id": idController.text,
-        "vehicle_number": vehiclenumberController.text,
-        "model": modelnameController.text,
-        "status": status
-      });
+          .doc(vehiclenumberController.text.toUpperCase());
+
+      // Upload the photo to Firebase Storage
+      if (takenPhoto != null) {
+        final ref = firebase_storage.FirebaseStorage.instance
+            .ref()
+            .child('vehicle_photos/${vehicleRef.id}.jpg');
+
+        await ref.putFile(File(takenPhoto!.path));
+
+        final downloadUrl = await ref.getDownloadURL();
+
+        await vehicleRef.set({
+          "name": nameController.text,
+          "email": emailController.text,
+          "user_id": idController.text,
+          "vehicle_number": vehiclenumberController.text.toUpperCase(),
+          "vehicle_type": _selectedVehicleType as String,
+          "vehicle_brand": _selectedVehicleBrand as String,
+          "vehicle_model": modelnameController.text,
+          "status": status,
+          "photoUrl": downloadUrl,
+          "id": auth // Save the photo URL in the database
+        });
+      } else {
+        await vehicleRef.set({
+          "name": nameController.text,
+          "email": emailController.text,
+          "id": idController.text,
+          "vehicle_type": _selectedVehicleType as String,
+          "vehicle_number": vehiclenumberController.text.toUpperCase(),
+          "vehicle_brand": _selectedVehicleBrand as String,
+          "vehicle_model": modelnameController.text,
+          "status": status,
+        });
+      }
       print(auth);
-    } on FirebaseAuthException catch (e) {}
-    ;
+    } on FirebaseAuthException catch (e) {
+      // Handle the exception
+    }
     // pop the loading circle
   }
 
@@ -250,13 +393,13 @@ class _RegistrationVehicleFormMState extends State<RegistrationVehicleFormM> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Create account'),
-          content: Text(
-              'This also will create a profile for' + emailController.text),
+          title: Text('Register Vehicle'),
+          content: Text('The registration will send to management review'),
           actions: [
             TextButton(
               child: Text('OK'),
               onPressed: () {
+                Navigator.pop(context);
                 Navigator.pop(context);
               },
             ),
@@ -267,13 +410,33 @@ class _RegistrationVehicleFormMState extends State<RegistrationVehicleFormM> {
 
     // pop the loading circle
   }
+
+  void _showAlertDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Terms of Service and Privacy Policy'),
+          content: SingleChildScrollView(child: RegisterVehicleTnC()),
+          actions: [
+            TextButton(
+              child: Text('Close'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
 
 
 
 class RegisterVisitorPassM extends StatefulWidget {
-  String id;
+   String id;
   RegisterVisitorPassM({Key? key, required this.id}) : super(key: key);
 
   @override
@@ -282,7 +445,9 @@ class RegisterVisitorPassM extends StatefulWidget {
 
 class _RegisterVisitorPassMState extends State<RegisterVisitorPassM> {
   _RegisterVisitorPassMState() {
-    _selectedVehicleType = _vehicletype[0];
+    _selectedVehicleType = _vehicleType[0];
+    _selectedVisitorPassType = _visitorPassType[0];
+    _selectedVehicleBrand = _vehicleBrand[0];
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -291,18 +456,56 @@ class _RegisterVisitorPassMState extends State<RegisterVisitorPassM> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController nricController = TextEditingController();
   final TextEditingController reasonController = TextEditingController();
-  final TextEditingController vehicleplatenumberController =
-      TextEditingController();
+  final TextEditingController vehicleNumberController = TextEditingController();
+
+  final TextEditingController vehiclemodelController = TextEditingController();
   final TextEditingController relationController = TextEditingController();
   final String status = "Waiting the Management Review";
 
-  final _vehicletype = ['Motorcycle', 'Car', 'Bus'];
+  final _visitorPassType = ['Short Term', 'Long Term'];
+
+  final _vehicleBrand = [
+    'Perodua',
+    'Proton',
+    'Honda',
+    'Toyota',
+    'BMW',
+    'Audi',
+    'Lexus',
+    'Mazda',
+    'Mercedes-Benz',
+    'Nissan',
+    'Suzuki',
+    'Volvo',
+    'Ford',
+    'Subaru',
+    'Porsche',
+    'Mitsubishi',
+    'Infiniti',
+    'Hyundai',
+    'Chevrolet',
+    'Isuzu'
+  ];
+
+  String? _selectedVisitorPassType = "";
+  String? _selectedVehicleBrand = "";
+
+  final _vehicleType = ['Motorcycle', 'Car', 'Bus'];
 
   String? _selectedVehicleType = "";
 
   DateTime datevisit = DateTime.now();
+  DateTime enddatevisit = DateTime.now();
   bool checkboxValue = false;
   TimeOfDay _selectedTime = TimeOfDay.now();
+
+  void _handlePhotoTaken(XFile photo) {
+    setState(() {
+      takenPhoto = photo;
+    });
+  }
+
+  XFile? takenPhoto;
 
   Future<void> _selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
@@ -317,232 +520,296 @@ class _RegisterVisitorPassMState extends State<RegisterVisitorPassM> {
     }
   }
 
+  getdatafromDB() async {
+    // final user = widget.id;
+    final user = FirebaseAuth.instance.currentUser!.uid;
+
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection('users') // Replace with your collection name
+        .doc(user) // Use the provided document ID
+        .get();
+
+    String name = await snapshot.get('name');
+    String email = await snapshot.get('email');
+    String nric = await snapshot.get('nric');
+    return [name, email, nric];
+  }
+
+  initState() {
+    super.initState();
+    getdatafromDB();
+  }
+
   @override
   Widget build(BuildContext context) {
-    getdatafromDB() async {
-      // final user = widget.id;
-      final user = FirebaseAuth.instance.currentUser!.uid;
-
-      DocumentSnapshot snapshot = await FirebaseFirestore.instance
-          .collection('users') // Replace with your collection name
-          .doc(user) // Use the provided document ID
-          .get();
-
-      String name = await snapshot.get('name');
-      String email = await snapshot.get('email');
-      // String id = await snapshot.get('id');
-      return [name, email];
-    }
-
     return Scaffold(
       appBar: MyAppBar(),
       body: SingleChildScrollView(
         child: FutureBuilder(
           future: getdatafromDB(),
           builder: (context, snapshot) {
-            List<String> dataList = snapshot.data as List<String>;
-            String name = dataList[0];
-            String email = dataList[1];
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator(); // or any loading indicator
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text('Error occurred while loading data'),
+              );
+            } else {
+              List<String> dataList = snapshot.data as List<String>;
+              String name = dataList[0];
+              String email = dataList[1];
+              String nric = dataList[2];
 
-            nameController.text = name;
-            emailController.text = email;
+              nameController.text = name;
+              emailController.text = email;
+              nricController.text = nric;
 
-            return Container(
-              padding: EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Visitor Pass Application',
-                      style: TextStyle(fontSize: 30),
-                    ),
-                  ),
-                  Divider(
-                    color: Colors.black,
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25),
-                      color: Colors.grey,
-                    ),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextFormField(
-                            controller: nameController,
-                            decoration: InputDecoration(labelText: 'Name'),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter your name';
-                              }
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-                            controller: emailController,
-                            decoration: InputDecoration(labelText: 'Email'),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter your Email';
-                              }
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-                            controller: nricController,
-                            decoration: InputDecoration(labelText: 'NRIC'),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter your Email';
-                              }
-                              return null;
-                            },
-                          ),
-                          SizedBox(
-                            height: 25,
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(16),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Text(
-                                  'Date Selected: ${datevisit.year}/${datevisit.month}/${datevisit.day}',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                                ElevatedButton(
-                                  onPressed: () async {
-                                    DateTime? newDate = await showDatePicker(
-                                      context: context,
-                                      initialDate: datevisit,
-                                      firstDate: DateTime(1900),
-                                      lastDate: DateTime(2100),
-                                    );
-
-                                    if (newDate == null) return;
-                                    setState(() => datevisit = newDate);
-                                  },
-                                  child: Text('Select Visit Date'),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Text(
-                                  'Time Selected: ${_selectedTime.format(context)}',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    _selectTime(context);
-                                  },
-                                  child: Text('Select Visit Time'),
-                                ),
-                              ],
-                            ),
-                          ),
-                          TextFormField(
-                            controller: reasonController,
-                            decoration:
-                                InputDecoration(labelText: 'Reason to visit'),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter your Reason to visit';
-                              }
-                              return null;
-                            },
-                          ),
-                          DropdownButtonFormField(
-                            decoration: InputDecoration(
-                              labelText: "Vehicle Type",
-                              prefixIcon: Icon(Icons.verified_user),
-                              border: UnderlineInputBorder(),
-                            ),
-                            value: _selectedVehicleType,
-                            items: _vehicletype
-                                .map((e) => DropdownMenuItem(
-                                      child: Text(e),
-                                      value: e,
-                                    ))
-                                .toList(),
-                            onChanged: (val) {
-                              setState(() {
-                                _selectedVehicleType = val as String;
-                              });
-                            },
-                          ),
-                          SizedBox(height: 16.0),
-                          TextFormField(
-                            controller: vehicleplatenumberController,
-                            decoration: InputDecoration(
-                              labelText: 'Vehicle plate Number',
-                            ),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter your Vehicle number';
-                              }
-                              return null;
-                            },
-                          ),
-                          Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  _showAlertDialog();
-                                },
-                                child: Row(
-                                  children: [
-                                    Checkbox(
-                                      value: checkboxValue,
-                                      onChanged: (bool? value) {
-                                        setState(() {
-                                          checkboxValue = value ?? false;
-                                        });
-                                      },
-                                    ),
-                                    Text(
-                                      "I have read and agree to Terms of Service and Privacy Policy",
-                                      style: TextStyle(
-                                        color: const Color.fromARGB(
-                                            255, 33, 40, 243),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 25,
-                          ),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: ElevatedButton(
-                              onPressed: checkboxValue
-                                  ? () {
-                                      if (_formKey.currentState!.validate()) {
-                                        VisitorPassApplication(context);
-                                        _confirmDialog();
-                                      }
-                                    }
-                                  : null,
-                              child: Text('Register'),
-                            ),
-                          ),
-                        ],
+              return Container(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Visitor Pass Application',
+                        style: TextStyle(fontSize: 30),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            );
+                    Divider(
+                      color: Colors.black,
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
+                        color: Colors.grey,
+                      ),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextFormField(
+                              enabled: false,
+                              controller: nameController,
+                              decoration: InputDecoration(labelText: 'Name'),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Please enter your name';
+                                }
+                                return null;
+                              },
+                            ),
+                            TextFormField(
+                              enabled: false,
+                              controller: emailController,
+                              decoration: InputDecoration(labelText: 'Email'),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Please enter your Email';
+                                }
+                                return null;
+                              },
+                            ),
+                            TextFormField(
+                              enabled: false,
+                              controller: nricController,
+                              decoration: InputDecoration(labelText: 'NRIC'),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Please enter your NRIC';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(
+                              height: 25,
+                            ),
+                            DropdownButtonFormField(
+                              decoration: InputDecoration(
+                                labelText: "Visitor Pass Type",
+                                prefixIcon: Icon(Icons.badge_rounded),
+                                border: UnderlineInputBorder(),
+                              ),
+                              value: _selectedVisitorPassType,
+                              items: _visitorPassType
+                                  .map((e) => DropdownMenuItem(
+                                        child: Text(e),
+                                        value: e,
+                                      ))
+                                  .toList(),
+                              onChanged: (val) {
+                                setState(() {
+                                  _selectedVisitorPassType = val as String;
+                                });
+                              },
+                            ),
+                            SizedBox(
+                              height: 16,
+                            ),
+                            MyMiddleText(text: "Visit Period"),
+                            MyDivider(),
+                            visitorType(),
+                            MyDivider(),
+                            TextFormField(
+                              controller: reasonController,
+                              decoration:
+                                  InputDecoration(labelText: 'Reason to visit'),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Please enter your Reason to visit';
+                                }
+                                return null;
+                              },
+                            ),
+                            DropdownButtonFormField(
+                              decoration: InputDecoration(
+                                labelText: "Vehicle Type",
+                                prefixIcon: Icon(Icons.verified_user),
+                                border: UnderlineInputBorder(),
+                              ),
+                              value: _selectedVehicleType,
+                              items: _vehicleType
+                                  .map((e) => DropdownMenuItem(
+                                        child: Text(e),
+                                        value: e,
+                                      ))
+                                  .toList(),
+                              onChanged: (val) {
+                                setState(() {
+                                  _selectedVehicleType = val as String;
+                                });
+                              },
+                            ),
+                            SizedBox(height: 16.0),
+                            DropdownButtonFormField(
+                              decoration: InputDecoration(
+                                labelText: "Vehicle Brand",
+                                prefixIcon: Icon(Icons.car_crash),
+                                border: UnderlineInputBorder(),
+                              ),
+                              value: _selectedVehicleBrand,
+                              items: _vehicleBrand
+                                  .map((e) => DropdownMenuItem(
+                                        child: Text(e),
+                                        value: e,
+                                      ))
+                                  .toList(),
+                              onChanged: (val) {
+                                setState(() {
+                                  _selectedVehicleBrand = val as String;
+                                });
+                              },
+                            ),
+                            TextFormField(
+                              controller: vehiclemodelController,
+                              decoration: InputDecoration(
+                                labelText: 'Vehicle Model',
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Please enter your Vehicle Model';
+                                }
+                                return null;
+                              },
+                            ),
+                            TextFormField(
+                              controller: vehicleNumberController,
+                              decoration: InputDecoration(
+                                labelText: 'Vehicle Plate Number',
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Please enter your Vehicle number';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(
+                              height: 25,
+                            ),
+                            if (takenPhoto != null) // Display the taken photo
+                              Center(
+                                child: Container(
+                                    width: 300,
+                                    child: Image.file(File(takenPhoto!.path))),
+                              ),
+                            ElevatedButton(
+                              child: Text('Take Photo'),
+                              onPressed: () async {
+                                await availableCameras().then((value) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => CameraPage(
+                                        cameras: value,
+                                        onPhotoTaken:
+                                            _handlePhotoTaken, // Pass the callback function
+                                      ),
+                                    ),
+                                  );
+                                });
+                              },
+                            ),
+                            SizedBox(height: 16.0),
+                            Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    _showAlertDialog();
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Checkbox(
+                                        value: checkboxValue,
+                                        onChanged: (bool? value) {
+                                          setState(() {
+                                            checkboxValue = value ?? false;
+                                          });
+                                        },
+                                      ),
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.7,
+                                        child: Text(
+                                          "I have read and agree to Terms of Service and Privacy Policy",
+                                          style: TextStyle(
+                                            color: const Color.fromARGB(
+                                                255, 33, 40, 243),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 25,
+                            ),
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: ElevatedButton(
+                                onPressed: checkboxValue
+                                    ? () {
+                                        if (_formKey.currentState!.validate()) {
+                                          VisitorPassApplication(context);
+                                          _confirmDialog();
+                                        }
+                                      }
+                                    : null,
+                                child: Text('Register'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
           },
         ),
       ),
@@ -550,38 +817,111 @@ class _RegisterVisitorPassMState extends State<RegisterVisitorPassM> {
   }
 
   VisitorPassApplication(BuildContext context) async {
-    DateTime timestamp = DateTime.now();
+    DateTime registerTime = DateTime.now();
 
+    String auth = FirebaseAuth.instance.currentUser!.uid;
+    String formattedDateVisit = DateFormat('yyyy/MM/dd').format(datevisit);
+
+    String formattedEndDateVisit =
+        DateFormat('yyyy/MM/dd').format(enddatevisit);
+
+    DateTime ExpiredDateTime =
+        DateTime(datevisit.year, datevisit.month, datevisit.day, 23, 59, 59);
+    Timestamp shortTermPassExpired = Timestamp.fromDate(ExpiredDateTime);
+
+    DateTime ExpiredDatevisitTime = DateTime(
+        enddatevisit.year, enddatevisit.month, enddatevisit.day, 23, 59, 59);
+    Timestamp longTermPassExpired = Timestamp.fromDate(ExpiredDatevisitTime);
+
+    String formattedTimeVisit = DateFormat.Hm().format(
+      DateTime(datevisit.year, datevisit.month, datevisit.day,
+          _selectedTime.hour, _selectedTime.minute),
+    );
+    String formattedTimeStamp =
+        DateFormat('yyyy-MM-dd HH:mm:ss').format(registerTime);
+
+    String visitorPassID = Uuid().v4();
     try {
-      String auth = FirebaseAuth.instance.currentUser!.uid;
-      String formattedDateVisit = DateFormat('yyyy/MM/dd').format(datevisit);
-      String formattedTimeVisit = DateFormat.Hm().format(
-        DateTime(datevisit.year, datevisit.month, datevisit.day,
-            _selectedTime.hour, _selectedTime.minute),
-      );
-      String formattedTimeStamp =
-          DateFormat('yyyy-MM-dd HH:mm:ss').format(timestamp);
+      if (_selectedVisitorPassType == _visitorPassType[0]) {
+        await FirebaseFirestore.instance
+            .collection('visitor_pass_application')
+            .doc(visitorPassID)
+            .set({
+          "name": nameController.text,
+          "email": emailController.text,
+          "nric": nricController.text,
 
-      await FirebaseFirestore.instance
-          .collection('visitor_pass_application')
-          .doc()
-          .set({
-        "name": nameController.text,
-        "email": emailController.text,
-        "nric": nricController.text,
-        "vehicle_plate_number": vehicleplatenumberController.text,
-        "vehicle_type": _selectedVehicleType as String,
-        "date_visit": formattedDateVisit,
-        "time_visit": formattedTimeVisit,
-        "status": status,
-        "reason": reasonController.text,
-        "timestamp": formattedTimeStamp,
-        "entry_time":null,
-        "exit_time":null,
+          "date_visit": formattedDateVisit,
+          "status": status,
+          "reason": reasonController.text,
 
-        "visitorid": auth
-      });
-      print(auth);
+          // register time
+          "timestamp": formattedTimeStamp,
+          "expired_timestamp": shortTermPassExpired,
+
+          "entry_time": "",
+          "exit_time": "",
+          "visitorid": auth,
+          "time_visit": formattedTimeVisit,
+          "visitor_pass_type": _selectedVisitorPassType as String,
+
+          "visitor_pass_id": visitorPassID,
+          "vehicle_number": vehicleNumberController.text.toUpperCase(),
+          "vehicle_model": vehiclemodelController.text,
+          "vehicle_brand": _selectedVehicleBrand as String,
+          "vehicle_type": _selectedVehicleType as String
+        });
+      } else if (_selectedVisitorPassType == _visitorPassType[1]) {
+        await FirebaseFirestore.instance
+            .collection('visitor_pass_application')
+            .doc(visitorPassID)
+            .set({
+          "name": nameController.text,
+          "email": emailController.text,
+          "nric": nricController.text,
+          "start_date_visit": formattedDateVisit,
+          "status": status,
+          "reason": reasonController.text,
+          "timestamp": formattedTimeStamp,
+          "visitorid": auth,
+          "end_date_visit": formattedEndDateVisit,
+          "visitor_pass_type": _selectedVisitorPassType as String,
+          "expired_timestamp": longTermPassExpired,
+          "visitor_pass_id": visitorPassID,
+          "vehicle_number": vehicleNumberController.text.toUpperCase(),
+          "vehicle_model": vehiclemodelController.text,
+          "vehicle_brand": _selectedVehicleBrand as String,
+          "vehicle_type": _selectedVehicleType as String
+        });
+      }
+
+      try {
+        final vehicleRef =
+            FirebaseFirestore.instance.collection('vehicle').doc(visitorPassID);
+        if (takenPhoto != null) {
+          final ref = firebase_storage.FirebaseStorage.instance
+              .ref()
+              .child('vehicle_photos/${vehicleRef.id}.jpg');
+
+          await ref.putFile(File(takenPhoto!.path));
+
+          final downloadUrl = await ref.getDownloadURL();
+
+          await FirebaseFirestore.instance
+              .collection('vehicle')
+              .doc(vehicleNumberController.text)
+              .set({
+            "name": nameController.text,
+            "vehicle_number": vehicleNumberController.text.toUpperCase(),
+            "vehicle_model": vehiclemodelController.text,
+            "vehicle_brand": _selectedVehicleBrand as String,
+            "vehicle_type": _selectedVehicleType as String,
+            "status": status,
+            "id": auth,
+            "photoUrl": downloadUrl,
+          });
+        }
+      } catch (e) {}
     } on FirebaseAuthException catch (e) {
       // Handle the exception if needed
     }
@@ -591,17 +931,19 @@ class _RegisterVisitorPassMState extends State<RegisterVisitorPassM> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Terms of Service and Privacy Policy'),
-          content: VisitorPassTnC(),
-          actions: [
-            TextButton(
-              child: Text('Close'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
+        return SingleChildScrollView(
+          child: AlertDialog(
+            title: Text('Terms of Service and Privacy Policy'),
+            content: VisitorPassTnC(),
+            actions: [
+              TextButton(
+                child: Text('Close'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
         );
       },
     );
@@ -620,6 +962,7 @@ class _RegisterVisitorPassMState extends State<RegisterVisitorPassM> {
               child: Text('OK'),
               onPressed: () {
                 Navigator.pop(context);
+                Navigator.pop(context);
               },
             ),
           ],
@@ -627,7 +970,116 @@ class _RegisterVisitorPassMState extends State<RegisterVisitorPassM> {
       },
     );
   }
+
+  visitorType() {
+    if (_selectedVisitorPassType == _visitorPassType[0]) {
+      return Container(
+        alignment: Alignment.center,
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Text(
+                    'Date Selected: ${datevisit.year}/${datevisit.month}/${datevisit.day}',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      DateTime? newDate = await showDatePicker(
+                        context: context,
+                        initialDate: datevisit,
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime(2100),
+                      );
+
+                      if (newDate == null) return;
+                      setState(() => datevisit = newDate);
+                    },
+                    child: Text('Select Visit Date'),
+                  ),
+                ],
+              ),
+            ),
+            Column(
+              children: [
+                Text(
+                  'Time Selected: ${_selectedTime.format(context)}',
+                  style: TextStyle(fontSize: 20),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    _selectTime(context);
+                  },
+                  child: Text('Select Visit Time'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    } else if (_selectedVisitorPassType == _visitorPassType[1]) {
+      return Container(
+        alignment: Alignment.center,
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Text(
+                    'Start Date: ${datevisit.year}/${datevisit.month}/${datevisit.day}',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      DateTime? StartDate = await showDatePicker(
+                        context: context,
+                        initialDate: datevisit,
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime(2100),
+                      );
+
+                      if (StartDate == null) return;
+                      setState(() => datevisit = StartDate);
+                    },
+                    child: Text('Select Visit Start Date'),
+                  ),
+                ],
+              ),
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  'Date End: ${enddatevisit.year}/${enddatevisit.month}/${enddatevisit.day}',
+                  style: TextStyle(fontSize: 20),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    DateTime? endDate = await showDatePicker(
+                      context: context,
+                      initialDate: enddatevisit,
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime(2100),
+                    );
+
+                    if (endDate == null) return;
+                    setState(() => enddatevisit = endDate);
+                  },
+                  child: Text('Select Visit End Date'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+  }
 }
+
+
 
 
 class ResidentApplicationPageM extends StatefulWidget {
@@ -656,13 +1108,14 @@ class _ResidentApplicationPageMState extends State<ResidentApplicationPageM> {
       TextEditingController();
   final TextEditingController relationshipController = TextEditingController();
   final TextEditingController parentemailController = TextEditingController();
-  final String status = "Wait the Management Review";
+  final String status = "Waiting the Management Review";
   final String roomno = "";
+  final String roombedno = "";
   final _roomtype = [
-    'Twin Sharing (Air Conditioned) (Block A & C) RM 660 (Short Semester) RM 990 (Long Semester)',
-    'Twin Sharing (Non Air Conditioned) (Block B & D) RM 840 (Short Semester) RM 1 260 (Long Semester)',
-    'Twin Sharing (Air Conditioned) (Block E) RM 1 500 (Short Semester)  RM 2 250 (Long Semester)',
-    'Trio Sharing (Air Conditioned) (Block E) RM 1 050 (Short Semester)  RM 1 575 (Long Semester)'
+    'Twin Sharing (Air Conditioned) (Block A & C)',
+    'Twin Sharing (Non Air Conditioned) (Block B & D)',
+    'Twin Sharing (Air Conditioned) (Block E)',
+    'Trio Sharing (Air Conditioned) (Block E)'
   ];
 
   String? _selectedRoomType = "";
@@ -672,7 +1125,7 @@ class _ResidentApplicationPageMState extends State<ResidentApplicationPageM> {
   @override
   Widget build(BuildContext context) {
     getdatafromDB() async {
-      final user = widget.id;
+      final user = FirebaseAuth.instance.currentUser!.uid;
 
       DocumentSnapshot snapshot = await FirebaseFirestore.instance
           .collection('users') // Replace with your collection name
@@ -725,6 +1178,13 @@ class _ResidentApplicationPageMState extends State<ResidentApplicationPageM> {
             parentemailController.text = parentemail;
             relationshipController.text = relationship;
 
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator(); // Display circular progress indicator while data is loading
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text('Error fetching data'), // Display error message
+              );
+            }
             return Container(
               padding: EdgeInsets.all(16.0),
               child: Column(
@@ -873,8 +1333,8 @@ class _ResidentApplicationPageMState extends State<ResidentApplicationPageM> {
                                       child: Text(
                                         "I have read and agree to Terms of Service and Privacy Policy",
                                         style: TextStyle(
-                                          color: const Color.fromARGB(
-                                              255, 33, 40, 243),
+                                          color:
+                                              Color.fromARGB(255, 35, 109, 193),
                                         ),
                                       ),
                                     ),
@@ -924,7 +1384,7 @@ class _ResidentApplicationPageMState extends State<ResidentApplicationPageM> {
         "name": nameController.text,
         "email": emailController.text,
         "gender": genderController.text,
-        "student_id": studentidController.text,
+        "user_id": studentidController.text,
         "parent_name": parentnameController.text,
         "relationship": relationshipController.text,
         "parent_contact_no": parentcontactnoController.text,
@@ -932,6 +1392,8 @@ class _ResidentApplicationPageMState extends State<ResidentApplicationPageM> {
         "room_type": _selectedRoomType as String,
         "status": status,
         "room_no": roomno,
+        "room_bed_no": roombedno,
+        "id": auth
       });
       print(auth);
     } on FirebaseAuthException catch (e) {
@@ -944,14 +1406,15 @@ class _ResidentApplicationPageMState extends State<ResidentApplicationPageM> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Submit your student resident form'),
+          title: Text('Submit your student resident application'),
           content: Text(
-            'This will also sent the student resident form to management',
+            'This will also sent the student resident application to management review',
           ),
           actions: [
             TextButton(
               child: Text('OK'),
               onPressed: () {
+                Navigator.pop(context);
                 Navigator.pop(context);
               },
             ),
@@ -973,6 +1436,7 @@ class _ResidentApplicationPageMState extends State<ResidentApplicationPageM> {
               child: Text('Close'),
               onPressed: () {
                 Navigator.pop(context);
+                Navigator.pop(context);
               },
             ),
           ],
@@ -981,4 +1445,3 @@ class _ResidentApplicationPageMState extends State<ResidentApplicationPageM> {
     );
   }
 }
-

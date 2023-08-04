@@ -182,7 +182,7 @@ class _StudentResidentApplicationPageState
                             tileColor: Colors.grey,
                             title: Text(user['email'] ?? 'No Email'),
                             subtitle:
-                                Text(user['name'] + ' ' + user['student_id']),
+                                Text(user['name'] + ' ' + user['user_id']),
                             onTap: () {
                               Navigator.push(
                                 context,
@@ -274,7 +274,7 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
                             text: "Name: " +
                                 widget.student['name'] +
                                 "\nStudent ID: " +
-                                widget.student['student_id'] +
+                                widget.student['user_id'] +
                                 "\nStudent Email: " +
                                 widget.student['email'] +
                                 "\nGender: " +

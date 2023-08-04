@@ -498,7 +498,7 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
             "vehicle_brand": _selectedVehicleBrand as String,
             "vehicle_type": _selectedVehicleType as String,
             "status": status,
-            "id": auth,
+            "user_id": auth,
             "photoUrl": downloadUrl,
           });
         }
