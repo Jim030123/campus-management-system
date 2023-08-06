@@ -229,6 +229,9 @@ class _RegistrationVehicleFormMState extends State<RegistrationVehicleFormM> {
                                 if (value!.isEmpty) {
                                   return 'Please enter your Vehicle Plate Number';
                                 }
+                                 if (value.contains(' ')) {
+      return 'Vehicle number cannot contain spaces';
+    }
                                 return null;
                               },
                             ),
@@ -722,6 +725,9 @@ class _RegisterVisitorPassMState extends State<RegisterVisitorPassM> {
                                 if (value!.isEmpty) {
                                   return 'Please enter your Vehicle number';
                                 }
+                                 if (value.contains(' ')) {
+      return 'Vehicle number cannot contain spaces';
+    }
                                 return null;
                               },
                             ),

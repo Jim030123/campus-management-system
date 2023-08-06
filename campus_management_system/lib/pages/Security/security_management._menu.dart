@@ -29,13 +29,7 @@ class SecurityManagementMenu extends StatelessWidget {
               text: 'View All Vehicle ',
               routename: '/view_all_vehicle',
             ),
-            SizedBox(
-              height: 25,
-            ),
-            // MyLongButton(
-            //   text: 'Show Vechicle Registered',
-            //   routename: '/show_registered_car',
-            // ),
+          
             SizedBox(
               height: 25,
             ),

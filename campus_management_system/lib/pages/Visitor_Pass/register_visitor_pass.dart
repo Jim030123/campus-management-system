@@ -303,6 +303,9 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
                                 if (value!.isEmpty) {
                                   return 'Please enter your Vehicle number';
                                 }
+                                 if (value.contains(' ')) {
+      return 'Vehicle number cannot contain spaces';
+    }
                                 return null;
                               },
                             ),

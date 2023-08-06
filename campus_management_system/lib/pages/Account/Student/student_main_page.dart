@@ -151,10 +151,10 @@ class _StudentMainPageState extends State<StudentMainPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            // MyMenuTile(
-                            //     text: 'Facility',
-                            //     iconnumber: 0xf01c8,
-                            //     routename: '/facility_menu'),
+                            MyMenuTile(
+                                text: 'Facility',
+                                iconnumber: 0xf01c8,
+                                routename: '/facility_menu'),
                             MyMenuTile(
                                 text: 'Feedback',
                                 iconnumber: 0xf73b,

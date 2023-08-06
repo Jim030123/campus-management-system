@@ -3,6 +3,8 @@ import 'package:campus_management_system/pages/Account/Management/management_mai
 import 'package:campus_management_system/pages/Account/Visitor/visitor_login.dart';
 import 'package:campus_management_system/pages/Account/Visitor/visitor_register_page.dart';
 import 'package:campus_management_system/pages/Account/account_management_page.dart';
+import 'package:campus_management_system/pages/Facility/booking_screen.dart';
+import 'package:campus_management_system/pages/Facility/facility_status.dart';
 import 'package:campus_management_system/pages/Feedback/feedback_form.dart';
 import 'package:campus_management_system/pages/Feedback/feedback_menu_page.dart';
 import 'package:campus_management_system/pages/Feedback/feedback_submitted.dart';
@@ -123,7 +125,9 @@ class MainApp extends StatelessWidget {
         // Facility
         '/facility_menu': (context) => BookingMenuPage(),
         '/facility_information': (context) => FacilityInformationPage(),
-        '/check_facility_available': (context) => CheckFacilityAvailable(),
+        '/check_facility_available': (context) => FacilityStatusScreen(),
+        '/booking':(context)=>BookingScreen(),
+        
 
         // Management
         '/management_profile': (context) => ManagementProfilePage(),
@@ -149,12 +153,12 @@ class MainApp extends StatelessWidget {
         '/visitor_profile_page': (context) => VistitorProfilePage(),
         '/view_all_visitor_pass': (context) => ViewAllVisitorPass(),
         '/visitor_pass_scanner': (context) => VisitorPassScanner(),
-        '/log_book': (context) => LogbooksScreen()
+        '/log_book': (context) => LogbooksScreen(),
       },
 
       initialRoute: '/',
       debugShowCheckedModeBanner: true,
-      // home: AuthPage(),
+      
       theme: ThemeData(
           appBarTheme: AppBarTheme(color: Colors.black),
           textTheme:

@@ -290,6 +290,8 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
                                 "\nStatus: " +
                                 widget.student['status']),
                       ),
+
+                      
                       ElevatedButton(
                           onPressed: (widget.student['status'] !=
                                   'Waiting the Management Review')
