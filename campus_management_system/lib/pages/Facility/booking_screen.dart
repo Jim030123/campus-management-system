@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class BookingService {
   final CollectionReference _bookingsCollection =
@@ -95,7 +95,7 @@ class _BookingScreenState extends State<BookingScreen> {
                 selectedFacility = value!;
               });
             },
-            items: ['badminton_court', 'another_facility_name'] // Add more facility names
+            items: ['badminton_court', 'another_facility_name', 'basketball_facility']
                 .map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,

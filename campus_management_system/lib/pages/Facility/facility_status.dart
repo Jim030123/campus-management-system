@@ -55,9 +55,9 @@ class _FacilityStatusScreenState extends State<FacilityStatusScreen> {
             },
             items: [
               'badminton_court',
-              'another_facility_name'
-            ] // Add more facility names
-                .map<DropdownMenuItem<String>>((String value) {
+              'another_facility_name',
+              'basketball_facility'
+            ].map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,
                 child: Text(value),
