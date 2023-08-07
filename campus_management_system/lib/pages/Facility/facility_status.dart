@@ -18,6 +18,7 @@ class _FacilityStatusScreenState extends State<FacilityStatusScreen> {
     '4PM - 6PM',
   ];
   DateTime? selectedDate;
+  String selectedFacility = 'badminton_court'; // Default facility name
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -26,7 +27,7 @@ class _FacilityStatusScreenState extends State<FacilityStatusScreen> {
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(Duration(days: 30)),
     );
-    if (picked != null && picked != selectedDate) {
+    if (picked != null) {
       setState(() {
         selectedDate = picked;
       });
@@ -39,27 +40,89 @@ class _FacilityStatusScreenState extends State<FacilityStatusScreen> {
       appBar: AppBar(title: Text('Facility Status')),
       body: Column(
         children: [
-          SizedBox(height: 16),
           ElevatedButton(
             onPressed: () => _selectDate(context),
             child: Text(selectedDate == null
                 ? 'Select Date'
                 : 'Selected Date: ${DateFormat('yyyy-MM-dd').format(selectedDate!)}'),
           ),
+          DropdownButton<String>(
+            value: selectedFacility,
+            onChanged: (value) {
+              setState(() {
+                selectedFacility = value!;
+              });
+            },
+            items: [
+              'badminton_court',
+              'another_facility_name'
+            ] // Add more facility names
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+          ),
           if (selectedDate != null)
             Expanded(
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                ),
-                itemCount: timeSlots.length,
-                itemBuilder: (context, index) {
-                  final timeSlot = timeSlots[index];
+              child: StreamBuilder<QuerySnapshot>(
+                stream: BookingService().getBookingsStream(selectedFacility),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.active) {
+                    final bookings = snapshot.data?.docs ?? [];
 
-                  return TimeSlotContainer(
-                    timeSlot: timeSlot,
-                    selectedDate: selectedDate!,
-                  );
+                    return GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                      ),
+                      itemCount: timeSlots.length,
+                      itemBuilder: (context, index) {
+                        final timeSlot = timeSlots[index];
+                        final isBooked = bookings.any(
+                          (booking) =>
+                              booking['timeSlot'] ==
+                              '${selectedDate!.toLocal()} - $timeSlot',
+                        );
+
+                        return Container(
+                          margin: EdgeInsets.all(8),
+                          padding: EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: isBooked ? Colors.red : Colors.white,
+                            border: Border.all(
+                              color: Colors.black,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                timeSlot,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: isBooked ? Colors.white : Colors.black,
+                                ),
+                              ),
+                              SizedBox(height: 8),
+                              Text(
+                                isBooked ? 'Booked' : 'Available',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: isBooked ? Colors.white : Colors.green,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  }
+                  return Center(child: CircularProgressIndicator());
                 },
               ),
             ),
@@ -76,66 +139,6 @@ class _FacilityStatusScreenState extends State<FacilityStatusScreen> {
         },
         child: Icon(Icons.add),
       ),
-    );
-  }
-}
-
-class TimeSlotContainer extends StatelessWidget {
-  final String timeSlot;
-  final DateTime selectedDate;
-
-  const TimeSlotContainer({
-    required this.timeSlot,
-    required this.selectedDate,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: BookingService().isTimeSlotAvailable(
-        '${selectedDate.toLocal()} - $timeSlot',
-      ),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
-        }
-        final isAvailable = snapshot.data ?? false;
-
-        return Container(
-          margin: EdgeInsets.all(8),
-          padding: EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: isAvailable ? Colors.white : Colors.red,
-            border: Border.all(
-              color: Colors.black,
-              width: 2,
-            ),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                timeSlot,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: isAvailable ? Colors.black : Colors.white,
-                ),
-              ),
-              SizedBox(height: 8),
-              Text(
-                isAvailable ? 'Available' : 'Booked',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: isAvailable ? Colors.green : Colors.white,
-                ),
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 }

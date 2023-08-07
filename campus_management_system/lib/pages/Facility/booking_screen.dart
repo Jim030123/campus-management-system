@@ -1,17 +1,15 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class BookingService {
   final CollectionReference _bookingsCollection =
       FirebaseFirestore.instance.collection('bookings');
 
-  Future<void> bookFacility(String timeSlot) async {
+  Future<void> bookFacility(String timeSlot, String facilityName) async {
     try {
       await _bookingsCollection.add({
-        // 'userId': user.uid,
+        'facilityName': facilityName,
         'timeSlot': timeSlot,
         'isAvailable': false,
       });
@@ -28,14 +26,15 @@ class BookingService {
     }
   }
 
-  Stream<QuerySnapshot> getBookingsStream() {
-    return _bookingsCollection.snapshots();
+  Stream<QuerySnapshot> getBookingsStream(String facilityName) {
+    return _bookingsCollection.where('facilityName', isEqualTo: facilityName).snapshots();
   }
 
-  Future<bool> isTimeSlotAvailable(String timeSlot) async {
+  Future<bool> isTimeSlotAvailable(String timeSlot, String facilityName) async {
     try {
       final snapshot = await _bookingsCollection
           .where('timeSlot', isEqualTo: timeSlot)
+          .where('facilityName', isEqualTo: facilityName)
           .get();
 
       return snapshot.docs.isEmpty;
@@ -61,6 +60,7 @@ class _BookingScreenState extends State<BookingScreen> {
     '4PM - 6PM',
   ];
   DateTime? selectedDate;
+  String selectedFacility = 'badminton_court'; // Default facility name
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -88,43 +88,121 @@ class _BookingScreenState extends State<BookingScreen> {
                 ? 'Select Date'
                 : 'Selected Date: ${DateFormat('yyyy-MM-dd').format(selectedDate!)}'),
           ),
+          DropdownButton<String>(
+            value: selectedFacility,
+            onChanged: (value) {
+              setState(() {
+                selectedFacility = value!;
+              });
+            },
+            items: ['badminton_court', 'another_facility_name'] // Add more facility names
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+          ),
           if (selectedDate != null)
             Expanded(
-              child: ListView.builder(
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                ),
                 itemCount: timeSlots.length,
                 itemBuilder: (context, index) {
                   final timeSlot = timeSlots[index];
 
-                  return ListTile(
-                    title: Text(timeSlot),
-                    trailing: FutureBuilder<bool>(
-                      future: _bookingService.isTimeSlotAvailable(
-                        '${selectedDate!.toLocal()} - $timeSlot',
-                      ),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return CircularProgressIndicator();
-                        }
-                        final isAvailable = snapshot.data ?? false;
-                        return ElevatedButton(
-                          onPressed: isAvailable
-                              ? () async {
-                                  await _bookingService.bookFacility(
-                                    '${selectedDate!.toLocal()} - $timeSlot',
-                                  );
-                                  Navigator.pop(context);
-                                }
-                              : null,
-                          child: Text('Book'),
-                        );
-                      },
-                    ),
+                  return TimeSlotContainer(
+                    timeSlot: timeSlot,
+                    selectedDate: selectedDate!,
+                    selectedFacility: selectedFacility,
                   );
                 },
               ),
             ),
         ],
       ),
+    );
+  }
+}
+
+class TimeSlotContainer extends StatelessWidget {
+  final String timeSlot;
+  final DateTime selectedDate;
+  final String selectedFacility;
+
+  const TimeSlotContainer({
+    required this.timeSlot,
+    required this.selectedDate,
+    required this.selectedFacility,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<bool>(
+      future: BookingService().isTimeSlotAvailable(
+        '${selectedDate.toLocal()} - $timeSlot',
+        selectedFacility,
+      ),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        }
+        final isAvailable = snapshot.data ?? false;
+
+        return GestureDetector(
+          onTap: () {
+            if (isAvailable) {
+              BookingService().bookFacility(
+                '${selectedDate.toLocal()} - $timeSlot',
+                selectedFacility,
+              );
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Facility booked successfully!')),
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Facility is already booked!')),
+              );
+            }
+          },
+          child: Container(
+            margin: EdgeInsets.all(8),
+            padding: EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: isAvailable ? Colors.white : Colors.red,
+              border: Border.all(
+                color: Colors.black,
+                width: 2,
+              ),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  timeSlot,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: isAvailable ? Colors.black : Colors.white,
+                  ),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  isAvailable ? 'Available' : 'Booked',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: isAvailable ? Colors.green : Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
