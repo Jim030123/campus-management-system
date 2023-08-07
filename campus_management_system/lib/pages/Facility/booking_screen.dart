@@ -102,8 +102,7 @@ class _BookingScreenState extends State<BookingScreen> {
                         '${selectedDate!.toLocal()} - $timeSlot',
                       ),
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
                           return CircularProgressIndicator();
                         }
                         final isAvailable = snapshot.data ?? false;

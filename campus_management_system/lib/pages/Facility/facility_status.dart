@@ -10,9 +10,6 @@ class FacilityStatusScreen extends StatefulWidget {
 }
 
 class _FacilityStatusScreenState extends State<FacilityStatusScreen> {
-  final BookingService _bookingService = BookingService();
-  DateTime? selectedDate; // Nullable DateTime
-
   final List<String> timeSlots = [
     '8AM - 10AM',
     '10AM - 12PM',
@@ -20,6 +17,21 @@ class _FacilityStatusScreenState extends State<FacilityStatusScreen> {
     '2PM - 4PM',
     '4PM - 6PM',
   ];
+  DateTime? selectedDate;
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate ?? DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(Duration(days: 30)),
+    );
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,56 +41,27 @@ class _FacilityStatusScreenState extends State<FacilityStatusScreen> {
         children: [
           SizedBox(height: 16),
           ElevatedButton(
-            onPressed: () async {
-              final DateTime? picked = await showDatePicker(
-                context: context,
-                initialDate: selectedDate ?? DateTime.now(),
-                firstDate: DateTime.now(),
-                lastDate: DateTime.now().add(Duration(days: 30)),
-              );
-              if (picked != null) {
-                setState(() {
-                  selectedDate = picked;
-                });
-              }
-            },
+            onPressed: () => _selectDate(context),
             child: Text(selectedDate == null
                 ? 'Select Date'
                 : 'Selected Date: ${DateFormat('yyyy-MM-dd').format(selectedDate!)}'),
           ),
           if (selectedDate != null)
-            StreamBuilder<QuerySnapshot>(
-              stream: _bookingService.getBookingsStream(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.active) {
-                  final bookings = snapshot.data?.docs ?? [];
+            Expanded(
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                ),
+                itemCount: timeSlots.length,
+                itemBuilder: (context, index) {
+                  final timeSlot = timeSlots[index];
 
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: timeSlots.length,
-                    itemBuilder: (context, index) {
-                      final timeSlot = timeSlots[index];
-                      final isBooked = bookings.any(
-                        (booking) =>
-                            booking['timeSlot'] ==
-                            '${selectedDate!.toLocal()} - $timeSlot',
-                      );
-
-                      return ListTile(
-                        title: Text(timeSlot),
-                        trailing: Text(
-                          isBooked ? 'Booked' : 'Available',
-                          style: TextStyle(
-                            color: isBooked ? Colors.red : Colors.green,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      );
-                    },
+                  return TimeSlotContainer(
+                    timeSlot: timeSlot,
+                    selectedDate: selectedDate!,
                   );
-                }
-                return Center(child: CircularProgressIndicator());
-              },
+                },
+              ),
             ),
         ],
       ),
@@ -93,6 +76,66 @@ class _FacilityStatusScreenState extends State<FacilityStatusScreen> {
         },
         child: Icon(Icons.add),
       ),
+    );
+  }
+}
+
+class TimeSlotContainer extends StatelessWidget {
+  final String timeSlot;
+  final DateTime selectedDate;
+
+  const TimeSlotContainer({
+    required this.timeSlot,
+    required this.selectedDate,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<bool>(
+      future: BookingService().isTimeSlotAvailable(
+        '${selectedDate.toLocal()} - $timeSlot',
+      ),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        }
+        final isAvailable = snapshot.data ?? false;
+
+        return Container(
+          margin: EdgeInsets.all(8),
+          padding: EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: isAvailable ? Colors.white : Colors.red,
+            border: Border.all(
+              color: Colors.black,
+              width: 2,
+            ),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                timeSlot,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: isAvailable ? Colors.black : Colors.white,
+                ),
+              ),
+              SizedBox(height: 8),
+              Text(
+                isAvailable ? 'Available' : 'Booked',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: isAvailable ? Colors.green : Colors.white,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

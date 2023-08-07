@@ -1,6 +1,8 @@
 import 'package:campus_management_system/components/my_appbar.dart';
 import 'package:flutter/material.dart';
 
+import 'booking_screen.dart';
+
 class FacilityInformationPage extends StatefulWidget {
   FacilityInformationPage({super.key});
 
@@ -63,8 +65,7 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                             Align(
                               child: GestureDetector(
                                 onTap: () {
-                                  Navigator.pushNamed(
-                                      context, '/check_facility_available');
+                                  Navigator.pushNamed(context, '/booking');
                                 },
                                 child: Text("Booking Now",
                                     style: TextStyle(
@@ -112,8 +113,7 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                                 Align(
                                   child: GestureDetector(
                                     onTap: () {
-                                      Navigator.pushNamed(
-                                          context, '/check_facility_available');
+                                      Navigator.pushNamed(context, '/booking');
                                     },
                                     child: Text("Booking Now",
                                         style: TextStyle(
@@ -177,8 +177,7 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                             Align(
                               child: GestureDetector(
                                 onTap: () {
-                                  Navigator.pushNamed(
-                                      context, '/check_facility_available');
+                                  Navigator.pushNamed(context, '/booking');
                                 },
                                 child: Text("Booking Now",
                                     style: TextStyle(
@@ -221,19 +220,18 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                                 SizedBox(
                                   height: 10,
                                 ),
-                                Align(
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.pushNamed(
-                                          context, '/check_facility_available');
-                                    },
-                                    child: Text("Booking Now",
-                                        style: TextStyle(
-                                          color: Colors.blue,
-                                        )),
-                                  ),
-                                  alignment: Alignment.bottomRight,
-                                )
+                                // Align(
+                                //   child: GestureDetector(
+                                //     onTap: () {
+                                //       Navigator.pushNamed(context, '/booking');
+                                //     },
+                                //     child: const Text("Booking Now",
+                                //         style: TextStyle(
+                                //           color: Colors.blue,
+                                //         )),
+                                //   ),
+                                //   alignment: Alignment.bottomRight,
+                                // )
                               ],
                             ),
                           ),

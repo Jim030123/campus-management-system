@@ -36,6 +36,13 @@ class BookingMenuPage extends StatelessWidget {
               text: 'Booking Facility Record',
               routename: '',
             ),
+            SizedBox(
+              height: 25,
+            ),
+            MyLongButton(
+              text: 'Check facility available',
+              routename: '/check_facility_available',
+            ),
           ]),
         ),
       ),
