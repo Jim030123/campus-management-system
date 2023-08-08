@@ -33,8 +33,8 @@ class BookingMenuPage extends StatelessWidget {
               height: 25,
             ),
             MyLongButton(
-              text: 'Booking Facility Record',
-              routename: '',
+              text: 'Booking Facility History',
+              routename: '/booking_history',
             ),
             SizedBox(
               height: 25,

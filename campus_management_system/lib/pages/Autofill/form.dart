@@ -929,7 +929,7 @@ class _RegisterVisitorPassMState extends State<RegisterVisitorPassM> {
         }
       } catch (e) {}
     } on FirebaseAuthException catch (e) {
-      // Handle the exception if needed
+      
     }
   }
 

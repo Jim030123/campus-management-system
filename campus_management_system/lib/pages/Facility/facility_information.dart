@@ -12,6 +12,15 @@ class FacilityInformationPage extends StatefulWidget {
 }
 
 class _FacilityInformationPageState extends State<FacilityInformationPage> {
+  void _navigateToBookingScreen(String facilityName) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BookingScreen(facilityName: facilityName),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,17 +71,16 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                             SizedBox(
                               height: 10,
                             ),
-                            Align(
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.pushNamed(context, '/booking');
-                                },
+                            GestureDetector(
+                              onTap: () =>
+                                  _navigateToBookingScreen('basketball_court'),
+                              child: Align(
                                 child: Text("Booking Now",
                                     style: TextStyle(
                                       color: Colors.blue,
                                     )),
+                                alignment: Alignment.bottomRight,
                               ),
-                              alignment: Alignment.bottomRight,
                             )
                           ],
                         ),
@@ -110,17 +118,16 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                                 SizedBox(
                                   height: 10,
                                 ),
-                                Align(
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.pushNamed(context, '/booking');
-                                    },
+                                GestureDetector(
+                                  onTap: () =>
+                                      _navigateToBookingScreen('tennis_court'),
+                                  child: Align(
                                     child: Text("Booking Now",
                                         style: TextStyle(
                                           color: Colors.blue,
                                         )),
+                                    alignment: Alignment.bottomRight,
                                   ),
-                                  alignment: Alignment.bottomRight,
                                 )
                               ],
                             ),
@@ -174,17 +181,16 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                             SizedBox(
                               height: 10,
                             ),
-                            Align(
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.pushNamed(context, '/booking');
-                                },
+                            GestureDetector(
+                              onTap: () =>
+                                  _navigateToBookingScreen('badminton_court'),
+                              child: Align(
                                 child: Text("Booking Now",
                                     style: TextStyle(
                                       color: Colors.blue,
                                     )),
+                                alignment: Alignment.bottomRight,
                               ),
-                              alignment: Alignment.bottomRight,
                             )
                           ],
                         ),

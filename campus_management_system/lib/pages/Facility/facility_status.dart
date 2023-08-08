@@ -10,6 +10,11 @@ class FacilityStatusScreen extends StatefulWidget {
 }
 
 class _FacilityStatusScreenState extends State<FacilityStatusScreen> {
+  final List<String> facilities = [
+    'badminton_court',
+    'tennis_court',
+    'basketball_court'
+  ];
   final List<String> timeSlots = [
     '8AM - 10AM',
     '10AM - 12PM',
@@ -18,7 +23,6 @@ class _FacilityStatusScreenState extends State<FacilityStatusScreen> {
     '4PM - 6PM',
   ];
   DateTime? selectedDate;
-  String selectedFacility = 'badminton_court'; // Default facility name
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -27,7 +31,7 @@ class _FacilityStatusScreenState extends State<FacilityStatusScreen> {
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(Duration(days: 30)),
     );
-    if (picked != null) {
+    if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
       });
@@ -40,105 +44,60 @@ class _FacilityStatusScreenState extends State<FacilityStatusScreen> {
       appBar: AppBar(title: Text('Facility Status')),
       body: Column(
         children: [
+          SizedBox(height: 16),
           ElevatedButton(
             onPressed: () => _selectDate(context),
             child: Text(selectedDate == null
                 ? 'Select Date'
                 : 'Selected Date: ${DateFormat('yyyy-MM-dd').format(selectedDate!)}'),
           ),
-          DropdownButton<String>(
-            value: selectedFacility,
-            onChanged: (value) {
-              setState(() {
-                selectedFacility = value!;
-              });
-            },
-            items: [
-              'badminton_court',
-              'another_facility_name',
-              'basketball_facility'
-            ].map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-          ),
           if (selectedDate != null)
             Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-                stream: BookingService().getBookingsStream(selectedFacility),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.active) {
-                    final bookings = snapshot.data?.docs ?? [];
+              child: ListView.builder(
+                itemCount: facilities.length,
+                itemBuilder: (context, facilityIndex) {
+                  final facilityType = facilities[facilityIndex];
 
-                    return GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          facilityType.replaceAll('_', ' ').capitalize,
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
                       ),
-                      itemCount: timeSlots.length,
-                      itemBuilder: (context, index) {
-                        final timeSlot = timeSlots[index];
-                        final isBooked = bookings.any(
-                          (booking) =>
-                              booking['timeSlot'] ==
-                              '${selectedDate!.toLocal()} - $timeSlot',
-                        );
+                      GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                        ),
+                        shrinkWrap: true,
+                        itemCount: timeSlots.length,
+                        itemBuilder: (context, timeSlotIndex) {
+                          final timeSlot = timeSlots[timeSlotIndex];
 
-                        return Container(
-                          margin: EdgeInsets.all(8),
-                          padding: EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: isBooked ? Colors.red : Colors.white,
-                            border: Border.all(
-                              color: Colors.black,
-                              width: 2,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                timeSlot,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: isBooked ? Colors.white : Colors.black,
-                                ),
-                              ),
-                              SizedBox(height: 8),
-                              Text(
-                                isBooked ? 'Booked' : 'Available',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: isBooked ? Colors.white : Colors.green,
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  }
-                  return Center(child: CircularProgressIndicator());
+                          return TimeSlotContainer(
+                            timeSlot: timeSlot,
+                            selectedDate: selectedDate!,
+                            selectedFacility: facilityType,
+                          );
+                        },
+                      ),
+                      SizedBox(height: 25),
+                    ],
+                  );
                 },
               ),
             ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => BookingScreen(),
-            ),
-          );
-        },
-        child: Icon(Icons.add),
-      ),
     );
+  }
+}
+
+extension StringExtension on String {
+  String get capitalize {
+    return '${this[0].toUpperCase()}${this.substring(1)}';
   }
 }

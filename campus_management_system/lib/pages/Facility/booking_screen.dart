@@ -46,6 +46,10 @@ class BookingService {
 }
 
 class BookingScreen extends StatefulWidget {
+  final String facilityName;
+
+  BookingScreen({required this.facilityName});
+
   @override
   _BookingScreenState createState() => _BookingScreenState();
 }
@@ -60,7 +64,6 @@ class _BookingScreenState extends State<BookingScreen> {
     '4PM - 6PM',
   ];
   DateTime? selectedDate;
-  String selectedFacility = 'badminton_court'; // Default facility name
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -79,7 +82,7 @@ class _BookingScreenState extends State<BookingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Book Facility')),
+      appBar: AppBar(title: Text('Book ${widget.facilityName}')),
       body: Column(
         children: [
           ElevatedButton(
@@ -88,38 +91,54 @@ class _BookingScreenState extends State<BookingScreen> {
                 ? 'Select Date'
                 : 'Selected Date: ${DateFormat('yyyy-MM-dd').format(selectedDate!)}'),
           ),
-          DropdownButton<String>(
-            value: selectedFacility,
-            onChanged: (value) {
-              setState(() {
-                selectedFacility = value!;
-              });
-            },
-            items: ['badminton_court', 'another_facility_name', 'basketball_facility']
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-          ),
           if (selectedDate != null)
             Expanded(
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                ),
-                itemCount: timeSlots.length,
-                itemBuilder: (context, index) {
-                  final timeSlot = timeSlots[index];
+              child: StreamBuilder<QuerySnapshot>(
+                stream: _bookingService.getBookingsStream(widget.facilityName),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.active) {
+                    final bookings = snapshot.data?.docs ?? [];
 
-                  return TimeSlotContainer(
-                    timeSlot: timeSlot,
-                    selectedDate: selectedDate!,
-                    selectedFacility: selectedFacility,
-                  );
+                    return ListView.builder(
+                      itemCount: timeSlots.length,
+                      itemBuilder: (context, index) {
+                        final timeSlot = timeSlots[index];
+                        final isBooked = bookings.any(
+                          (booking) =>
+                              booking['timeSlot'] ==
+                              '${selectedDate!.toLocal()} - $timeSlot',
+                        );
+
+                        return ListTile(
+                          title: Text(timeSlot),
+                          trailing: ElevatedButton(
+                            onPressed: isBooked
+                                ? null
+                                : () async {
+                                    await _bookingService.bookFacility(
+                                      '${selectedDate!.toLocal()} - $timeSlot',
+                                      widget.facilityName,
+                                    );
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('Facility booked successfully!'),
+                                      ),
+                                    );
+                                  },
+                            child: Text('Book'),
+                          ),
+                        );
+                      },
+                    );
+                  }
+                  return Center(child: CircularProgressIndicator());
                 },
               ),
+            ),
+          if (selectedDate == null)
+            Text(
+              'Please select a date first.',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
         ],
       ),

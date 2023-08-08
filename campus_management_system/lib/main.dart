@@ -3,6 +3,7 @@ import 'package:campus_management_system/pages/Account/Management/management_mai
 import 'package:campus_management_system/pages/Account/Visitor/visitor_login.dart';
 import 'package:campus_management_system/pages/Account/Visitor/visitor_register_page.dart';
 import 'package:campus_management_system/pages/Account/account_management_page.dart';
+import 'package:campus_management_system/pages/Facility/booking_history.dart';
 import 'package:campus_management_system/pages/Facility/booking_screen.dart';
 import 'package:campus_management_system/pages/Facility/facility_status.dart';
 import 'package:campus_management_system/pages/Feedback/feedback_form.dart';
@@ -126,8 +127,7 @@ class MainApp extends StatelessWidget {
         '/facility_menu': (context) => BookingMenuPage(),
         '/facility_information': (context) => FacilityInformationPage(),
         '/check_facility_available': (context) => FacilityStatusScreen(),
-        '/booking':(context)=>BookingScreen(),
-        
+        '/booking_history': (context) => BookingFacilityHistory(),
 
         // Management
         '/management_profile': (context) => ManagementProfilePage(),
@@ -155,10 +155,8 @@ class MainApp extends StatelessWidget {
         '/visitor_pass_scanner': (context) => VisitorPassScanner(),
         '/log_book': (context) => LogbooksScreen(),
       },
-
       initialRoute: '/',
       debugShowCheckedModeBanner: true,
-      
       theme: ThemeData(
           appBarTheme: AppBarTheme(color: Colors.black),
           textTheme:

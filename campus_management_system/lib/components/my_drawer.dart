@@ -38,7 +38,9 @@ class MyStudentDrawer extends StatelessWidget {
                   color: Colors.black,
                 ),
                 MyDrawerListtile(
-                    pagename: 'Main Page', routename: '/student_main_page', icon: 0xe328),
+                    pagename: 'Main Page',
+                    routename: '/student_main_page',
+                    icon: 0xe328),
                 MyDrawerListtile(
                     pagename: 'Profile', routename: '/profile', icon: 0xf522),
                 MyDrawerListtile(
@@ -50,11 +52,7 @@ class MyStudentDrawer extends StatelessWidget {
                     routename: '/feedback_menu',
                     icon: 0xf73b),
                 MyDrawerListtile(
-                    pagename: 'Billing (havent done)',
-                    routename: '/facility_menu',
-                    icon: 0xe481),
-                MyDrawerListtile(
-                    pagename: 'Facility (Done)',
+                    pagename: 'Facility',
                     routename: '/facility_menu',
                     icon: 0xf01c8),
                 SizedBox(height: 50),
