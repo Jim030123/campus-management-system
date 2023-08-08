@@ -93,15 +93,14 @@ class _BookingFacilityHistoryState extends State<BookingFacilityHistory> {
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
                                             QrImageView(
-                                              data: filter['visitor_pass_id'],
+                                              data: filter['facility_pass_id'],
                                               version: QrVersions.auto,
                                               size: 150.0,
                                             ),
-                                            Text("Visitor Pass ID:" +
+                                            Text("Facility Pass ID:" +
                                                 "\n" +
-                                                filter['visitor_pass_id']),
+                                                filter['facility_pass_id']),
                                             MyDivider(),
-                                            visitorType(filter),
                                             SizedBox(
                                               height: 25,
                                             ),
@@ -126,126 +125,5 @@ class _BookingFacilityHistoryState extends State<BookingFacilityHistory> {
         ),
       ),
     );
-  }
-
-  QRTrailer(Map<String, dynamic> filter) {
-    Timestamp expiredTimestamp = filter['expired_timestamp'];
-    // DateTime expiredTime = filter['expired_timestamp'];
-    // String formattedExpiredTime = DateFormat('yyyy-MM-dd').format(expiredTime);
-
-    int expiredtime = expiredTimestamp.millisecondsSinceEpoch;
-    print(expiredtime);
-    print(now);
-
-    DateTime vpexpiredtime = DateTime.fromMillisecondsSinceEpoch(expiredtime);
-
-    // set status in firebase
-
-    if (now > expiredtime) {
-      // update status in firebase
-
-      updateVPstatus(filter);
-
-      return Icon(
-        Icons.error_outline,
-        color: Colors.blue,
-        size: 40,
-      );
-    } else {
-      if (filter['status'] == "Approved") {
-        return GestureDetector(
-          child: Text(
-            textAlign: TextAlign.center,
-            "\nView QR Code",
-            style: TextStyle(decoration: TextDecoration.underline),
-          ),
-          onTap: () {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return Dialog(
-                  child: Container(
-                    padding: EdgeInsets.all(16),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        QrImageView(
-                          data: filter['visitor_pass_id'],
-                          version: QrVersions.auto,
-                          size: 150.0,
-                        ),
-                        Text("Visitor Pass ID:" +
-                            "\n" +
-                            filter['visitor_pass_id']),
-                        MyDivider(),
-                        visitorType(filter),
-                        SizedBox(
-                          height: 25,
-                        ),
-                        MyDivider(),
-                        MySmallText(
-                            text: "This visitor pass will expired at: " +
-                                "\n" +
-                                vpexpiredtime.toString())
-                      ],
-                    ),
-                  ),
-                );
-              },
-            );
-          },
-        );
-      } else if (filter['status'] == "Waiting the Management Review") {
-        return Icon(
-          Icons.browse_gallery,
-          color: Colors.yellow,
-        );
-      } else if (filter['status'] == "Declined") {
-        return Icon(
-          Icons.block,
-          color: Colors.red,
-        );
-      } else {
-        return Container(); // You should return something for this case as well
-      }
-    }
-  }
-
-  declineReason(Map<String, dynamic> filter) {
-    if (filter["status"] == "Declined") {
-      return "\nDeclined Reason: " + filter["decline_reason"];
-    } else {
-      return "";
-    }
-  }
-
-  updateVPstatus(Map<String, dynamic> filter) async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('visitor_pass_application')
-          .doc(filter["visitor_pass_id"].toString())
-          .update({"status": "Expired"});
-
-      await FirebaseFirestore.instance
-          .collection('vehicle')
-          .doc(filter["vehicle_number"])
-          .update({"status": "Expired"});
-    } catch (e) {}
-  }
-
-  visitorType(Map<String, dynamic> filter) {
-    if (filter["visitor_pass_type"] == "Short Term") {
-      return MyMiddleText(
-          text: "Date: " +
-              filter['date_visit'] +
-              "\nVisit Time: " +
-              filter['time_visit']);
-    } else if (filter["visitor_pass_type"] == "Long Term") {
-      return MyMiddleText(
-          text: "Start Date: " +
-              filter['start_date_visit'] +
-              "\nEnd Date: " +
-              filter['end_date_visit']);
-    }
   }
 }

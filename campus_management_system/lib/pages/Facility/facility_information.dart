@@ -73,7 +73,7 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                             ),
                             GestureDetector(
                               onTap: () =>
-                                  _navigateToBookingScreen('basketball_court'),
+                                  _navigateToBookingScreen('Basketball Court'),
                               child: Align(
                                 child: Text("Booking Now",
                                     style: TextStyle(
@@ -120,7 +120,7 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                                 ),
                                 GestureDetector(
                                   onTap: () =>
-                                      _navigateToBookingScreen('tennis_court'),
+                                      _navigateToBookingScreen('Tennis Court'),
                                   child: Align(
                                     child: Text("Booking Now",
                                         style: TextStyle(
@@ -183,7 +183,7 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                             ),
                             GestureDetector(
                               onTap: () =>
-                                  _navigateToBookingScreen('badminton_court'),
+                                  _navigateToBookingScreen('Badminton Court'),
                               child: Align(
                                 child: Text("Booking Now",
                                     style: TextStyle(

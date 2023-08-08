@@ -1,17 +1,23 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uuid/uuid.dart';
 
 class BookingService {
   final CollectionReference _bookingsCollection =
       FirebaseFirestore.instance.collection('bookings');
-
   Future<void> bookFacility(String timeSlot, String facilityName) async {
+    String facilityPassID = Uuid().v4();
+    final user = FirebaseAuth.instance.currentUser!.uid;
+
     try {
       await _bookingsCollection.add({
         'facilityName': facilityName,
         'timeSlot': timeSlot,
         'isAvailable': false,
+        'id': user,
+        'facility_pass_id': facilityPassID
       });
     } catch (e) {
       print('Error: $e');

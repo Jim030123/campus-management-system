@@ -11,9 +11,9 @@ class FacilityStatusScreen extends StatefulWidget {
 
 class _FacilityStatusScreenState extends State<FacilityStatusScreen> {
   final List<String> facilities = [
-    'badminton_court',
-    'tennis_court',
-    'basketball_court'
+    'Badminton Court',
+    'Tennis Court',
+    'Basketball Court'
   ];
   final List<String> timeSlots = [
     '8AM - 10AM',
