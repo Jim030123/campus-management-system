@@ -52,6 +52,8 @@ import 'firebase_options.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'pages/Facility/booking_management.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -128,6 +130,7 @@ class MainApp extends StatelessWidget {
         '/facility_information': (context) => FacilityInformationPage(),
         '/check_facility_available': (context) => FacilityStatusScreen(),
         '/booking_history': (context) => BookingFacilityHistory(),
+        "/facility_management": (context) => FacilityManagement(),
 
         // Management
         '/management_profile': (context) => ManagementProfilePage(),

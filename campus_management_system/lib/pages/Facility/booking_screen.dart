@@ -191,19 +191,19 @@ class TimeSlotContainer extends StatelessWidget {
 
         return GestureDetector(
           onTap: () {
-            if (isAvailable) {
-              BookingService().bookFacility(
-                '${selectedDate.toLocal()} - $timeSlot',
-                selectedFacility,
-              );
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Facility booked successfully!')),
-              );
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Facility is already booked!')),
-              );
-            }
+            // if (isAvailable) {
+            //   BookingService().bookFacility(
+            //     '${selectedDate.toLocal()} - $timeSlot',
+            //     selectedFacility,
+            //   );
+            //   ScaffoldMessenger.of(context).showSnackBar(
+            //     SnackBar(content: Text('Facility booked successfully!')),
+            //   );
+            // } else {
+            //   ScaffoldMessenger.of(context).showSnackBar(
+            //     SnackBar(content: Text('Facility is already booked!')),
+            //   );
+            // }
           },
           child: Container(
             margin: EdgeInsets.all(8),

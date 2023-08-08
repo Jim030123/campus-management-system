@@ -63,6 +63,7 @@ class _StudentMainPageState extends State<StudentMainPage> {
             }
 
             return Scaffold(
+              
               body: SingleChildScrollView(
                 child: Center(
                   child: Container(

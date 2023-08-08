@@ -53,66 +53,68 @@ class _MyLoginPageState extends State<MyLoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.grey[300],
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                // column child
-                children: [
-                  SizedBox(
-                    height: 70.0,
+      backgroundColor: Colors.grey[300],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              // column child
+              children: [
+                SizedBox(
+                  height: 70.0,
+                ),
+
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: ElevatedButton(
+                    child: Text('If you are visitor, Register Here '),
+                    onPressed: () {
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/visitor_register', (route) => false);
+                    },
                   ),
+                ),
 
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: ElevatedButton(
-                      child: Text('If you are visitor, Register Here '),
-                      onPressed: () {
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, '/visitor_register', (route) => false);
-                      },
-                    ),
+                SizedBox(
+                  height: 50.0,
+                ),
+                // Allign center
+
+                MyLogo(),
+
+                SizedBox(
+                  height: 25.0,
+                ),
+
+                Container(
+                  // color: Colors.red,
+                  width: 300,
+                  height: 300,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      SampleTextField(
+                        controller: _emailController,
+                        hintText: 'Email',
+                        obsecureText: false,
+                      ),
+                      SampleTextField(
+                        controller: _passwordController,
+                        hintText: 'Password',
+                        obsecureText: true,
+                      ),
+                      MyButton(onTap: signUserIn, text: 'Log In'),
+                    ],
                   ),
-
-                  SizedBox(
-                    height: 50.0,
-                  ),
-                  // Allign center
-
-                  MyLogo(),
-
-                  SizedBox(
-                    height: 25.0,
-                  ),
-
-                  Container(
-                    // color: Colors.red,
-                    width: 300,
-                    height: 300,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        SampleTextField(
-                          controller: _emailController,
-                          hintText: 'Email',
-                          obsecureText: false,
-                        ),
-                        SampleTextField(
-                          controller: _passwordController,
-                          hintText: 'Password',
-                          obsecureText: true,
-                        ),
-                        MyButton(onTap: signUserIn, text: 'Log In'),
-                      ],
-                    ),
-                  )
-                ],
-              ),
+                )
+              ],
             ),
           ),
-        ));
+        ),
+      ),
+      bottomNavigationBar: MyFooter(),
+    );
   }
 
   void wrongEmailMessage() {
@@ -133,5 +135,27 @@ class _MyLoginPageState extends State<MyLoginPage> {
             title: Text('Incorrect Password'),
           );
         });
+  }
+}
+
+class MyFooter extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.grey[300], // Change the color as needed
+      padding: EdgeInsets.all(10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text(
+            'Version: 2.2 (BETA)',
+            style: TextStyle(
+              fontSize: 16.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
