@@ -11,13 +11,18 @@ class BookingService {
     String facilityPassID = Uuid().v4();
     final user = FirebaseAuth.instance.currentUser!.uid;
 
+    DateTime registerTime = DateTime.now();
+    String formattedTimeStamp =
+        DateFormat('yyyy-MM-dd HH:mm:ss').format(registerTime);
+
     try {
       await _bookingsCollection.add({
         'facilityName': facilityName,
         'timeSlot': timeSlot,
         'isAvailable': false,
         'id': user,
-        'facility_pass_id': facilityPassID
+        'facility_pass_id': facilityPassID,
+        'timestamp': formattedTimeStamp
       });
     } catch (e) {
       print('Error: $e');

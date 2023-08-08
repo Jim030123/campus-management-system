@@ -74,7 +74,9 @@ class _BookingFacilityHistoryState extends State<BookingFacilityHistory> {
                           padding: EdgeInsets.all(16),
                           child: ListTile(
                             tileColor: Colors.grey,
-                            title: Text(filter['facilityName']),
+                            title: Text(filter['facilityName'] +
+                                "\n" +
+                                filter['timeSlot']),
                             trailing: GestureDetector(
                               child: Text(
                                 textAlign: TextAlign.center,
@@ -101,9 +103,8 @@ class _BookingFacilityHistoryState extends State<BookingFacilityHistory> {
                                                 "\n" +
                                                 filter['facility_pass_id']),
                                             MyDivider(),
-                                            SizedBox(
-                                              height: 25,
-                                            ),
+                                            MyMiddleText(
+                                                text: filter['facilityName']),
                                             MyDivider(),
                                           ],
                                         ),

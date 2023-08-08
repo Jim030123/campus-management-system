@@ -226,18 +226,13 @@ class _FacilityInformationPageState extends State<FacilityInformationPage> {
                                 SizedBox(
                                   height: 10,
                                 ),
-                                // Align(
-                                //   child: GestureDetector(
-                                //     onTap: () {
-                                //       Navigator.pushNamed(context, '/booking');
-                                //     },
-                                //     child: const Text("Booking Now",
-                                //         style: TextStyle(
-                                //           color: Colors.blue,
-                                //         )),
-                                //   ),
-                                //   alignment: Alignment.bottomRight,
-                                // )
+                                Align(
+                                  child: const Text("Direct Entry",
+                                      style: TextStyle(
+                                        color: Colors.blue,
+                                      )),
+                                  alignment: Alignment.bottomRight,
+                                )
                               ],
                             ),
                           ),
