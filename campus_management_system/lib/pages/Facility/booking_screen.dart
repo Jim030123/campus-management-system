@@ -27,7 +27,9 @@ class BookingService {
   }
 
   Stream<QuerySnapshot> getBookingsStream(String facilityName) {
-    return _bookingsCollection.where('facilityName', isEqualTo: facilityName).snapshots();
+    return _bookingsCollection
+        .where('facilityName', isEqualTo: facilityName)
+        .snapshots();
   }
 
   Future<bool> isTimeSlotAvailable(String timeSlot, String facilityName) async {
@@ -83,64 +85,70 @@ class _BookingScreenState extends State<BookingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Book ${widget.facilityName}')),
-      body: Column(
-        children: [
-          ElevatedButton(
-            onPressed: () => _selectDate(context),
-            child: Text(selectedDate == null
-                ? 'Select Date'
-                : 'Selected Date: ${DateFormat('yyyy-MM-dd').format(selectedDate!)}'),
-          ),
-          if (selectedDate != null)
-            Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-                stream: _bookingService.getBookingsStream(widget.facilityName),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.active) {
-                    final bookings = snapshot.data?.docs ?? [];
-
-                    return ListView.builder(
-                      itemCount: timeSlots.length,
-                      itemBuilder: (context, index) {
-                        final timeSlot = timeSlots[index];
-                        final isBooked = bookings.any(
-                          (booking) =>
-                              booking['timeSlot'] ==
-                              '${selectedDate!.toLocal()} - $timeSlot',
-                        );
-
-                        return ListTile(
-                          title: Text(timeSlot),
-                          trailing: ElevatedButton(
-                            onPressed: isBooked
-                                ? null
-                                : () async {
-                                    await _bookingService.bookFacility(
-                                      '${selectedDate!.toLocal()} - $timeSlot',
-                                      widget.facilityName,
-                                    );
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text('Facility booked successfully!'),
-                                      ),
-                                    );
-                                  },
-                            child: Text('Book'),
-                          ),
-                        );
-                      },
-                    );
-                  }
-                  return Center(child: CircularProgressIndicator());
-                },
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (selectedDate == null)
+              Text(
+                'Please select a date first.',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
+            ElevatedButton(
+              onPressed: () => _selectDate(context),
+              child: Text(selectedDate == null
+                  ? 'Select Date'
+                  : 'Selected Date: ${DateFormat('yyyy-MM-dd').format(selectedDate!)}'),
             ),
-          if (selectedDate == null)
-            Text(
-              'Please select a date first.',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-        ],
+            if (selectedDate != null)
+              Expanded(
+                child: StreamBuilder<QuerySnapshot>(
+                  stream:
+                      _bookingService.getBookingsStream(widget.facilityName),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.active) {
+                      final bookings = snapshot.data?.docs ?? [];
+
+                      return ListView.builder(
+                        itemCount: timeSlots.length,
+                        itemBuilder: (context, index) {
+                          final timeSlot = timeSlots[index];
+                          final isBooked = bookings.any(
+                            (booking) =>
+                                booking['timeSlot'] ==
+                                '${selectedDate!.toLocal()} - $timeSlot',
+                          );
+
+                          return ListTile(
+                            title: Text(timeSlot),
+                            trailing: ElevatedButton(
+                              onPressed: isBooked
+                                  ? null
+                                  : () async {
+                                      await _bookingService.bookFacility(
+                                        '${selectedDate!.toLocal()} - $timeSlot',
+                                        widget.facilityName,
+                                      );
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                              'Facility booked successfully!'),
+                                        ),
+                                      );
+                                    },
+                              child: Text('Book'),
+                            ),
+                          );
+                        },
+                      );
+                    }
+                    return Center(child: CircularProgressIndicator());
+                  },
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

@@ -42,55 +42,63 @@ class _FacilityStatusScreenState extends State<FacilityStatusScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Facility Status')),
-      body: Column(
-        children: [
-          SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: () => _selectDate(context),
-            child: Text(selectedDate == null
-                ? 'Select Date'
-                : 'Selected Date: ${DateFormat('yyyy-MM-dd').format(selectedDate!)}'),
-          ),
-          if (selectedDate != null)
-            Expanded(
-              child: ListView.builder(
-                itemCount: facilities.length,
-                itemBuilder: (context, facilityIndex) {
-                  final facilityType = facilities[facilityIndex];
-
-                  return Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          facilityType.replaceAll('_', ' ').capitalize,
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                        ),
-                        shrinkWrap: true,
-                        itemCount: timeSlots.length,
-                        itemBuilder: (context, timeSlotIndex) {
-                          final timeSlot = timeSlots[timeSlotIndex];
-
-                          return TimeSlotContainer(
-                            timeSlot: timeSlot,
-                            selectedDate: selectedDate!,
-                            selectedFacility: facilityType,
-                          );
-                        },
-                      ),
-                      SizedBox(height: 25),
-                    ],
-                  );
-                },
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (selectedDate == null)
+              Text(
+                'Please select a date first.',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
+            ElevatedButton(
+              onPressed: () => _selectDate(context),
+              child: Text(selectedDate == null
+                  ? 'Select Date'
+                  : 'Selected Date: ${DateFormat('yyyy-MM-dd').format(selectedDate!)}'),
             ),
-        ],
+            if (selectedDate != null)
+              Expanded(
+                child: ListView.builder(
+                  itemCount: facilities.length,
+                  itemBuilder: (context, facilityIndex) {
+                    final facilityType = facilities[facilityIndex];
+
+                    return Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            facilityType.replaceAll('_', ' ').capitalize,
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                          ),
+                          shrinkWrap: true,
+                          itemCount: timeSlots.length,
+                          itemBuilder: (context, timeSlotIndex) {
+                            final timeSlot = timeSlots[timeSlotIndex];
+
+                            return TimeSlotContainer(
+                              timeSlot: timeSlot,
+                              selectedDate: selectedDate!,
+                              selectedFacility: facilityType,
+                            );
+                          },
+                        ),
+                        SizedBox(height: 25),
+                      ],
+                    );
+                  },
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
