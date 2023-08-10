@@ -142,7 +142,7 @@ class _StudentProfilePageState extends State<StudentProfilePage> {
                                         Align(
                                             alignment: Alignment.centerLeft,
                                             child: MyMiddleText(
-                                              text: 'Basic information',
+                                              text: 'Basic Information',
                                             )),
                                         MyDivider(),
                                         Align(
@@ -521,7 +521,7 @@ class _ManagementProfilePage extends State<ManagementProfilePage> {
                                         Align(
                                             alignment: Alignment.centerLeft,
                                             child: MyMiddleText(
-                                              text: 'Basic information',
+                                              text: 'Basic Information',
                                             )),
                                         MyDivider(),
                                         Align(
@@ -655,7 +655,7 @@ class _ManagementProfilePage extends State<ManagementProfilePage> {
           Align(
               alignment: Alignment.centerLeft,
               child: MyMiddleText(
-                text: role + ' information',
+                text: role + ' Information',
               )),
           MyDivider(),
           Align(

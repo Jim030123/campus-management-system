@@ -119,7 +119,7 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
                     Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        'Register New Car',
+                        'Register New Vehicle',
                         style: TextStyle(fontSize: 30),
                       ),
                     ),

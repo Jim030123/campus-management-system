@@ -8,14 +8,14 @@ import 'package:flutter/widgets.dart';
 import '../../components/my_appbar.dart';
 import '../../components/my_long_button.dart';
 
-class BookingMenuPage extends StatelessWidget {
-  const BookingMenuPage({super.key});
+class BookingMenuManagementPage extends StatelessWidget {
+  const BookingMenuManagementPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(),
-      drawer: MyStudentDrawer(),
+      drawer: MyManagementDrawer(),
       body: Container(
         color: Colors.white,
         child: Center(
@@ -26,22 +26,15 @@ class BookingMenuPage extends StatelessWidget {
               height: 25,
             ),
             MyLongButton(
-              text: 'Booking and Facility Information',
-              routename: '/facility_information',
+              text: 'Facility Reservation',
+              routename: '/facility_management',
             ),
             SizedBox(
               height: 25,
             ),
             MyLongButton(
-              text: 'Booking Facility History',
-              routename: '/booking_history',
-            ),
-            SizedBox(
-              height: 25,
-            ),
-            MyLongButton(
-              text: 'Check facility available',
-              routename: '/check_facility_available',
+              text: 'Facility Scanner',
+              routename: '/facility_scan',
             ),
           ]),
         ),

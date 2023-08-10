@@ -67,7 +67,7 @@ class _FeedbackReceivedState extends State<FeedbackReceived> {
                     tileColor: Colors.grey,
                     title: Text(feedback['feedback_type']),
                     subtitle: Text(
-                      "Descibe feedback: " +
+                      "Describe feedback: " +
                           feedback['describe_feedback'] +
                           "\nSuppoting Evidence: " +
                           feedback['supporting_evidence'] +

@@ -171,7 +171,7 @@ class _ManagementMainPageState extends State<ManagementMainPage> {
                             MyMenuTile(
                                 text: 'Facility Management',
                                 iconnumber: 0xece9,
-                                routename: '/facility_management'),
+                                routename: '/facility_management_menu'),
                           ],
                         ),
                       ],

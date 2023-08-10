@@ -97,9 +97,14 @@ class _FacilityScanState extends State<FacilityScan> {
                     // Display the retrieved data
                     return Column(
                       children: documents.map((doc) {
-                        Object? data = doc.data();
+                        Map<String, dynamic> data =
+                            doc.data() as Map<String, dynamic>;
+
                         return Text(
-                          'Retrieved Data: ${data.toString()}',
+                          'Facility Name: ' +
+                              data['facilityName'] +
+                              "\nTime Slot: " +
+                              data['timeSlot'],
                           style: TextStyle(
                             fontSize: 16.0,
                             color: Colors.white,

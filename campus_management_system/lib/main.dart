@@ -4,6 +4,7 @@ import 'package:campus_management_system/pages/Account/Visitor/visitor_login.dar
 import 'package:campus_management_system/pages/Account/Visitor/visitor_register_page.dart';
 import 'package:campus_management_system/pages/Account/account_management_page.dart';
 import 'package:campus_management_system/pages/Facility/booking_history.dart';
+import 'package:campus_management_system/pages/Facility/booking_management_menu.dart';
 import 'package:campus_management_system/pages/Facility/booking_screen.dart';
 import 'package:campus_management_system/pages/Facility/facility_status.dart';
 import 'package:campus_management_system/pages/Facility/scan_facility.dart';
@@ -132,7 +133,8 @@ class MainApp extends StatelessWidget {
         '/check_facility_available': (context) => FacilityStatusScreen(),
         '/booking_history': (context) => BookingFacilityHistory(),
         "/facility_management": (context) => FacilityManagement(),
-        '/facility_scan':(context) => FacilityScan(),
+        '/facility_scan': (context) => FacilityScan(),
+        "/facility_management_menu": (context) => BookingMenuManagementPage(),
 
         // Management
         '/management_profile': (context) => ManagementProfilePage(),

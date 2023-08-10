@@ -57,7 +57,7 @@ class _FeedbackSubmittedState extends State<FeedbackSubmitted> {
                   child: ListTile(
                     tileColor: Colors.grey,
                     title: Text(feedback['feedback_type']),
-                    subtitle: Text("descibe_feedback: " +
+                    subtitle: Text("Describe Feedback: " +
                         feedback['supporting_evidence'] +
                         "\nSubmit by: " +
                         feedback['name']),

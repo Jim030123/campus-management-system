@@ -130,7 +130,7 @@ class _RegistrationVehicleFormMState extends State<RegistrationVehicleFormM> {
                     Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        'Register New Car',
+                        'Register New Vehicle',
                         style: TextStyle(fontSize: 30),
                       ),
                     ),
@@ -221,6 +221,18 @@ class _RegistrationVehicleFormMState extends State<RegistrationVehicleFormM> {
                                 });
                               },
                             ),
+
+                            TextFormField(
+                              controller: modelnameController,
+                              decoration: InputDecoration(
+                                  labelText: 'Vehicle Model Name'),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Please enter your Vehicle Model Name';
+                                }
+                                return null;
+                              },
+                            ),
                             TextFormField(
                               controller: vehiclenumberController,
                               decoration: InputDecoration(
@@ -229,19 +241,8 @@ class _RegistrationVehicleFormMState extends State<RegistrationVehicleFormM> {
                                 if (value!.isEmpty) {
                                   return 'Please enter your Vehicle Plate Number';
                                 }
-                                 if (value.contains(' ')) {
-      return 'Vehicle number cannot contain spaces';
-    }
-                                return null;
-                              },
-                            ),
-                            TextFormField(
-                              controller: modelnameController,
-                              decoration: InputDecoration(
-                                  labelText: 'Vehicle Model Name'),
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Please enter your Vehicle Model Name';
+                                if (value.contains(' ')) {
+                                  return 'Vehicle number cannot contain spaces';
                                 }
                                 return null;
                               },
@@ -435,11 +436,8 @@ class _RegistrationVehicleFormMState extends State<RegistrationVehicleFormM> {
   }
 }
 
-
-
-
 class RegisterVisitorPassM extends StatefulWidget {
-   String id;
+  String id;
   RegisterVisitorPassM({Key? key, required this.id}) : super(key: key);
 
   @override
@@ -725,9 +723,9 @@ class _RegisterVisitorPassMState extends State<RegisterVisitorPassM> {
                                 if (value!.isEmpty) {
                                   return 'Please enter your Vehicle number';
                                 }
-                                 if (value.contains(' ')) {
-      return 'Vehicle number cannot contain spaces';
-    }
+                                if (value.contains(' ')) {
+                                  return 'Vehicle number cannot contain spaces';
+                                }
                                 return null;
                               },
                             ),
@@ -928,9 +926,7 @@ class _RegisterVisitorPassMState extends State<RegisterVisitorPassM> {
           });
         }
       } catch (e) {}
-    } on FirebaseAuthException catch (e) {
-      
-    }
+    } on FirebaseAuthException catch (e) {}
   }
 
   void _showAlertDialog() {
@@ -1084,9 +1080,6 @@ class _RegisterVisitorPassMState extends State<RegisterVisitorPassM> {
     }
   }
 }
-
-
-
 
 class ResidentApplicationPageM extends StatefulWidget {
   String id;
