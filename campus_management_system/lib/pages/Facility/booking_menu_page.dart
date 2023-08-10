@@ -45,7 +45,7 @@ class BookingMenuPage extends StatelessWidget {
             ),
             MyLongButton(
               text: 'Facility Management',
-              routename: '/facility_management',
+              routename: '/facility_scan',
             ),
           ]),
         ),

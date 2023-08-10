@@ -71,9 +71,9 @@ class FacilityManagement extends StatefulWidget {
 
 class _FacilityManagementState extends State<FacilityManagement> {
   final List<String> facilities = [
-    'badminton_court',
-    'tennis_court',
-    'basketball_court'
+    'Badminton Court',
+    'Tennis Court',
+    'Basketball Court'
   ];
   final List<String> timeSlots = [
     '8AM - 10AM',

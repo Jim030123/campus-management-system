@@ -142,10 +142,6 @@ class _ManagementMainPageState extends State<ManagementMainPage> {
                                 text: 'Feedback Recieved',
                                 iconnumber: 0xe260,
                                 routename: '/feedback_received'),
-                            // MyMenuTile(
-                            //     text: 'Facility Management',
-                            //     iconnumber: 0xe260,
-                            //     routename: '/facility_management'),
                             MyMenuTile(
                                 text: 'Visitor Pass Management',
                                 iconnumber: 0xef2e,
@@ -172,6 +168,10 @@ class _ManagementMainPageState extends State<ManagementMainPage> {
                                 text: 'Auto fill Form',
                                 iconnumber: 0xf60d,
                                 routename: '/auto_fill_form_menu'),
+                            MyMenuTile(
+                                text: 'Facility Management',
+                                iconnumber: 0xece9,
+                                routename: '/facility_management'),
                           ],
                         ),
                       ],
@@ -189,7 +189,7 @@ class _ManagementMainPageState extends State<ManagementMainPage> {
               topLeft: Radius.circular(200), topRight: Radius.circular(200)),
           color: Colors.black54,
         ),
-        // color: Colors.green,
+
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 70),
           child: Row(

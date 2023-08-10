@@ -84,16 +84,32 @@ class _FacilityScanState extends State<FacilityScan> {
                   color: Colors.white,
                 ),
               ),
-              ElevatedButton(
-                  onPressed: () {
-                    facilityEntry(scannedData);
-                  },
-                  child: Text("Entry")),
-              ElevatedButton(
-                  onPressed: () {
-                    facilityExit(scannedData);
-                  },
-                  child: Text("Exit"))
+              StreamBuilder<QuerySnapshot>(
+                stream: facilityRetrieved(scannedData), // Provide the stream
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator(); // Show loading indicator while fetching data
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    final documents = snapshot.data?.docs ?? [];
+
+                    // Display the retrieved data
+                    return Column(
+                      children: documents.map((doc) {
+                        Object? data = doc.data();
+                        return Text(
+                          'Retrieved Data: ${data.toString()}',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: Colors.white,
+                          ),
+                        );
+                      }).toList(),
+                    );
+                  }
+                },
+              ),
             ],
           ),
         ),
@@ -111,30 +127,22 @@ class _FacilityScanState extends State<FacilityScan> {
     });
   }
 
-  void facilityExit(String person) async {
+  Stream<QuerySnapshot> facilityRetrieved(String facilityid) {
     try {
-      print(person);
-      await FirebaseFirestore.instance
-          .collection('visitor_pass_application')
-          .doc(person)
-          .update({"exit_time": timestamp as String});
+      final CollectionReference facilityCollection =
+          FirebaseFirestore.instance.collection('bookings');
 
-      // controller?.resumeCamera();
+      return facilityCollection
+          .where('facility_pass_id', isEqualTo: facilityid)
+          .snapshots();
     } on FirebaseAuthException catch (e) {
-      // Handle the exception if needed
-    }
-  }
-
-  facilityEntry(String person) async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('visitor_pass_application')
-          .doc(person)
-          .update({"entry_time": timestamp as String});
-      print(person);
-      // controller?.resumeCamera();
-    } on FirebaseAuthException catch (e) {
-      // Handle the exception if needed
+      // Handle FirebaseAuth exceptions
+      print('FirebaseAuthException: ${e.message}');
+      throw e; // Rethrow the exception to indicate an error to the StreamBuilder
+    } catch (error) {
+      // Handle other exceptions
+      print('Error: $error');
+      throw error; // Rethrow the exception to indicate an error to the StreamBuilder
     }
   }
 }

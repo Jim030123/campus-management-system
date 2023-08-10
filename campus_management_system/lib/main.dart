@@ -6,6 +6,7 @@ import 'package:campus_management_system/pages/Account/account_management_page.d
 import 'package:campus_management_system/pages/Facility/booking_history.dart';
 import 'package:campus_management_system/pages/Facility/booking_screen.dart';
 import 'package:campus_management_system/pages/Facility/facility_status.dart';
+import 'package:campus_management_system/pages/Facility/scan_facility.dart';
 import 'package:campus_management_system/pages/Feedback/feedback_form.dart';
 import 'package:campus_management_system/pages/Feedback/feedback_menu_page.dart';
 import 'package:campus_management_system/pages/Feedback/feedback_submitted.dart';
@@ -131,6 +132,7 @@ class MainApp extends StatelessWidget {
         '/check_facility_available': (context) => FacilityStatusScreen(),
         '/booking_history': (context) => BookingFacilityHistory(),
         "/facility_management": (context) => FacilityManagement(),
+        '/facility_scan':(context) => FacilityScan(),
 
         // Management
         '/management_profile': (context) => ManagementProfilePage(),
