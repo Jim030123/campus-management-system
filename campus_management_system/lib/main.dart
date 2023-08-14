@@ -5,7 +5,6 @@ import 'package:campus_management_system/pages/Account/Visitor/visitor_register_
 import 'package:campus_management_system/pages/Account/account_management_page.dart';
 import 'package:campus_management_system/pages/Facility/booking_history.dart';
 import 'package:campus_management_system/pages/Facility/booking_management_menu.dart';
-import 'package:campus_management_system/pages/Facility/booking_screen.dart';
 import 'package:campus_management_system/pages/Facility/facility_status.dart';
 import 'package:campus_management_system/pages/Facility/scan_facility.dart';
 import 'package:campus_management_system/pages/Feedback/feedback_form.dart';
@@ -28,7 +27,6 @@ import 'package:campus_management_system/pages/General/redirect_page.dart';
 import 'package:campus_management_system/pages/Facility/booking_menu_page.dart';
 import 'package:campus_management_system/pages/Student_Resident/student_resident_exist.dart';
 import 'package:campus_management_system/pages/Student_Resident/student_resident_management_menu.dart';
-import 'package:campus_management_system/pages/Facility/check_facility_available.dart';
 import 'package:campus_management_system/pages/Visitor_Pass/scan.dart';
 import 'package:campus_management_system/pages/Visitor_Pass/view_all_visitor_pass.dart';
 import 'package:campus_management_system/pages/Visitor_Pass/visitor_pass_application.dart';
@@ -38,7 +36,6 @@ import 'package:campus_management_system/pages/General/login_page.dart';
 import 'package:campus_management_system/pages/Account/registration_account.dart';
 import 'package:campus_management_system/pages/General/profile_page.dart';
 import 'package:campus_management_system/pages/Student_Resident/resident_form.dart';
-
 import 'package:campus_management_system/pages/Student_Resident/resident_information.dart';
 import 'package:campus_management_system/pages/Account/Student/student_main_page.dart';
 import 'package:campus_management_system/pages/Account/view_all_account.dart';
@@ -53,7 +50,6 @@ import 'documentation/room_type.dart';
 import 'firebase_options.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'pages/Facility/booking_management.dart';
 
 void main() async {

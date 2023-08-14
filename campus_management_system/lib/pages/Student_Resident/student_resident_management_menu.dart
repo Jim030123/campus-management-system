@@ -1,7 +1,6 @@
 import 'package:campus_management_system/components/my_drawer.dart';
 import 'package:campus_management_system/components/my_icon_tile.dart';
 import 'package:campus_management_system/components/my_logo.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../components/my_appbar.dart';
@@ -19,8 +18,7 @@ class StudentResidentManagementMenu extends StatelessWidget {
         color: Colors.white,
         child: Column(children: [
           MyLogo(),
-          MyIconTile(
-              iconnumber: 0xf0110, text: 'Student Resident (Management)'),
+          MyIconTile(iconnumber: 0xf0110, text: 'Student Resident Management'),
           SizedBox(
             height: 25,
           ),

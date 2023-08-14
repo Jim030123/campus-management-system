@@ -42,7 +42,7 @@ class _ViewAllVehicleState extends State<ViewAllVehicle> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text('Filter the Student Application'),
+                    title: Text('Filter the Vehicle Application'),
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -222,12 +222,9 @@ class _VehicleApplicationDetailState extends State<VehicleApplicationDetail> {
                         child: MySmallText(
                             text: "Name: " +
                                 widget.user['name'] +
-                                "\nUser ID: " +
-                                widget.user['user_id'] +
-                               
-                                "\nVehicle Type " +
+                                "\nVehicle Type: " +
                                 widget.user['vehicle_type'] +
-                                "\nVehicle Brand " +
+                                "\nVehicle Brand: " +
                                 widget.user['vehicle_brand'] +
                                 "\nVehicle Model: " +
                                 widget.user['vehicle_model'] +

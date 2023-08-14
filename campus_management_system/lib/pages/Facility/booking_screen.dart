@@ -1,3 +1,4 @@
+import 'package:campus_management_system/components/my_textstyle.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -100,6 +101,7 @@ class _BookingScreenState extends State<BookingScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            MyMiddleText(text: "Time Available"),
             if (selectedDate == null)
               Text(
                 'Please select a date first.',

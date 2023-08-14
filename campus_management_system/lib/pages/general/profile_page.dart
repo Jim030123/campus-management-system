@@ -2,7 +2,6 @@ import 'package:campus_management_system/components/my_appbar.dart';
 import 'package:campus_management_system/components/my_divider.dart';
 import 'package:campus_management_system/components/my_drawer.dart';
 import 'package:campus_management_system/components/my_textstyle.dart';
-import 'package:campus_management_system/pages/Account/Student/student_main_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

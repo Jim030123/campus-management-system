@@ -255,7 +255,7 @@ class _ApplicationDetailState extends State<ApplicationDetail> {
               Align(
                 alignment: Alignment.topLeft,
                 child: Text(
-                  'The Student Resident Profile',
+                  'Student Resident Profile',
                   style: TextStyle(fontSize: 25),
                 ),
               ),

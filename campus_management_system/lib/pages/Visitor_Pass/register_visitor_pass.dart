@@ -11,10 +11,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../components/my_camera.dart';
 import '../../documentation/term_and_condition.dart';
-import '../../components/my_alert_dialog.dart';
 import '../../components/my_appbar.dart';
-import '../../components/my_drawer.dart';
-import '../general/login_page.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class RegisterVisitorPass extends StatefulWidget {
@@ -501,7 +498,7 @@ class _RegisterVisitorPassState extends State<RegisterVisitorPass> {
             "vehicle_brand": _selectedVehicleBrand as String,
             "vehicle_type": _selectedVehicleType as String,
             "status": status,
-            "user_id": auth,
+            "id": auth,
             "photoUrl": downloadUrl,
           });
         }

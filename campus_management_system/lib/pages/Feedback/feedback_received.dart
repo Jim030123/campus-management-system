@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../components/my_divider.dart';
+import '../../components/my_textstyle.dart';
+
 class FeedbackReceived extends StatefulWidget {
   FeedbackReceived({Key? key}) : super(key: key);
 
@@ -12,6 +15,7 @@ class _FeedbackReceivedState extends State<FeedbackReceived> {
   final CollectionReference feedbackCollection =
       FirebaseFirestore.instance.collection('feedback');
 
+  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,52 +44,68 @@ class _FeedbackReceivedState extends State<FeedbackReceived> {
         ],
       ),
       body: Container(
-        padding: EdgeInsets.all(1),
-        child: StreamBuilder<QuerySnapshot>(
-          stream: feedbackCollection.snapshots(), // Fetch all feedbacks
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            }
+        padding: EdgeInsets.all(16),
+        child: Column(
+          // Wrap with a Column
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: MyMiddleText(text: "Feedback Received"),
+            ),
+            MyDivider(),
+            Expanded(
+              // Use Expanded to allow the ListView to take available space
+              child: StreamBuilder<QuerySnapshot>(
+                stream: feedbackCollection.snapshots(), // Fetch all feedbacks
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  }
 
-            if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            }
+                  if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  }
 
-            final documents = snapshot.data?.docs ?? [];
+                  final documents = snapshot.data?.docs ?? [];
 
-            return ListView.builder(
-              itemCount: documents.length,
-              itemBuilder: (context, index) {
-                DocumentSnapshot feedback = documents[index];
-                String feedbackId = feedback.id;
-                bool isFavourite = feedback['isFavourite'] ?? false;
+                  return ListView.builder(
+                    itemCount: documents.length,
+                    itemBuilder: (context, index) {
+                      DocumentSnapshot feedback = documents[index];
+                      String feedbackId = feedback.id;
+                      bool isFavourite = feedback['isFavourite'] ?? false;
 
-                return Container(
-                  padding: EdgeInsets.all(8),
-                  child: ListTile(
-                    tileColor: Colors.grey,
-                    title: Text(feedback['feedback_type']),
-                    subtitle: Text(
-                      "Describe feedback: " +
-                          feedback['describe_feedback'] +
-                          "\nSuppoting Evidence: " +
-                          feedback['supporting_evidence'] +
-                          "\n" +
-                          feedback['timestamp'],
-                    ),
-                    trailing: IconButton(
-                      icon: Icon(
-                        isFavourite ? Icons.favorite : Icons.favorite_border,
-                        color: isFavourite ? Colors.red : null,
-                      ),
-                      onPressed: () => toggleFavourite(feedbackId, isFavourite),
-                    ),
-                  ),
-                );
-              },
-            );
-          },
+                      return Container(
+                        padding: EdgeInsets.all(8),
+                        child: ListTile(
+                          tileColor: Colors.grey,
+                          title: Text(feedback['feedback_type']),
+                          subtitle: Text(
+                            "Describe feedback: " +
+                                feedback['describe_feedback'] +
+                                "\nSuppoting Evidence: " +
+                                feedback['supporting_evidence'] +
+                                "\n" +
+                                feedback['timestamp'],
+                          ),
+                          trailing: IconButton(
+                            icon: Icon(
+                              isFavourite
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: isFavourite ? Colors.red : null,
+                            ),
+                            onPressed: () =>
+                                toggleFavourite(feedbackId, isFavourite),
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );

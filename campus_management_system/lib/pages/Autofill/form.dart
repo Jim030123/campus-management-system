@@ -2,14 +2,11 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:camera/camera.dart';
-import 'package:campus_management_system/components/my_alert_dialog.dart';
 import 'package:campus_management_system/components/my_appbar.dart';
-import 'package:campus_management_system/components/my_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:campus_management_system/pages/general/login_page.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:uuid/uuid.dart';
 

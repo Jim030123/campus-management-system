@@ -4,7 +4,6 @@ import 'package:campus_management_system/components/my_textstyle.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class ViewAllVisitorPass extends StatefulWidget {

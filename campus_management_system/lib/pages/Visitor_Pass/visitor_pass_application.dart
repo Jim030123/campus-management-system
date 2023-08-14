@@ -1,9 +1,7 @@
 import 'package:campus_management_system/components/my_divider.dart';
-import 'package:campus_management_system/pages/Account/Student/student_main_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../components/my_textstyle.dart';
 
@@ -127,16 +125,13 @@ class _VisitorPassApplicationPageState
         ],
       ),
       body: Container(
-        padding: EdgeInsets.all(1),
+        padding: EdgeInsets.all(16),
         child: Column(
           children: [
-            Container(
-              padding: EdgeInsets.all(16),
-              child: Align(
-                  alignment: FractionalOffset.topLeft,
-                  child: MyMiddleText(
-                      text: 'Visitor Pass Application: ' + _selectedVPStatus)),
-            ),
+            Align(
+                alignment: FractionalOffset.topLeft,
+                child: MyMiddleText(
+                    text: 'Visitor Pass Application: ' + _selectedVPStatus)),
             MyDivider(),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(

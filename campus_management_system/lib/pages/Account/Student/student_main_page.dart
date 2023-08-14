@@ -1,4 +1,3 @@
-import "package:campus_management_system/components/my_alert_dialog.dart";
 import "package:campus_management_system/components/my_logo.dart";
 import "package:campus_management_system/components/my_tile.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
