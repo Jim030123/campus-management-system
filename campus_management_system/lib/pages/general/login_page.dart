@@ -148,7 +148,7 @@ class MyFooter extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Text(
-            'Version: 2.2 (BETA)',
+            'Version: 2.3',
             style: TextStyle(
               fontSize: 16.0,
               fontWeight: FontWeight.bold,

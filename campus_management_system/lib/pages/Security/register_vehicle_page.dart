@@ -385,7 +385,7 @@ class _RegistrationVehicleFormState extends State<RegistrationVehicleForm> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Register Vehicle'),
+          title: Text('Register Vehicle Pass'),
           content: Text('The registration will send to management review'),
           actions: [
             TextButton(

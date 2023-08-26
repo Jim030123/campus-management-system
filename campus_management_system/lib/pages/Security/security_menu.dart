@@ -26,7 +26,7 @@ class SecurityMenuPage extends StatelessWidget {
               height: 25,
             ),
             MyLongButton(
-              text: 'Register Vehicle',
+              text: 'Register Vehicle Pass',
               routename: '/register_vehicle',
             ),
             SizedBox(
